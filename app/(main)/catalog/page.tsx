@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { query } from "@/lib/db";
 import type { ProductWithStock } from "@/types";
 import CatalogClient from "./CatalogClient";
