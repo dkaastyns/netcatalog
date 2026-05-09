@@ -92,8 +92,8 @@ export default async function HomePage() {
             <div className="animate-fadeUp">
 
               <h1 style={{ fontSize: "48px", fontWeight: 800, lineHeight: 1.1, color: "#ffffff", marginBottom: "20px", letterSpacing: "-1.5px" }}>
-                Keunggulan Terkurasi<br />
-                <span style={{ color: "var(--amber-smoke)" }}>untuk Profesional</span> Modern
+                Solusi Jaringan Terbaik<br />
+                <span style={{ color: "var(--amber-smoke)" }}>untuk Kebutuhan</span> Anda
               </h1>
               <p style={{ fontSize: "16px", color: "rgba(255,255,255,0.8)", lineHeight: 1.8, marginBottom: "44px", maxWidth: "460px" }}>
                 Temukan koleksi solusi jaringan kelas perusahaan yang dipilih secara teliti untuk meningkatkan infrastruktur dan alur kerja harian Anda.
