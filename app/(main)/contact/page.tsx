@@ -64,12 +64,12 @@ export default async function ContactPage() {
                         </div>
                     </div>
 
-                    <div className="nc-card p-12 text-center bg-slate-50/50 border-dashed border-slate-200 animate-fadeUp" style={{ animationDelay: "0.5s" }}>
-                        <h2 className="text-xl font-bold text-slate-900 mb-2">Mencari Spesifikasi Teknis?</h2>
-                        <p className="text-slate-600 mb-8 max-w-lg mx-auto">Jelajahi katalog ekstensif perangkat keras jaringan kelas perusahaan dan solusi infrastruktur kami.</p>
-                        <div className="flex justify-center gap-4">
-                            <Link href="/catalog" className="nc-btn-primary h-12 px-8 flex items-center justify-center rounded-xl bg-slate-900 text-white hover:bg-slate-800 transition-all">Lihat Katalog</Link>
-                            <Link href="/about" className="nc-btn-secondary h-12 px-8 flex items-center justify-center rounded-xl border-slate-200 hover:bg-white transition-all">Cerita Kami</Link>
+                    <div className="nc-card py-16 px-8 sm:px-12 text-center bg-slate-50/50 border-dashed border-slate-200 animate-fadeUp mb-8" style={{ animationDelay: "0.5s" }}>
+                        <h2 className="text-2xl font-bold text-slate-900 mb-4">Mencari Spesifikasi Teknis?</h2>
+                        <p className="text-slate-600 mb-10 max-w-lg mx-auto leading-relaxed">Jelajahi katalog ekstensif perangkat keras jaringan kelas perusahaan dan solusi infrastruktur kami.</p>
+                        <div className="flex flex-col sm:flex-row justify-center gap-4">
+                            <Link href="/catalog" className="nc-btn-primary h-12 px-8 flex items-center justify-center rounded-xl bg-slate-900 text-white hover:bg-slate-800 transition-all font-medium">Lihat Katalog</Link>
+                            <Link href="/about" className="nc-btn-secondary h-12 px-8 flex items-center justify-center rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition-all font-medium text-slate-700">Cerita Kami</Link>
                         </div>
                     </div>
                 </div>

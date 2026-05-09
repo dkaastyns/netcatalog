@@ -254,12 +254,12 @@ export default async function HomePage() {
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "24px" }}>
             {[
-              { icon: ShieldCheckIcon, title: "Kelas Perusahaan", desc: "Perangkat keras yang dibuat untuk tahan lama di lingkungan pusat data 24/7 dengan dukungan garansi komprehensif.", color: "var(--navy-900)" },
-              { icon: PhoneIcon, title: "Dukungan Ahli 24/7", desc: "Akses langsung ke insinyur jaringan L3 untuk bantuan penerapan dan penyelesaian masalah cepat.", color: "var(--blue-600)" },
-              { icon: GlobeAltIcon, title: "Logistik Global", desc: "Gudang yang terletak strategis memastikan pengiriman cepat dan penggantian suku cadang di seluruh dunia.", color: "var(--green-600)" },
+              { icon: ShieldCheckIcon, title: "Kelas Perusahaan", desc: "Perangkat keras yang dibuat untuk tahan lama di lingkungan pusat data 24/7 dengan dukungan garansi komprehensif." },
+              { icon: PhoneIcon, title: "Dukungan Ahli 24/7", desc: "Akses langsung ke insinyur jaringan L3 untuk bantuan penerapan dan penyelesaian masalah cepat." },
+              { icon: GlobeAltIcon, title: "Logistik Global", desc: "Gudang yang terletak strategis memastikan pengiriman cepat dan penggantian suku cadang di seluruh dunia." },
             ].map((f, i) => (
               <div key={i} className={`animate-fadeUp delay-${(i+1)*100}`} style={{ padding: "36px 32px", background: "var(--surface)", borderRadius: "20px", border: "1px solid var(--border)", boxShadow: "0 4px 20px -10px rgba(0,0,0,0.06)", transition: "all 0.3s ease", textAlign: "center" }}>
-                <div style={{ width: 60, height: 60, borderRadius: "50%", background: `${f.color}12`, border: `1px solid ${f.color}30`, color: f.color, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px" }}>
+                <div className="w-14 h-14 rounded-xl bg-slate-50 flex items-center justify-center text-slate-800 mx-auto mb-6 border border-slate-100">
                   <f.icon className="w-7 h-7" />
                 </div>
                 <h3 style={{ fontSize: "16px", fontWeight: 800, color: "var(--text-primary)", marginBottom: "12px" }}>{f.title}</h3>
