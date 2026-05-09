@@ -16,6 +16,7 @@
     "@hookform/resolvers": "^5.2.2",
     "@indodev/toolkit": "^0.7.3",
     "@phosphor-icons/react": "^2.1.10",
+    "@supabase/supabase-js": "^2.105.4",
     "@tanstack/react-query": "^5.100.6",
     "better-auth": "^1.6.9",
     "class-variance-authority": "^0.7.1",

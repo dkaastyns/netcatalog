@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import type { ProductWithStock, Category } from "@/types";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import { useRealtimeSync } from "@/lib/hooks/use-realtime-sync";
 import {
   PencilSquareIcon,
   TrashIcon,
@@ -23,11 +24,18 @@ interface ProductTableProps {
 }
 
 export default function ProductTable({ initialProducts, categories }: ProductTableProps) {
+  useRealtimeSync();
+
   const [products, setProducts] = useState(initialProducts);
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Sync state when real-time updates arrive
+  useEffect(() => {
+    setProducts(initialProducts);
+  }, [initialProducts]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);

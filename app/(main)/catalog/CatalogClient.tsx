@@ -6,6 +6,7 @@ import type { ProductWithStock } from "@/types";
 import Image from "next/image";
 import { formatCurrency } from "@/lib/format";
 import { motion, AnimatePresence } from "framer-motion";
+import { useRealtimeSync } from "@/lib/hooks/use-realtime-sync";
 import {
   MagnifyingGlassIcon,
   ChevronLeftIcon,
@@ -22,6 +23,8 @@ interface CatalogClientProps {
 }
 
 export default function CatalogClient({ initialProducts, categories }: CatalogClientProps) {
+  useRealtimeSync();
+
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [stockFilter, setStockFilter] = useState<{ inStock: boolean; outOfStock: boolean }>({
     inStock: false,
