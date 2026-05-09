@@ -1,4 +1,4 @@
-export const dynamic = 'force-dynamic';
+export const revalidate = 60; // ISR: revalidate every 60 seconds
 
 import Link from "next/link";
 import { query } from "@/lib/db";
@@ -26,10 +26,12 @@ async function getStats() {
 async function getFeatured(): Promise<ProductWithStock[]> {
   return query<ProductWithStock>(`
     SELECT p.*, c."name" AS "categoryName",
-      COALESCE((SELECT SUM(im."quantity") FROM inventory_movements im WHERE im."productId"=p."id"),0)::INTEGER AS "stockCount"
+      COALESCE(SUM(im."quantity"), 0)::INTEGER AS "stockCount"
     FROM products p
     LEFT JOIN categories c ON p."categoryId"=c."id"
+    LEFT JOIN inventory_movements im ON im."productId" = p."id"
     WHERE p."status"='published'
+    GROUP BY p."id", c."name"
     ORDER BY p."createdAt" DESC LIMIT 6
   `);
 }
@@ -134,7 +136,6 @@ export default async function HomePage() {
                     width={520}
                     height={340}
                     style={{ width: "100%", height: "100%", objectFit: "cover", position: "relative", zIndex: 1 }}
-                    unoptimized
                     priority
                   />
                 </div>

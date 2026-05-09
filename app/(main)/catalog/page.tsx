@@ -12,10 +12,12 @@ import { Footer } from "@/components/layout/Footer";
 async function getProducts() {
   return query<ProductWithStock>(`
     SELECT p.*, c."name" AS "categoryName",
-      COALESCE((SELECT SUM(im."quantity") FROM inventory_movements im WHERE im."productId"=p."id"),0)::INTEGER AS "stockCount"
+      COALESCE(SUM(im."quantity"), 0)::INTEGER AS "stockCount"
     FROM products p
     LEFT JOIN categories c ON p."categoryId"=c."id"
+    LEFT JOIN inventory_movements im ON im."productId" = p."id"
     WHERE p."status"='published'
+    GROUP BY p."id", c."name"
     ORDER BY p."name" ASC
   `);
 }
