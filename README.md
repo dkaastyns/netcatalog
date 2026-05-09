@@ -1,8 +1,8 @@
-# Netcatalog
+# Netcatalog - Product Catalog with Stock Count
 
-Netcatalog adalah aplikasi Web Manajemen Katalog Produk & Inventaris, yang dirancang khusus dengan alur satu arah (one-directional flow) untuk mengamankan data dan memberikan pengalaman terbaik:
-- **Pengunjung/User:** Dapat melihat katalog produk secara publik dan mengecek ketersediaan stok, lalu dapat menghubungi admin untuk penawaran produk.
-- **Admin:** Mengelola produk, stok inventaris, serta mencatat pesanan manual melalui dasbor yang aman.
+Netcatalog adalah aplikasi **Product Catalog with Stock Count** yang dirancang untuk memudahkan publikasi katalog produk dengan pemantauan stok secara real-time. Aplikasi ini memiliki alur satu arah (one-directional flow) untuk mengamankan data dan memberikan pengalaman terbaik:
+- **Pengunjung/User:** Dapat menjelajahi katalog produk secara publik, mengecek ketersediaan stok secara akurat, dan menghubungi admin untuk penawaran produk.
+- **Admin:** Mengelola data produk, memantau stok inventaris, serta mencatat pesanan manual melalui dasbor yang aman.
 
 ## Tech Stack
 
