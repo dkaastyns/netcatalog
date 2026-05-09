@@ -18,7 +18,7 @@ import {
 } from "@heroicons/react/24/outline";
 
 const navLinks = [
-  { href: "/admin", label: "Dasbor", Icon: HomeIcon },
+  { href: "/admin", label: "Dashboard", Icon: HomeIcon },
   { href: "/admin/products", label: "Produk", Icon: CubeIcon },
   { href: "/admin/orders", label: "Pesanan", Icon: ShoppingCartIcon },
   { href: "/admin/categories", label: "Kategori", Icon: FolderIcon },
@@ -168,7 +168,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               </motion.div>
             </button>
             <h2 style={{ fontSize: "13px", fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.8px" }}>
-              {pathname === "/admin" ? "Ikhtisar" : pathname.split("/").pop()?.replace("products", "Produk").replace("orders", "Pesanan").replace("categories", "Kategori").replace("inventory", "Inventaris").replace("users", "Pengguna").replace("-", " ")}
+              {pathname === "/admin" ? "Dashboard" : pathname.split("/").pop()?.replace("products", "Produk").replace("orders", "Pesanan").replace("categories", "Kategori").replace("inventory", "Inventaris").replace("users", "Pengguna").replace("-", " ")}
             </h2>
           </div>
           <div style={{ flex: 1 }} />
@@ -198,7 +198,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         onClose={() => setIsLogoutModalOpen(false)}
         onConfirm={handleLogout}
         title="Keluar"
-        message="Apakah Anda yakin ingin keluar dari dasbor admin?"
+        message="Apakah Anda yakin ingin keluar dari dashboard admin?"
         confirmText="Keluar"
         isLoading={isLoggingOut}
         variant="primary"

@@ -68,8 +68,8 @@ export default async function AdminDashboard() {
       {/* Page header */}
       <div style={{ marginBottom: 32, display: "flex", alignItems: "flex-start", justifyContent: "space-between" }}>
         <div>
-          <h1 style={{ fontSize: 24, fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.5px" }}>Dasbor</h1>
-          <p style={{ fontSize: 13.5, color: "var(--text-muted)", marginTop: 4 }}>Selamat datang kembali — berikut adalah ikhtisar katalog Anda.</p>
+          <h1 style={{ fontSize: 24, fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.5px" }}>Dashboard</h1>
+          <p style={{ fontSize: 13.5, color: "var(--text-muted)", marginTop: 4 }}>Selamat datang kembali — berikut adalah ringkasan katalog Anda.</p>
         </div>
         <div style={{ display: "flex", gap: 10 }}>
           <Link href="/admin/products" className="nc-btn-primary" style={{ fontSize: 13, gap: 6 }}>
