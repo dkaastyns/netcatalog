@@ -207,8 +207,10 @@ export default async function HomePage() {
             {products.map((p, idx) => (
               <div key={p.id} className={`nc-product-card animate-fadeUp delay-${Math.min(idx * 100, 500)}`}>
                 <div className="nc-product-card-image">
-                  {idx === 0 && <span className="nc-product-badge new">Baru</span>}
-                  {idx === 2 && <span className="nc-product-badge bestseller">Terlaris</span>}
+                  {/* BUG-12 FIX: Badge 'Baru' berdasarkan tanggal (30 hari terakhir), bukan posisi index */}
+                  {(new Date().getTime() - new Date(p.createdAt).getTime()) < 30 * 24 * 60 * 60 * 1000 && (
+                    <span className="nc-product-badge new">Baru</span>
+                  )}
                   {p.image ? (
                     <Image src={p.image} alt={p.name} width={400} height={300} style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute", inset: 0 }} unoptimized />
                   ) : (

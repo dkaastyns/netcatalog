@@ -24,8 +24,9 @@ export default async function AdminUsersPage() {
     <div style={{ padding: 28 }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24 }}>
         <div>
-          <h1 style={{ fontSize: 22, fontWeight: 800, color: "var(--text-primary)" }}>User Management</h1>
-          <p style={{ fontSize: 13.5, color: "var(--text-muted)", marginTop: 2 }}>Manage administrative access and partner permissions</p>
+          {/* BUG-15 FIX: Terjemahkan ke Bahasa Indonesia agar konsisten */}
+          <h1 style={{ fontSize: 22, fontWeight: 800, color: "var(--text-primary)" }}>Manajemen Pengguna</h1>
+          <p style={{ fontSize: 13.5, color: "var(--text-muted)", marginTop: 2 }}>Kelola akses administrator dan izin mitra</p>
         </div>
       </div>
 

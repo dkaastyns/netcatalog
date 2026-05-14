@@ -164,8 +164,7 @@ export default function ProductTable({ initialProducts, categories }: ProductTab
 
       if (res.ok) {
         setIsModalOpen(false);
-        router.refresh();
-        window.location.reload();
+        router.refresh(); // BUG-06 FIX: Cukup router.refresh(), tidak perlu full reload
       } else {
         const data = await res.json();
         alert(data.message || "Terjadi kesalahan");

@@ -9,9 +9,11 @@ cloudinary.config({
 
 export async function POST(request: NextRequest) {
     try {
-        await auth.api.getSession({ headers: request.headers });
-        // We allow both members and guests to upload payment proofs, 
-        // consistent with guest checkout in /api/orders
+        // BUG-04 FIX: Wajib login sebagai admin untuk upload gambar produk
+        const session = await auth.api.getSession({ headers: request.headers });
+        if (!session || session.user.role !== "admin") {
+            return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+        }
 
         const formData = await request.formData();
         const file = formData.get("file") as File;

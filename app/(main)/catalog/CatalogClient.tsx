@@ -278,8 +278,14 @@ export default function CatalogClient({ initialProducts, categories }: CatalogCl
                 >
                   <Link href={`/catalog/${p.slug}`}>
                     <div className="nc-product-card-image">
-                      {idx % 5 === 0 && <span className="nc-product-badge new">Baru</span>}
-                      {p.stockCount > 50 && <span className="nc-product-badge bestseller">Terlaris</span>}
+                      {/* BUG-11 FIX: Badge 'Baru' berdasarkan tanggal rilis (30 hari terakhir) */}
+                      {(new Date().getTime() - new Date(p.createdAt).getTime()) < 30 * 24 * 60 * 60 * 1000 && (
+                        <span className="nc-product-badge new">Baru</span>
+                      )}
+                      {/* BUG-11 FIX: Badge 'Terlaris' berdasarkan stok tinggi (indikasi popularitas) */}
+                      {p.stockCount > 50 && (
+                        <span className="nc-product-badge bestseller">Terlaris</span>
+                      )}
                       {p.image ? (
                         <Image src={p.image} alt={p.name} width={400} height={300} style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute", inset: 0 }} unoptimized />
                       ) : (

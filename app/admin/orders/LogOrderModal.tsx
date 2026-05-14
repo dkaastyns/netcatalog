@@ -65,6 +65,16 @@ export function LogOrderModal({ isOpen, onClose, products, onSuccess }: LogOrder
 
             if (res.ok) {
                 toast.success("Pesanan berhasil dicatat");
+                // BUG-09 FIX: Reset form setelah submit sukses
+                setFormData({
+                    customerName: "",
+                    customerEmail: "",
+                    customerPhone: "",
+                    companyName: "",
+                    notes: "",
+                    productId: "",
+                    quantity: 1,
+                });
                 onSuccess();
             } else {
                 throw new Error("Gagal mencatat pesanan");

@@ -41,8 +41,8 @@ export default async function ContactPage() {
                                 <PhoneIcon className="w-6 h-6" />
                             </div>
                             <h3 className="font-bold text-slate-900 mb-2">Telepon Langsung</h3>
-                            <p className="text-sm text-slate-500">+1 (555) 789-2244</p>
-                            <p className="text-xs text-slate-400 mt-2 font-medium uppercase tracking-wider">Sen - Jum, 9-6</p>
+                            <p className="text-sm text-slate-500">+62 821-4456-9908</p>
+                            <p className="text-xs text-slate-400 mt-2 font-medium uppercase tracking-wider">Sen - Jum, 09:00 - 18:00</p>
                         </div>
 
                         <div className="nc-card p-8 text-center flex flex-col items-center hover:border-slate-300 transition-colors animate-fadeUp" style={{ animationDelay: "0.3s" }}>

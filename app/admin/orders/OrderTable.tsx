@@ -20,14 +20,15 @@ export default function OrderTable({ initialOrders }: { initialOrders: OrderWith
     const [isLogModalOpen, setIsLogModalOpen] = useState(false);
     const [products, setProducts] = useState<ProductWithStock[]>([]);
     const router = useRouter();
-    const pathname = usePathname();
+    // BUG-13 FIX: pathname tidak lagi digunakan sebagai dependency
 
     useEffect(() => {
+        // BUG-13 FIX: Hanya fetch sekali saat komponen mount, bukan setiap navigasi
         fetch("/api/products?limit=100")
             .then(res => res.json())
             .then(data => setProducts(data.data || []))
             .catch(() => { });
-    }, [pathname]);
+    }, []); // dependency array kosong = hanya sekali saat mount
 
     const handleStatusChange = async (id: number, newStatus: OrderStatus) => {
         setUpdatingId(id);

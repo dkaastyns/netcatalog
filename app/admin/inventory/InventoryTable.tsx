@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import type { Product } from "@/types";
 import {
   PlusIcon,
@@ -25,7 +26,14 @@ interface InventoryTableProps {
 }
 
 export default function InventoryTable({ initialMovements, products, userId }: InventoryTableProps) {
-  const [movements] = useState(initialMovements);
+  // BUG-07+08 FIX: Tambah setter dan sinkronisasi state saat props berubah
+  const [movements, setMovements] = useState(initialMovements);
+  const router = useRouter();
+  // Sinkronisasi state lokal saat server data berubah (setelah router.refresh)
+  useEffect(() => {
+    setMovements(initialMovements);
+  }, [initialMovements]);
+
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -65,8 +73,11 @@ export default function InventoryTable({ initialMovements, products, userId }: I
       });
 
       if (res.ok) {
+        // BUG-07 FIX: Gunakan router.refresh() bukan window.location.reload()
+        // BUG-08 FIX: Reset form setelah submit sukses
+        setFormData({ productId: "", quantity: 0, type: "in", notes: "" });
         setIsModalOpen(false);
-        window.location.reload();
+        router.refresh();
       } else {
         alert("Gagal menyimpan mutasi");
       }

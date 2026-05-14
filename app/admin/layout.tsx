@@ -54,8 +54,30 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     router.push("/login");
   };
 
+  // BUG-14 FIX: Tampilkan loading spinner saat menunggu redirect, bukan layar kosong
   if (isPending || !session || (session.user as unknown as { role: string }).role !== "admin") {
-    return null;
+    return (
+      <div style={{
+        display: "flex",
+        height: "100vh",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "var(--background)",
+        flexDirection: "column",
+        gap: 16
+      }}>
+        <div style={{
+          width: 40,
+          height: 40,
+          borderRadius: "50%",
+          border: "3px solid var(--border)",
+          borderTopColor: "var(--blue-mirage)",
+          animation: "spin 0.8s linear infinite"
+        }} />
+        <p style={{ fontSize: 13, color: "var(--text-muted)", fontWeight: 500 }}>Memuat...</p>
+        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+      </div>
+    );
   }
 
   return (

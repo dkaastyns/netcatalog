@@ -186,8 +186,14 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
 }
 
 // ── DELETE /api/products/[id] ──────────────────────────────
-export async function DELETE(_request: NextRequest, { params }: RouteParams) {
+export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
+    // BUG-01 FIX: Verifikasi session & role sebelum menghapus
+    const session = await auth.api.getSession({ headers: request.headers });
+    if (!session || session.user.role !== "admin") {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
     const { id } = await params;
     const productId = parseInt(id);
 

@@ -15,10 +15,19 @@ export async function GET(request: NextRequest) {
     const categoryId = searchParams.get("categoryId") || "";
     const offset = (page - 1) * limit;
 
+    // BUG-05 FIX: Cek apakah request datang dari admin
+    const session = await auth.api.getSession({ headers: request.headers });
+    const isAdmin = session?.user?.role === "admin";
+
     // Build WHERE clauses dynamically
     const conditions: string[] = [];
     const params: unknown[] = [];
     let paramIndex = 1;
+
+    // Jika bukan admin, hanya tampilkan produk yang sudah published
+    if (!isAdmin) {
+      conditions.push(`p."status" = 'published'`);
+    }
 
     if (search) {
       conditions.push(`(p."name" ILIKE $${paramIndex} OR p."slug" ILIKE $${paramIndex})`);
@@ -26,7 +35,8 @@ export async function GET(request: NextRequest) {
       paramIndex++;
     }
 
-    if (status) {
+    if (status && isAdmin) {
+      // Filter by status hanya tersedia untuk admin
       conditions.push(`p."status" = $${paramIndex}`);
       params.push(status);
       paramIndex++;
