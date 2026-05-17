@@ -80,4 +80,4 @@ Proyek ini sudah dikonfigurasi untuk berjalan dengan Vercel secara mudah, memanf
    Masukkan variabel yang sama persis dengan `.env` kamu, dengan pengecualian berikut:
    - `DATABASE_URL`: Pastikan menggunakan port **6543** (Transaction Pooler di Supabase) jika mendeploy aplikasi serverless di Vercel agar koneksi tidak habis (*Connection Exhaustion*).
    - `BETTER_AUTH_URL` dan `NEXT_PUBLIC_BETTER_AUTH_URL`: Ganti isinya dari `localhost:3000` menjadi **URL production Vercel kamu** (contoh: `https://netcatalog-anda.vercel.app`).
-6. Klik **Deploy** dan tunggu proses selesai. 🎉
+6. Klik **Deploy** dan tunggu proses selesai.
