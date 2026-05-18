@@ -15,7 +15,9 @@ export async function POST(req: Request) {
 
     try {
         const body = (await req.json()) as CreateOrderInput;
-        const { customerName, customerEmail, customerPhone, companyName, notes, items } = body;
+        const { customerName, customerEmail, customerPhone, companyName, notes, items, status } = body;
+        
+        const initialStatus = status || "pending";
 
         // 1. Create the main order
         // For simplicity, if there's only 1 item, we also populate the legacy productId/quantity fields
@@ -39,14 +41,16 @@ export async function POST(req: Request) {
                 customerPhone || null,
                 companyName || null,
                 notes || null,
-                "pending",
+                initialStatus,
                 items.length === 1 ? firstItem.id : null,
                 items.length === 1 ? firstItem.quantity : null,
                 true // Since it's created by admin, mark as read
             ]
         );
 
-        // 2. Create order items
+        // 2. Create order items and handle stock if fulfilled
+        const isFulfilled = ["shipped", "delivered", "completed"].includes(initialStatus);
+
         if (items && items.length > 0) {
             for (const item of items) {
                 await query(
@@ -54,6 +58,14 @@ export async function POST(req: Request) {
                      VALUES ($1, $2, $3, $4)`,
                     [order.id, item.id, item.quantity, item.price]
                 );
+
+                if (isFulfilled) {
+                    await query(
+                        `INSERT INTO inventory_movements ("productId", quantity, type, notes, "userId")
+                         VALUES ($1, $2, $3, $4, $5)`,
+                        [item.id, -Math.abs(item.quantity), "out", `Pesanan Manual: Order #${order.id}`, session.user.id]
+                    );
+                }
             }
         }
 

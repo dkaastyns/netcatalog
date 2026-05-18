@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import type { OrderWithDetails, OrderStatus } from "@/types";
 import { useRouter } from "next/navigation";
 import { format } from "date-fns";
@@ -9,15 +9,27 @@ import {
     EnvelopeIcon,
     DocumentTextIcon,
     MapPinIcon,
-    PlusIcon
+    PlusIcon,
+    PencilSquareIcon,
+    TrashIcon,
+    ArrowUpTrayIcon
 } from "@heroicons/react/24/outline";
 import { LogOrderModal } from "./LogOrderModal";
+import { EditOrderModal } from "./EditOrderModal";
+import { ConfirmationModal } from "@/components/ui/ConfirmationModal";
 import type { ProductWithStock } from "@/types";
 
 export default function OrderTable({ initialOrders }: { initialOrders: OrderWithDetails[] }) {
     const [orders, setOrders] = useState(initialOrders);
     const [updatingId, setUpdatingId] = useState<number | null>(null);
     const [isLogModalOpen, setIsLogModalOpen] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [editingOrder, setEditingOrder] = useState<OrderWithDetails | null>(null);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [orderToDelete, setOrderToDelete] = useState<number | null>(null);
+    const [uploadingId, setUploadingId] = useState<number | null>(null);
+    
+    const fileInputRef = useRef<HTMLInputElement>(null);
     const [products, setProducts] = useState<ProductWithStock[]>([]);
     const router = useRouter();
     // BUG-13 FIX: pathname tidak lagi digunakan sebagai dependency
@@ -50,6 +62,84 @@ export default function OrderTable({ initialOrders }: { initialOrders: OrderWith
             toast.error("Gagal memperbarui status");
         } finally {
             setUpdatingId(null);
+        }
+    };
+
+    const handleEdit = (order: OrderWithDetails) => {
+        setEditingOrder(order);
+        setIsEditModalOpen(true);
+    };
+
+    const handleDeleteClick = (id: number) => {
+        setOrderToDelete(id);
+        setIsDeleteModalOpen(true);
+    };
+
+    const confirmDelete = async () => {
+        if (!orderToDelete) return;
+        try {
+            const res = await fetch(`/api/orders/${orderToDelete}`, { method: "DELETE" });
+            if (res.ok) {
+                setOrders(orders.filter(o => o.id !== orderToDelete));
+                toast.success("Pesanan berhasil dihapus");
+                router.refresh();
+            } else {
+                toast.error("Gagal menghapus pesanan");
+            }
+        } catch {
+            toast.error("Gagal menghapus pesanan");
+        } finally {
+            setIsDeleteModalOpen(false);
+            setOrderToDelete(null);
+        }
+    };
+
+    const triggerUpload = (id: number) => {
+        setUploadingId(id);
+        fileInputRef.current?.click();
+    };
+
+    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (!uploadingId) return;
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        const id = uploadingId;
+        setUploadingId(null);
+        const toastId = toast.loading("Mengunggah bukti...");
+
+        const fd = new FormData();
+        fd.append("file", file);
+
+        try {
+            const res = await fetch("/api/upload", {
+                method: "POST",
+                body: fd
+            });
+            const data = await res.json();
+            if (data.url) {
+                const updateRes = await fetch(`/api/orders/${id}`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ paymentProof: data.url }),
+                });
+                
+                if (updateRes.ok) {
+                    setOrders(orders.map(o => o.id === id ? { ...o, paymentProof: data.url } : o));
+                    toast.success("Bukti pembayaran berhasil diunggah", { id: toastId });
+                    router.refresh();
+                } else {
+                    throw new Error();
+                }
+            } else {
+                throw new Error();
+            }
+        } catch {
+            toast.error("Gagal mengunggah", { id: toastId });
+        } finally {
+            if (fileInputRef.current) {
+                fileInputRef.current.value = '';
+            }
         }
     };
 
@@ -171,12 +261,12 @@ export default function OrderTable({ initialOrders }: { initialOrders: OrderWith
                                         </span>
                                     </td>
                                     <td style={{ padding: "24px", textAlign: "right" }}>
-                                        <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                                        <div style={{ display: "flex", justifyContent: "flex-end", gap: "8px", alignItems: "center" }}>
                                             <select
                                                 className="nc-select"
                                                 style={{
-                                                    width: "180px", height: "38px", fontSize: "13px", padding: "0 12px",
-                                                    borderRadius: "10px", border: "1px solid var(--border)",
+                                                    width: "160px", height: "34px", fontSize: "12px", padding: "0 12px",
+                                                    borderRadius: "8px", border: "1px solid var(--border)",
                                                     cursor: "pointer"
                                                 }}
                                                 value={o.status}
@@ -187,6 +277,16 @@ export default function OrderTable({ initialOrders }: { initialOrders: OrderWith
                                                     <option key={key} value={key}>{config.label}</option>
                                                 ))}
                                             </select>
+                                            
+                                            <button onClick={() => triggerUpload(o.id)} style={{ width: 34, height: 34, border: "1px solid var(--border)", borderRadius: "var(--radius-sm)", background: "var(--surface)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-muted)", flexShrink: 0 }} title="Unggah Bukti">
+                                                <ArrowUpTrayIcon className="w-4 h-4" />
+                                            </button>
+                                            <button onClick={() => handleEdit(o)} style={{ width: 34, height: 34, border: "1px solid var(--border)", borderRadius: "var(--radius-sm)", background: "var(--surface)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-muted)", flexShrink: 0 }} title="Edit Pesanan">
+                                                <PencilSquareIcon className="w-4 h-4" />
+                                            </button>
+                                            <button onClick={() => handleDeleteClick(o.id)} style={{ width: 34, height: 34, border: "1px solid #fca5a5", borderRadius: "var(--radius-sm)", background: "#fff5f5", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--red-600)", flexShrink: 0 }} title="Hapus Pesanan">
+                                                <TrashIcon className="w-4 h-4" />
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>
@@ -196,6 +296,8 @@ export default function OrderTable({ initialOrders }: { initialOrders: OrderWith
                 </table>
             </div>
 
+            <input type="file" ref={fileInputRef} onChange={handleFileUpload} style={{ display: "none" }} accept="image/*,application/pdf" />
+
             <LogOrderModal
                 isOpen={isLogModalOpen}
                 onClose={() => setIsLogModalOpen(false)}
@@ -204,6 +306,28 @@ export default function OrderTable({ initialOrders }: { initialOrders: OrderWith
                     setIsLogModalOpen(false);
                     router.refresh();
                 }}
+            />
+
+            <EditOrderModal
+                key={editingOrder?.id ?? 'empty'}
+                isOpen={isEditModalOpen}
+                onClose={() => setIsEditModalOpen(false)}
+                order={editingOrder}
+                onSuccess={() => {
+                    setIsEditModalOpen(false);
+                    router.refresh();
+                }}
+            />
+
+            <ConfirmationModal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                onConfirm={confirmDelete}
+                title="Konfirmasi Penghapusan Pesanan"
+                message="Tindakan ini akan menghapus pesanan secara permanen. Jika pesanan sudah memotong stok, stok tersebut akan otomatis dikembalikan (restock)."
+                confirmText="Hapus Pesanan"
+                isLoading={false}
+                variant="danger"
             />
         </>
     );

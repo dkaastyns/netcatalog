@@ -3,18 +3,19 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { XMarkIcon, ShoppingBagIcon } from "@heroicons/react/24/outline";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 import { toast } from "sonner";
-import type { ProductWithStock } from "@/types";
+import type { OrderWithDetails } from "@/types";
+import { PencilSquareIcon } from "@heroicons/react/24/outline";
 
-interface LogOrderModalProps {
+interface EditOrderModalProps {
     isOpen: boolean;
     onClose: () => void;
-    products: ProductWithStock[];
+    order: OrderWithDetails | null;
     onSuccess: () => void;
 }
 
-export function LogOrderModal({ isOpen, onClose, products, onSuccess }: LogOrderModalProps) {
+export function EditOrderModal({ isOpen, onClose, order, onSuccess }: EditOrderModalProps) {
     const [mounted, setMounted] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -23,35 +24,21 @@ export function LogOrderModal({ isOpen, onClose, products, onSuccess }: LogOrder
         return () => clearTimeout(timer);
     }, []);
     const [formData, setFormData] = useState({
-        customerName: "",
-        customerEmail: "",
-        customerPhone: "",
-        companyName: "",
-        notes: "",
-        productId: "",
-        quantity: 1,
-        status: "completed",
+        customerName: order?.customerName || "",
+        customerEmail: order?.customerEmail || "",
+        customerPhone: order?.customerPhone || "",
+        companyName: order?.companyName || "",
+        notes: order?.notes || "",
     });
-
-    const selectedProductObj = Array.isArray(products) && formData.productId 
-        ? products.find(p => p.id === parseInt(formData.productId)) 
-        : null;
-    const totalPrice = selectedProductObj ? selectedProductObj.price * formData.quantity : 0;
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!formData.productId) {
-            toast.error("Silakan pilih produk");
-            return;
-        }
+        if (!order) return;
 
         setIsLoading(true);
         try {
-            const selectedProduct = Array.isArray(products) ? products.find(p => p.id === parseInt(formData.productId)) : null;
-            if (!selectedProduct) throw new Error("Product not found");
-
-            const res = await fetch("/api/orders", {
-                method: "POST",
+            const res = await fetch(`/api/orders/${order.id}`, {
+                method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     customerName: formData.customerName,
@@ -59,30 +46,11 @@ export function LogOrderModal({ isOpen, onClose, products, onSuccess }: LogOrder
                     customerPhone: formData.customerPhone,
                     companyName: formData.companyName,
                     notes: formData.notes,
-                    items: [
-                        {
-                            id: selectedProduct.id,
-                            quantity: formData.quantity,
-                            price: selectedProduct.price
-                        }
-                    ],
-                    status: formData.status
                 }),
             });
 
             if (res.ok) {
-                toast.success("Pesanan berhasil dicatat");
-                // BUG-09 FIX: Reset form setelah submit sukses
-                setFormData({
-                    customerName: "",
-                    customerEmail: "",
-                    customerPhone: "",
-                    companyName: "",
-                    notes: "",
-                    productId: "",
-                    quantity: 1,
-                    status: "completed",
-                });
+                toast.success("Pesanan berhasil diperbarui");
                 onSuccess();
             } else {
                 throw new Error("Gagal mencatat pesanan");
@@ -125,11 +93,11 @@ export function LogOrderModal({ isOpen, onClose, products, onSuccess }: LogOrder
                     <div className="nc-modal-header" style={{ padding: "24px", borderBottom: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "space-between", background: "var(--surface)" }}>
                         <div className="flex items-center gap-3">
                             <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600">
-                                <ShoppingBagIcon className="w-5 h-5" />
+                                <PencilSquareIcon className="w-5 h-5" />
                             </div>
                             <div>
-                                <h2 className="text-xl font-extrabold text-slate-900 tracking-tight">Catat Pesanan Baru</h2>
-                                <p className="text-sm text-slate-500">Rekam penjualan manual atau pemenuhan permintaan</p>
+                                <h2 className="text-xl font-extrabold text-slate-900 tracking-tight">Edit Pesanan</h2>
+                                <p className="text-sm text-slate-500">Ubah rincian pesanan #{order?.id}</p>
                             </div>
                         </div>
                         <button onClick={onClose} className="p-2 hover:bg-slate-100 rounded-lg transition-colors">
@@ -186,50 +154,6 @@ export function LogOrderModal({ isOpen, onClose, products, onSuccess }: LogOrder
                             </div>
                         </div>
 
-                        <div className="space-y-4 pt-4 border-t border-slate-100">
-                            <div className="space-y-2">
-                                <label className="nc-label">Pilih Produk</label>
-                                <select
-                                    required
-                                    className="nc-select"
-                                    value={formData.productId}
-                                    onChange={e => setFormData({ ...formData, productId: e.target.value })}
-                                >
-                                    <option value="">Pilih produk...</option>
-                                    {Array.isArray(products) && products.map(p => (
-                                        <option key={p.id} value={p.id}>
-                                            {p.name} - Rp {p.price.toLocaleString()} (Stok: {p.stockCount})
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-                            <div className="flex gap-6">
-                                <div className="w-1/3 space-y-2">
-                                    <label className="nc-label">Jumlah</label>
-                                    <input
-                                        required
-                                        type="number"
-                                        min="1"
-                                        className="nc-input"
-                                        value={formData.quantity}
-                                        onChange={e => setFormData({ ...formData, quantity: parseInt(e.target.value) })}
-                                    />
-                                </div>
-                                <div className="w-2/3 space-y-2">
-                                    <label className="nc-label">Status Awal</label>
-                                    <select
-                                        className="nc-select"
-                                        value={formData.status}
-                                        onChange={e => setFormData({ ...formData, status: e.target.value })}
-                                    >
-                                        <option value="pending">Menunggu Verifikasi</option>
-                                        <option value="completed">Transaksi Selesai (Langsung potong stok)</option>
-                                        <option value="shipped">Dihantar (Langsung potong stok)</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
                         <div className="space-y-2">
                             <label className="nc-label">Catatan / Instruksi</label>
                             <textarea
@@ -243,14 +167,6 @@ export function LogOrderModal({ isOpen, onClose, products, onSuccess }: LogOrder
                         </div>
 
                         <div className="flex flex-col gap-4 pt-6 border-t border-slate-100">
-                            {selectedProductObj && (
-                                <div className="flex justify-between items-center p-4 bg-slate-50 rounded-xl border border-slate-100">
-                                    <span className="text-sm font-medium text-slate-500">Estimasi Total Pembayaran</span>
-                                    <span className="text-xl font-extrabold text-slate-900">
-                                        Rp {totalPrice.toLocaleString('id-ID')}
-                                    </span>
-                                </div>
-                            )}
                             <div className="flex gap-3">
                                 <button
                                     type="button"
@@ -264,7 +180,7 @@ export function LogOrderModal({ isOpen, onClose, products, onSuccess }: LogOrder
                                     disabled={isLoading}
                                     className="nc-btn-primary flex-[2] h-12 rounded-xl font-bold bg-slate-900 text-white hover:bg-slate-800 disabled:opacity-50"
                                 >
-                                    {isLoading ? "Memproses..." : "Konfirmasi & Catat Pesanan"}
+                                    {isLoading ? "Menyimpan..." : "Simpan Perubahan"}
                                 </button>
                             </div>
                         </div>

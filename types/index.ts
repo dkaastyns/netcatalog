@@ -217,6 +217,7 @@ export interface CreateOrderInput {
   companyName?: string;
   notes?: string;
   paymentProof?: string;
+  status?: OrderStatus;
   items: {
     id: number;
     quantity: number;
