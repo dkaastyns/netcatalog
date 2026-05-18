@@ -240,8 +240,8 @@ export function OrderDetailModal({ isOpen, onClose, order, onSuccess, onDelete }
                                                     <div className="font-bold text-slate-900">{order.productName}</div>
                                                 </td>
                                                 <td className="px-6 py-4 text-slate-600">{order.quantity}</td>
-                                                <td className="px-6 py-4 text-slate-600 text-right">Rp {order.price?.toLocaleString('id-ID')}</td>
-                                                <td className="px-6 py-4 font-bold text-slate-900 text-right">Rp {((order.price || 0) * (order.quantity || 1)).toLocaleString('id-ID')}</td>
+                                                <td className="px-6 py-4 text-slate-600 text-right">Rp {((order as any).price)?.toLocaleString('id-ID')}</td>
+                                                <td className="px-6 py-4 font-bold text-slate-900 text-right">Rp {(((order as any).price || 0) * (order.quantity || 1)).toLocaleString('id-ID')}</td>
                                             </tr>
                                         )}
                                         {/* Untuk pesanan multi-item */}
@@ -260,7 +260,7 @@ export function OrderDetailModal({ isOpen, onClose, order, onSuccess, onDelete }
                                         <tr className="bg-slate-50 border-t border-slate-200">
                                             <td colSpan={3} className="px-6 py-4 font-extrabold text-slate-900 text-right">Total Akhir</td>
                                             <td className="px-6 py-4 font-extrabold text-blue-600 text-right text-lg">
-                                                Rp {(order.totalAmount || ((order.price || 0) * (order.quantity || 1))).toLocaleString('id-ID')}
+                                                Rp {((order as any).totalAmount || (((order as any).price || 0) * (order.quantity || 1))).toLocaleString('id-ID')}
                                             </td>
                                         </tr>
                                     </tfoot>
