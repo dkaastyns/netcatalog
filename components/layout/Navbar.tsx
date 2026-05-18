@@ -48,7 +48,14 @@ export function Navbar({ session: initialSession }: NavbarProps) {
                                     key={link.href}
                                     href={link.href}
                                     className={`nc-nav-link ${isActive ? 'active' : ''}`}
-                                    style={{ position: "relative" }}
+                                    style={{ 
+                                        position: "relative", 
+                                        padding: "8px 14px", 
+                                        color: isActive ? "var(--text-primary)" : "var(--text-muted)",
+                                        fontWeight: isActive ? 600 : 500,
+                                        zIndex: 1,
+                                        transition: "color 0.2s ease"
+                                    }}
                                 >
                                     {link.label}
                                     {isActive && (
@@ -56,14 +63,14 @@ export function Navbar({ session: initialSession }: NavbarProps) {
                                             layoutId="navbar-active-indicator"
                                             style={{
                                                 position: "absolute",
-                                                bottom: "-2px",
-                                                left: "8px",
-                                                right: "8px",
-                                                height: "2px",
-                                                background: "var(--navy-600)",
-                                                borderRadius: "2px"
+                                                inset: 0,
+                                                background: "var(--surface)",
+                                                border: "1px solid var(--border)",
+                                                borderRadius: "10px",
+                                                zIndex: -1,
+                                                boxShadow: "0 2px 8px rgba(0,0,0,0.04)"
                                             }}
-                                            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                                            transition={{ type: "spring", stiffness: 350, damping: 30 }}
                                         />
                                     )}
                                 </Link>

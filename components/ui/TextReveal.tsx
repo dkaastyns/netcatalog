@@ -51,7 +51,7 @@ export default function TextReveal({
     },
   };
 
-  const MotionComponent = motion(Component as any);
+  const MotionComponent = useMemo(() => motion(Component as any), [Component]);
 
   return (
     <MotionComponent
