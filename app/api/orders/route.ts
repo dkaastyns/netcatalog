@@ -52,6 +52,23 @@ export async function POST(req: Request) {
         const isFulfilled = ["shipped", "delivered", "completed"].includes(initialStatus);
 
         if (items && items.length > 0) {
+            if (isFulfilled) {
+                for (const item of items) {
+                    const [stockRow] = await query<{ stock: string }>(
+                        `SELECT COALESCE(SUM(quantity), 0) as stock FROM inventory_movements WHERE "productId" = $1`,
+                        [item.id]
+                    );
+                    const currentStock = parseInt(stockRow?.stock || "0");
+                    if (currentStock < item.quantity) {
+                        // Clean up the order we just created since it failed validation
+                        await query(`DELETE FROM orders WHERE id = $1`, [order.id]);
+                        return NextResponse.json({ 
+                            message: `Stok produk ID ${item.id} tidak mencukupi. Sisa stok: ${currentStock}` 
+                        }, { status: 400 });
+                    }
+                }
+            }
+
             for (const item of items) {
                 await query(
                     `INSERT INTO order_items ("orderId", "productId", quantity, "unitPrice")

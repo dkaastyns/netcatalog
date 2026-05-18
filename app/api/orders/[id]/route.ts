@@ -51,7 +51,46 @@ export async function PUT(
             return NextResponse.json({ message: "Order not found" }, { status: 404 });
         }
 
-        // 2. Update fields
+        // 2. Validate stock if transitioning to fulfilled
+        const fulfilledStatuses = ["shipped", "completed", "delivered"];
+        const wasFulfilled = fulfilledStatuses.includes(currentOrder.status);
+        const isNowFulfilled = status ? fulfilledStatuses.includes(status) : false;
+
+        let itemsToDeduct: OrderItem[] = [];
+        let isLegacySingleProduct = false;
+
+        if (!wasFulfilled && isNowFulfilled) {
+            const items = await query<OrderItem>(
+                `SELECT "productId", quantity FROM order_items WHERE "orderId" = $1`,
+                [id]
+            );
+
+            if (items.length > 0) {
+                for (const item of items) {
+                    const [stockRow] = await query<{ stock: string }>(
+                        `SELECT COALESCE(SUM(quantity), 0) as stock FROM inventory_movements WHERE "productId" = $1`,
+                        [item.productId]
+                    );
+                    const currentStock = parseInt(stockRow?.stock || "0");
+                    if (currentStock < item.quantity) {
+                        return NextResponse.json({ message: `Stok produk ID ${item.productId} tidak mencukupi. Sisa stok: ${currentStock}` }, { status: 400 });
+                    }
+                }
+                itemsToDeduct = items;
+            } else if (currentOrder.productId && currentOrder.quantity) {
+                const [stockRow] = await query<{ stock: string }>(
+                    `SELECT COALESCE(SUM(quantity), 0) as stock FROM inventory_movements WHERE "productId" = $1`,
+                    [currentOrder.productId]
+                );
+                const currentStock = parseInt(stockRow?.stock || "0");
+                if (currentStock < currentOrder.quantity) {
+                    return NextResponse.json({ message: `Stok tidak mencukupi. Sisa stok: ${currentStock}` }, { status: 400 });
+                }
+                isLegacySingleProduct = true;
+            }
+        }
+
+        // 3. Update fields
         await query(
             `UPDATE orders SET 
                 "customerName" = COALESCE($1, "customerName"),
@@ -77,40 +116,23 @@ export async function PUT(
             ]
         );
 
-        // 3. Automation: If order is fulfilled/shipped, create inventory movement
-        // We only do this once when transitioning TO these statuses
-        if (status) {
-        const fulfilledStatuses = ["shipped", "completed", "delivered"];
-        const wasFulfilled = fulfilledStatuses.includes(currentOrder.status);
-        const isNowFulfilled = fulfilledStatuses.includes(status);
-
+        // 4. Automation: Create inventory movement if transitioning to fulfilled
         if (!wasFulfilled && isNowFulfilled) {
-            // Check if it's a single-product order (from legacy schema support) or multi-product
-            const items = await query<OrderItem>(
-                `SELECT "productId", quantity FROM order_items WHERE "orderId" = $1`,
-                [id]
-            );
-
-            // Handle multi-product items
-            if (items.length > 0) {
-                for (const item of items) {
+            if (itemsToDeduct.length > 0) {
+                for (const item of itemsToDeduct) {
                     await query(
                         `INSERT INTO inventory_movements ("productId", quantity, type, notes, "userId")
                          VALUES ($1, $2, $3, $4, $5)`,
                         [item.productId, -Math.abs(item.quantity), "out", `Auto-deduction from Order #${id}`, session.user.id]
                     );
                 }
-            }
-            // Fallback for single-product field in orders table
-            else if (currentOrder.productId && currentOrder.quantity) {
+            } else if (isLegacySingleProduct && currentOrder.productId && currentOrder.quantity) {
                 await query(
                     `INSERT INTO inventory_movements ("productId", quantity, type, notes, "userId")
                      VALUES ($1, $2, $3, $4, $5)`,
                     [currentOrder.productId, -Math.abs(currentOrder.quantity), "out", `Auto-deduction from Order #${id}`, session.user.id]
                 );
             }
-        }
-
         }
 
         return NextResponse.json({ message: "Order updated successfully" });

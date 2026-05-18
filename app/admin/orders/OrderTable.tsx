@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import type { OrderWithDetails, OrderStatus } from "@/types";
 import { useRouter } from "next/navigation";
 import { format } from "date-fns";
@@ -10,26 +10,21 @@ import {
     DocumentTextIcon,
     MapPinIcon,
     PlusIcon,
-    PencilSquareIcon,
-    TrashIcon,
-    ArrowUpTrayIcon
+    EyeIcon
 } from "@heroicons/react/24/outline";
 import { LogOrderModal } from "./LogOrderModal";
-import { EditOrderModal } from "./EditOrderModal";
+import { OrderDetailModal } from "./OrderDetailModal";
 import { ConfirmationModal } from "@/components/ui/ConfirmationModal";
 import type { ProductWithStock } from "@/types";
 
 export default function OrderTable({ initialOrders }: { initialOrders: OrderWithDetails[] }) {
     const [orders, setOrders] = useState(initialOrders);
-    const [updatingId, setUpdatingId] = useState<number | null>(null);
     const [isLogModalOpen, setIsLogModalOpen] = useState(false);
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-    const [editingOrder, setEditingOrder] = useState<OrderWithDetails | null>(null);
+    const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+    const [selectedOrder, setSelectedOrder] = useState<OrderWithDetails | null>(null);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [orderToDelete, setOrderToDelete] = useState<number | null>(null);
-    const [uploadingId, setUploadingId] = useState<number | null>(null);
     
-    const fileInputRef = useRef<HTMLInputElement>(null);
     const [products, setProducts] = useState<ProductWithStock[]>([]);
     const router = useRouter();
     // BUG-13 FIX: pathname tidak lagi digunakan sebagai dependency
@@ -42,35 +37,15 @@ export default function OrderTable({ initialOrders }: { initialOrders: OrderWith
             .catch(() => { });
     }, []); // dependency array kosong = hanya sekali saat mount
 
-    const handleStatusChange = async (id: number, newStatus: OrderStatus) => {
-        setUpdatingId(id);
-        try {
-            const res = await fetch(`/api/orders/${id}`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ status: newStatus }),
-            });
+    // Status config
 
-            if (res.ok) {
-                setOrders(orders.map(o => o.id === id ? { ...o, status: newStatus } : o));
-                toast.success(`Status pesanan diperbarui ke ${newStatus}`);
-                router.refresh();
-            } else {
-                throw new Error("Gagal memperbarui");
-            }
-        } catch {
-            toast.error("Gagal memperbarui status");
-        } finally {
-            setUpdatingId(null);
-        }
-    };
-
-    const handleEdit = (order: OrderWithDetails) => {
-        setEditingOrder(order);
-        setIsEditModalOpen(true);
+    const handleViewDetail = (order: OrderWithDetails) => {
+        setSelectedOrder(order);
+        setIsDetailModalOpen(true);
     };
 
     const handleDeleteClick = (id: number) => {
+        setIsDetailModalOpen(false); // Close detail modal if open
         setOrderToDelete(id);
         setIsDeleteModalOpen(true);
     };
@@ -91,55 +66,6 @@ export default function OrderTable({ initialOrders }: { initialOrders: OrderWith
         } finally {
             setIsDeleteModalOpen(false);
             setOrderToDelete(null);
-        }
-    };
-
-    const triggerUpload = (id: number) => {
-        setUploadingId(id);
-        fileInputRef.current?.click();
-    };
-
-    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (!uploadingId) return;
-        const file = e.target.files?.[0];
-        if (!file) return;
-
-        const id = uploadingId;
-        setUploadingId(null);
-        const toastId = toast.loading("Mengunggah bukti...");
-
-        const fd = new FormData();
-        fd.append("file", file);
-
-        try {
-            const res = await fetch("/api/upload", {
-                method: "POST",
-                body: fd
-            });
-            const data = await res.json();
-            if (data.url) {
-                const updateRes = await fetch(`/api/orders/${id}`, {
-                    method: "PUT",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ paymentProof: data.url }),
-                });
-                
-                if (updateRes.ok) {
-                    setOrders(orders.map(o => o.id === id ? { ...o, paymentProof: data.url } : o));
-                    toast.success("Bukti pembayaran berhasil diunggah", { id: toastId });
-                    router.refresh();
-                } else {
-                    throw new Error();
-                }
-            } else {
-                throw new Error();
-            }
-        } catch {
-            toast.error("Gagal mengunggah", { id: toastId });
-        } finally {
-            if (fileInputRef.current) {
-                fileInputRef.current.value = '';
-            }
         }
     };
 
@@ -261,31 +187,10 @@ export default function OrderTable({ initialOrders }: { initialOrders: OrderWith
                                         </span>
                                     </td>
                                     <td style={{ padding: "24px", textAlign: "right" }}>
-                                        <div style={{ display: "flex", justifyContent: "flex-end", gap: "8px", alignItems: "center" }}>
-                                            <select
-                                                className="nc-select"
-                                                style={{
-                                                    width: "160px", height: "34px", fontSize: "12px", padding: "0 12px",
-                                                    borderRadius: "8px", border: "1px solid var(--border)",
-                                                    cursor: "pointer"
-                                                }}
-                                                value={o.status}
-                                                onChange={(e) => handleStatusChange(o.id, e.target.value as OrderStatus)}
-                                                disabled={updatingId === o.id}
-                                            >
-                                                {Object.entries(statusConfig).map(([key, config]) => (
-                                                    <option key={key} value={key}>{config.label}</option>
-                                                ))}
-                                            </select>
-                                            
-                                            <button onClick={() => triggerUpload(o.id)} style={{ width: 34, height: 34, border: "1px solid var(--border)", borderRadius: "var(--radius-sm)", background: "var(--surface)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-muted)", flexShrink: 0 }} title="Unggah Bukti">
-                                                <ArrowUpTrayIcon className="w-4 h-4" />
-                                            </button>
-                                            <button onClick={() => handleEdit(o)} style={{ width: 34, height: 34, border: "1px solid var(--border)", borderRadius: "var(--radius-sm)", background: "var(--surface)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-muted)", flexShrink: 0 }} title="Edit Pesanan">
-                                                <PencilSquareIcon className="w-4 h-4" />
-                                            </button>
-                                            <button onClick={() => handleDeleteClick(o.id)} style={{ width: 34, height: 34, border: "1px solid #fca5a5", borderRadius: "var(--radius-sm)", background: "#fff5f5", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--red-600)", flexShrink: 0 }} title="Hapus Pesanan">
-                                                <TrashIcon className="w-4 h-4" />
+                                        <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                                            <button onClick={() => handleViewDetail(o)} className="nc-btn-secondary" style={{ padding: "8px 16px", borderRadius: "10px", fontSize: "12px", gap: "6px", display: "flex", alignItems: "center" }}>
+                                                <EyeIcon className="w-4 h-4" />
+                                                Lihat Detail
                                             </button>
                                         </div>
                                     </td>
@@ -295,8 +200,6 @@ export default function OrderTable({ initialOrders }: { initialOrders: OrderWith
                     </tbody>
                 </table>
             </div>
-
-            <input type="file" ref={fileInputRef} onChange={handleFileUpload} style={{ display: "none" }} accept="image/*,application/pdf" />
 
             <LogOrderModal
                 isOpen={isLogModalOpen}
@@ -308,13 +211,14 @@ export default function OrderTable({ initialOrders }: { initialOrders: OrderWith
                 }}
             />
 
-            <EditOrderModal
-                key={editingOrder?.id ?? 'empty'}
-                isOpen={isEditModalOpen}
-                onClose={() => setIsEditModalOpen(false)}
-                order={editingOrder}
+            <OrderDetailModal
+                key={selectedOrder?.id ?? 'empty'}
+                isOpen={isDetailModalOpen}
+                onClose={() => setIsDetailModalOpen(false)}
+                order={selectedOrder}
+                onDelete={handleDeleteClick}
                 onSuccess={() => {
-                    setIsEditModalOpen(false);
+                    setIsDetailModalOpen(false);
                     router.refresh();
                 }}
             />
