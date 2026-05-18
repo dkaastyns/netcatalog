@@ -1,7 +1,13 @@
+"use client";
+
 import Link from "next/link";
+import { authClient } from "@/lib/auth-client";
 
 export function Footer() {
   const year = new Date().getFullYear();
+  const { data: session } = authClient.useSession();
+  const isLoggedIn = !!session;
+
   return (
     <footer className="nc-footer" style={{ marginTop: 0 }}>
       <div className="container-xl">
@@ -27,9 +33,12 @@ export function Footer() {
                 <Link key={l} href={l === "Katalog" ? "/catalog" : l === "Kategori" ? "/categories" : l === "Tentang Kami" ? "/about" : "/contact"} className="nc-footer-link" style={{ fontSize: "13px" }}>{l}</Link>
               ))}
             </div>
-            <Link href="/login" className="nc-footer-link" style={{ fontSize: "11.5px", opacity: 0.5 }}>
-              Akses Admin →
-            </Link>
+            {/* Only show "Akses Admin" when user is NOT logged in */}
+            {!isLoggedIn && (
+              <Link href="/login" className="nc-footer-link" style={{ fontSize: "11.5px", opacity: 0.5 }}>
+                Akses Admin →
+              </Link>
+            )}
           </div>
         </div>
       </div>
