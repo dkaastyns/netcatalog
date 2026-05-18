@@ -50,11 +50,8 @@ export function Navbar({ session: initialSession }: NavbarProps) {
                                     className={`nc-nav-link ${isActive ? 'active' : ''}`}
                                     style={{ 
                                         position: "relative", 
-                                        padding: "8px 14px", 
-                                        color: isActive ? "var(--text-primary)" : "var(--text-muted)",
-                                        fontWeight: isActive ? 600 : 500,
-                                        zIndex: 1,
-                                        transition: "color 0.2s ease"
+                                        padding: "6px 12px", 
+                                        zIndex: 1
                                     }}
                                 >
                                     {link.label}
@@ -64,11 +61,9 @@ export function Navbar({ session: initialSession }: NavbarProps) {
                                             style={{
                                                 position: "absolute",
                                                 inset: 0,
-                                                background: "var(--surface)",
-                                                border: "1px solid var(--border)",
-                                                borderRadius: "10px",
-                                                zIndex: -1,
-                                                boxShadow: "0 2px 8px rgba(0,0,0,0.04)"
+                                                background: "rgba(255, 255, 255, 0.15)",
+                                                borderRadius: "6px",
+                                                zIndex: -1
                                             }}
                                             transition={{ type: "spring", stiffness: 350, damping: 30 }}
                                         />
