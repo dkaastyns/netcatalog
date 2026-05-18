@@ -21,15 +21,15 @@ export default function TextReveal({
   // Split words to animate individually
   const words = useMemo(() => text.split(" "), [text]);
 
-  const container = {
+  const container: any = {
     hidden: { opacity: 0 },
-    visible: (i = 1) => ({
+    visible: (i: number = 1) => ({
       opacity: 1,
       transition: { staggerChildren: 0.08, delayChildren: delay * i },
     }),
   };
 
-  const child = {
+  const child: any = {
     visible: {
       opacity: 1,
       y: 0,
