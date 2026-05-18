@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import type { ProductWithStock, Category } from "@/types";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
@@ -32,10 +32,7 @@ export default function ProductTable({ initialProducts, categories }: ProductTab
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Sync state when real-time updates arrive
-  useEffect(() => {
-    setProducts(initialProducts);
-  }, [initialProducts]);
+  // router.refresh() akan memperbarui initialProducts dari server secara otomatis
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);

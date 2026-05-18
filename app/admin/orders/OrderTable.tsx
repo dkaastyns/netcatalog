@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import type { OrderWithDetails, OrderStatus } from "@/types";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { format } from "date-fns";
 import { toast } from "sonner";
 

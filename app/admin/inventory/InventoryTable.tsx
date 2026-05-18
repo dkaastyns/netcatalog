@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import type { Product } from "@/types";
 import {
@@ -26,13 +26,9 @@ interface InventoryTableProps {
 }
 
 export default function InventoryTable({ initialMovements, products, userId }: InventoryTableProps) {
-  // BUG-07+08 FIX: Tambah setter dan sinkronisasi state saat props berubah
-  const [movements, setMovements] = useState(initialMovements);
+  // router.refresh() akan memperbarui initialMovements dari server secara otomatis
+  const movements = initialMovements;
   const router = useRouter();
-  // Sinkronisasi state lokal saat server data berubah (setelah router.refresh)
-  useEffect(() => {
-    setMovements(initialMovements);
-  }, [initialMovements]);
 
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
