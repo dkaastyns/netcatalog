@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 import { useMemo } from "react";
 
 interface TextRevealProps {
@@ -8,20 +8,35 @@ interface TextRevealProps {
   delay?: number;
   duration?: number;
   className?: string;
-  as?: React.ElementType;
+  as?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p" | "div" | "span";
 }
+
+// Pre-built at module level — never created during render.
+const motionTags = {
+  h1: motion.h1,
+  h2: motion.h2,
+  h3: motion.h3,
+  h4: motion.h4,
+  h5: motion.h5,
+  h6: motion.h6,
+  p: motion.p,
+  div: motion.div,
+  span: motion.span,
+} as const;
 
 export default function TextReveal({
   text,
   delay = 0,
   duration = 0.5,
   className = "",
-  as: Component = "h1",
+  as: tag = "h1",
 }: TextRevealProps) {
-  // Split words to animate individually
   const words = useMemo(() => text.split(" "), [text]);
 
-  const container: any = {
+  // Simple lookup — not creating a component during render.
+  const MotionTag = motionTags[tag];
+
+  const container: Variants = {
     hidden: { opacity: 0 },
     visible: (i: number = 1) => ({
       opacity: 1,
@@ -29,7 +44,7 @@ export default function TextReveal({
     }),
   };
 
-  const child: any = {
+  const child: Variants = {
     visible: {
       opacity: 1,
       y: 0,
@@ -51,10 +66,8 @@ export default function TextReveal({
     },
   };
 
-  const MotionComponent = useMemo(() => motion(Component as any), [Component]);
-
   return (
-    <MotionComponent
+    <MotionTag
       style={{ overflow: "hidden", display: "flex", flexWrap: "wrap", gap: "0.25em" }}
       className={className}
       variants={container}
@@ -66,6 +79,6 @@ export default function TextReveal({
           {word}
         </motion.span>
       ))}
-    </MotionComponent>
+    </MotionTag>
   );
 }

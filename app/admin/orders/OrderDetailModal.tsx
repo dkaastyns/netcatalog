@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, type Variants } from "framer-motion";
 import { XMarkIcon, DocumentTextIcon, ArrowUpTrayIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { toast } from "sonner";
 import type { OrderWithDetails, OrderStatus } from "@/types";
@@ -17,13 +17,13 @@ interface OrderDetailModalProps {
 }
 
 // Animation variants
-const backdropVariants: any = {
+const backdropVariants: Variants = {
     hidden: { opacity: 0 },
     visible: { opacity: 1, transition: { duration: 0.2 } },
     exit: { opacity: 0, transition: { duration: 0.2, delay: 0.1 } },
 };
 
-const panelVariants: any = {
+const panelVariants: Variants = {
     hidden: { scale: 0.96, opacity: 0, y: 24 },
     visible: {
         scale: 1, opacity: 1, y: 0,
@@ -35,7 +35,7 @@ const panelVariants: any = {
     },
 };
 
-const sectionVariants: any = {
+const sectionVariants: Variants = {
     hidden: { opacity: 0, y: 16 },
     visible: (i: number) => ({
         opacity: 1, y: 0,
@@ -43,7 +43,7 @@ const sectionVariants: any = {
     }),
 };
 
-const fieldVariants: any = {
+const fieldVariants: Variants = {
     hidden: { opacity: 0, x: -8 },
     visible: (i: number) => ({
         opacity: 1, x: 0,
@@ -52,7 +52,6 @@ const fieldVariants: any = {
 };
 
 export function OrderDetailModal({ isOpen, onClose, order, onSuccess, onDelete }: OrderDetailModalProps) {
-    const [mounted, setMounted] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
     const [savePulse, setSavePulse] = useState(false);
@@ -67,13 +66,10 @@ export function OrderDetailModal({ isOpen, onClose, order, onSuccess, onDelete }
         customerAddress: order?.customerAddress || "",
     });
 
-    useEffect(() => {
-        setMounted(true);
-    }, []);
-
-    // Sync formData when order changes
+    // Sync formData when the selected order changes
     useEffect(() => {
         if (order) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setFormData({
                 customerName: order.customerName || "",
                 customerEmail: order.customerEmail || "",
@@ -83,9 +79,8 @@ export function OrderDetailModal({ isOpen, onClose, order, onSuccess, onDelete }
                 customerAddress: order.customerAddress || "",
             });
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [order?.id]);
-
-    if (!mounted) return null;
 
     const handleSaveInfo = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -401,8 +396,8 @@ export function OrderDetailModal({ isOpen, onClose, order, onSuccess, onDelete }
                                                 >
                                                     <td style={{ padding: "12px 16px", fontWeight: 700, color: "#0f172a", fontSize: "13px" }}>{order.productName}</td>
                                                     <td style={{ padding: "12px 16px", color: "#475569", fontSize: "13px" }}>{order.quantity}</td>
-                                                    <td style={{ padding: "12px 16px", color: "#475569", fontSize: "13px", textAlign: "right" }}>Rp {((order as any).price)?.toLocaleString("id-ID")}</td>
-                                                    <td style={{ padding: "12px 16px", fontWeight: 700, color: "#0f172a", fontSize: "13px", textAlign: "right" }}>Rp {(((order as any).price || 0) * (order.quantity || 1)).toLocaleString("id-ID")}</td>
+                                                    <td style={{ padding: "12px 16px", color: "#475569", fontSize: "13px", textAlign: "right" }}>Rp {((order as OrderWithDetails & { price?: number }).price)?.toLocaleString("id-ID")}</td>
+                                                    <td style={{ padding: "12px 16px", fontWeight: 700, color: "#0f172a", fontSize: "13px", textAlign: "right" }}>Rp {(((order as OrderWithDetails & { price?: number }).price || 0) * (order.quantity || 1)).toLocaleString("id-ID")}</td>
                                                 </motion.tr>
                                             )}
                                             {order.items?.map((item: { productName?: string; productId: number; quantity: number; unitPrice: number }, idx: number) => (
@@ -430,7 +425,7 @@ export function OrderDetailModal({ isOpen, onClose, order, onSuccess, onDelete }
                                             >
                                                 <td colSpan={3} style={{ padding: "14px 16px", fontWeight: 800, color: "#0f172a", textAlign: "right", fontSize: "14px" }}>Total Akhir</td>
                                                 <td style={{ padding: "14px 16px", fontWeight: 800, color: "#2563eb", textAlign: "right", fontSize: "16px" }}>
-                                                    Rp {((order as any).totalAmount || (((order as any).price || 0) * (order.quantity || 1))).toLocaleString("id-ID")}
+                                                    Rp {((order as OrderWithDetails & { totalAmount?: number; price?: number }).totalAmount || (((order as OrderWithDetails & { price?: number }).price || 0) * (order.quantity || 1))).toLocaleString("id-ID")}
                                                 </td>
                                             </motion.tr>
                                         </tfoot>

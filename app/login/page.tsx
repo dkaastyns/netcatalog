@@ -23,7 +23,7 @@ export default function LoginPage() {
   
   const blob1Ref = useRef(null);
   const blob2Ref = useRef(null);
-  const formRef = useRef(null);
+  const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
     // Background floating animation
@@ -49,7 +49,7 @@ export default function LoginPage() {
     // Staggered form field entry
     if (formRef.current) {
       gsap.fromTo(
-        (formRef.current as any).children,
+        formRef.current.children,
         { opacity: 0, y: 15 },
         { opacity: 1, y: 0, duration: 0.6, stagger: 0.1, ease: "power2.out", delay: 0.3 }
       );

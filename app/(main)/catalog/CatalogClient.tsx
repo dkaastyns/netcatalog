@@ -38,13 +38,13 @@ export default function CatalogClient({ initialProducts, categories }: CatalogCl
   const [maxPrice, setMaxPrice] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
-  const sidebarRef = useRef(null);
+  const sidebarRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     // Premium sidebar entry animation with GSAP
     if (sidebarRef.current) {
       gsap.fromTo(
-        (sidebarRef.current as any).children,
+        sidebarRef.current.children,
         { opacity: 0, x: -15 },
         { opacity: 1, x: 0, duration: 0.6, stagger: 0.08, ease: "power2.out", delay: 0.2 }
       );
