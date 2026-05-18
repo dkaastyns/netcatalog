@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import Link from "next/link";
 import type { ProductWithStock } from "@/types";
 import Image from "next/image";
 import { formatCurrency } from "@/lib/format";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRealtimeSync } from "@/lib/hooks/use-realtime-sync";
+import gsap from "gsap";
 import {
   MagnifyingGlassIcon,
   ChevronLeftIcon,
@@ -16,6 +17,7 @@ import {
   AdjustmentsHorizontalIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
+import TextReveal from "@/components/ui/TextReveal";
 
 interface CatalogClientProps {
   initialProducts: ProductWithStock[];
@@ -36,6 +38,18 @@ export default function CatalogClient({ initialProducts, categories }: CatalogCl
   const [maxPrice, setMaxPrice] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
+  const sidebarRef = useRef(null);
+
+  useEffect(() => {
+    // Premium sidebar entry animation with GSAP
+    if (sidebarRef.current) {
+      gsap.fromTo(
+        (sidebarRef.current as any).children,
+        { opacity: 0, x: -15 },
+        { opacity: 1, x: 0, duration: 0.6, stagger: 0.08, ease: "power2.out", delay: 0.2 }
+      );
+    }
+  }, []);
 
   const toggleCategory = (slug: string) => {
     setSelectedCategories(prev =>
@@ -111,6 +125,7 @@ export default function CatalogClient({ initialProducts, categories }: CatalogCl
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
           style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 20, padding: "28px 24px", position: "sticky", top: "84px", boxShadow: "0 4px 20px rgba(0,0,0,0.04)" }}
+          ref={sidebarRef}
         >
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "24px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -221,10 +236,12 @@ export default function CatalogClient({ initialProducts, categories }: CatalogCl
           style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "28px" }}
         >
           <div>
-            <h1 style={{ fontSize: "26px", fontWeight: 800, letterSpacing: "-0.5px", color: "var(--text-primary)" }}>Katalog Produk</h1>
-            <p style={{ fontSize: "13.5px", color: "var(--text-muted)", marginTop: "4px" }}>
+            <TextReveal text="Katalog Produk" className="catalog-title" duration={0.6} delay={0.1} />
+            <style>{`.catalog-title { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; color: var(--text-primary); margin: 0; }`}</style>
+            
+            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} style={{ fontSize: "13.5px", color: "var(--text-muted)", marginTop: "4px" }}>
               Menampilkan <strong style={{ color: "var(--text-primary)" }}>{paginatedProducts.length}</strong> dari <strong style={{ color: "var(--text-primary)" }}>{filteredProducts.length}</strong> produk
-            </p>
+            </motion.p>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
             <span style={{ fontSize: "12.5px", color: "var(--text-muted)", fontWeight: 500 }}>Urutkan:</span>
@@ -272,12 +289,13 @@ export default function CatalogClient({ initialProducts, categories }: CatalogCl
                 <motion.div
                   key={p.id}
                   className="nc-product-card"
-                  initial={{ opacity: 0, y: 24 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.45, delay: idx * 0.06, ease: [0.22, 1, 0.36, 1] }}
+                  initial={{ opacity: 0, y: 24, scale: 0.96 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  whileHover={{ y: -6, transition: { duration: 0.2 } }}
+                  transition={{ duration: 0.5, delay: idx * 0.08, ease: [0.22, 1, 0.36, 1] }}
                 >
                   <Link href={`/catalog/${p.slug}`}>
-                    <div className="nc-product-card-image">
+                    <div className="nc-product-card-image" style={{ overflow: "hidden" }}>
                       {/* BUG-11 FIX: Badge 'Baru' berdasarkan tanggal rilis (30 hari terakhir) */}
                       {(new Date().getTime() - new Date(p.createdAt).getTime()) < 30 * 24 * 60 * 60 * 1000 && (
                         <span className="nc-product-badge new">Baru</span>
@@ -287,7 +305,9 @@ export default function CatalogClient({ initialProducts, categories }: CatalogCl
                         <span className="nc-product-badge bestseller">Terlaris</span>
                       )}
                       {p.image ? (
-                        <Image src={p.image} alt={p.name} width={400} height={300} style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute", inset: 0 }} unoptimized />
+                        <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.4 }} style={{ width: "100%", height: "100%", position: "absolute", inset: 0 }}>
+                          <Image src={p.image} alt={p.name} width={400} height={300} style={{ width: "100%", height: "100%", objectFit: "cover" }} unoptimized />
+                        </motion.div>
                       ) : (
                         <CubeIcon style={{ width: 48, height: 48 }} className="text-slate-800 opacity-30 stroke-[1.2]" />
                       )}
