@@ -17,13 +17,13 @@ interface OrderDetailModalProps {
 }
 
 // Animation variants
-const backdropVariants = {
+const backdropVariants: any = {
     hidden: { opacity: 0 },
     visible: { opacity: 1, transition: { duration: 0.2 } },
     exit: { opacity: 0, transition: { duration: 0.2, delay: 0.1 } },
 };
 
-const panelVariants = {
+const panelVariants: any = {
     hidden: { scale: 0.96, opacity: 0, y: 24 },
     visible: {
         scale: 1, opacity: 1, y: 0,
@@ -35,7 +35,7 @@ const panelVariants = {
     },
 };
 
-const sectionVariants = {
+const sectionVariants: any = {
     hidden: { opacity: 0, y: 16 },
     visible: (i: number) => ({
         opacity: 1, y: 0,
@@ -43,7 +43,7 @@ const sectionVariants = {
     }),
 };
 
-const fieldVariants = {
+const fieldVariants: any = {
     hidden: { opacity: 0, x: -8 },
     visible: (i: number) => ({
         opacity: 1, x: 0,
