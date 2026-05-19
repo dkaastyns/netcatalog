@@ -18,7 +18,8 @@ interface CategoryTableProps {
 }
 
 export default function CategoryTable({ initialCategories }: CategoryTableProps) {
-  const [categories, setCategories] = useState(initialCategories);
+  const [deletedIds, setDeletedIds] = useState<number[]>([]);
+  const categories = initialCategories.filter(c => !deletedIds.includes(c.id));
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
@@ -60,7 +61,7 @@ export default function CategoryTable({ initialCategories }: CategoryTableProps)
     try {
       const res = await fetch(`/api/categories/${categoryToDelete}`, { method: "DELETE" });
       if (res.ok) {
-        setCategories(categories.filter(c => c.id !== categoryToDelete));
+        setDeletedIds(prev => [...prev, categoryToDelete]);
         setIsDeleteModalOpen(false);
         router.refresh();
       }

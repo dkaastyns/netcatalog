@@ -26,13 +26,12 @@ interface ProductTableProps {
 export default function ProductTable({ initialProducts, categories }: ProductTableProps) {
   useRealtimeSync();
 
-  const [products, setProducts] = useState(initialProducts);
+  const [deletedIds, setDeletedIds] = useState<number[]>([]);
+  const products = initialProducts.filter(p => !deletedIds.includes(p.id));
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  // router.refresh() akan memperbarui initialProducts dari server secara otomatis
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -107,7 +106,7 @@ export default function ProductTable({ initialProducts, categories }: ProductTab
     try {
       const res = await fetch(`/api/products/${productToDelete}`, { method: "DELETE" });
       if (res.ok) {
-        setProducts(products.filter(p => p.id !== productToDelete));
+        setDeletedIds(prev => [...prev, productToDelete]);
         setIsDeleteModalOpen(false);
         router.refresh();
       }

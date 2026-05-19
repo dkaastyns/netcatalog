@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { queryOne } from "@/lib/db";
 import { auth } from "@/lib/auth";
+import { revalidatePath } from "next/cache";
 
 export async function POST(request: NextRequest) {
   try {
@@ -21,6 +22,8 @@ export async function POST(request: NextRequest) {
        VALUES ($1, $2, $3, $4, $5) RETURNING *`,
       [productId, quantity, type, notes || null, session.user.id]
     );
+
+    revalidatePath("/", "layout");
 
     return NextResponse.json({ data: result }, { status: 201 });
   } catch (error) {
