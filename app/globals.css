@@ -100,7 +100,7 @@
   }
 
   html {
-    scroll-behavior: smooth;
+    /* Kept default scroll for instant page transitions */
   }
 
   body {
