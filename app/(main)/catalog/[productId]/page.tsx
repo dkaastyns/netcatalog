@@ -70,11 +70,11 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
           <span style={{ color: "var(--text-primary)", fontWeight: 600 }}>{product.name}</span>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 480px", gap: "64px", alignItems: "start" }}>
+        <div className="product-grid">
 
-          <div className="animate-fadeUp">
+            <div className="animate-fadeUp">
             {/* Product Visual Hero */}
-            <div style={{
+            <div className="product-hero" style={{
               background: "linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%)",
               border: "1px solid var(--border)",
               borderRadius: "var(--radius-2xl)",
@@ -127,8 +127,8 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
             </div>
           </div>
 
-          <aside className="animate-fadeUp" style={{ animationDelay: "0.1s" }}>
-            <div className="nc-card" style={{ padding: "40px", position: "sticky", top: "100px", border: "1px solid var(--border-strong)" }}>
+            <aside className="animate-fadeUp">
+            <div className="nc-card product-purchase-card">
               <div className="nc-badge nc-badge-gray" style={{ marginBottom: "16px" }}>{product.categoryName}</div>
               <h1 style={{ fontSize: "32px", fontWeight: 800, lineHeight: 1.2, color: "var(--navy-950)", letterSpacing: "-0.5px" }}>{product.name}</h1>
 

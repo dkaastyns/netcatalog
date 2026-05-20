@@ -39,7 +39,7 @@ export default async function AboutPage() {
       {/* ── Mission Section ────────────────────────── */}
       <section style={{ padding: "80px 0" }}>
         <div className="container-xl">
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "64px", alignItems: "center" }}>
+          <div className="about-mission-grid" style={{ gap: "64px", alignItems: "center" }}>
             <div className="animate-fadeUp">
               <span style={{ fontSize: "13px", fontWeight: 700, color: "var(--blue-mirage)", textTransform: "uppercase", letterSpacing: "1px" }}>Misi Kami</span>
               <h2 style={{ fontSize: "32px", fontWeight: 800, marginTop: "12px", marginBottom: "24px" }}>Mendefinisikan Ulang Akuisisi Infrastruktur</h2>
@@ -69,21 +69,8 @@ export default async function AboutPage() {
             </div>
             <div className="animate-fadeUp delay-200">
               <div
-                className="nc-card"
-                style={{
-                  borderRadius: "32px",
-                  height: "460px",
-                  overflow: "hidden",
-                  position: "relative",
-                  background: "var(--surface)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  padding: "0",
-                  border: "1px solid var(--border-strong)",
-                  boxShadow: "0 40px 80px -15px rgba(0,0,0,0.12), 0 0 1px rgba(0,0,0,0.1)",
-                  transition: "all 0.5s cubic-bezier(0.4, 0, 0.2, 1)"
-                }}
+                className="nc-card about-mission-card"
+                style={{ borderRadius: "32px", overflow: "hidden", position: "relative", background: "var(--surface)", display: "flex", alignItems: "center", justifyContent: "center", padding: "0", border: "1px solid var(--border-strong)", boxShadow: "0 40px 80px -15px rgba(0,0,0,0.12), 0 0 1px rgba(0,0,0,0.1)", transition: "all 0.5s cubic-bezier(0.4, 0, 0.2, 1)" }}
               >
                 <div style={{ position: "absolute", inset: 0, background: "linear-gradient(225deg, rgba(255,255,255,0.1) 0%, transparent 40%)", zIndex: 2, pointerEvents: "none" }} />
                 <Image
@@ -109,7 +96,7 @@ export default async function AboutPage() {
           <div style={{ textAlign: "center", marginBottom: "56px" }}>
             <h2 style={{ fontSize: "32px", fontWeight: 800 }}>Nilai Inti</h2>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "32px" }}>
+          <div className="values-grid" style={{ gap: "32px" }}>
             {[
               { icon: ShieldCheckIcon, title: "Integritas", desc: "Kami memberikan spesifikasi teknis yang jujur dan waktu tunggu yang transparan untuk setiap pesanan." },
               { icon: LightBulbIcon, title: "Inovasi", desc: "Platform kami terus berkembang untuk menyediakan alat pelacakan dan katalogisasi yang lebih baik." },

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
+import { useState } from "react";
 import { authClient } from "@/lib/auth-client";
 import Magnet from "../ui/Magnet";
 import { motion } from "framer-motion";
@@ -33,14 +34,21 @@ export function Navbar({ session: initialSession }: NavbarProps) {
         { href: "/contact", label: "Kontak" },
     ];
 
+    const [open, setOpen] = useState(false);
+
     return (
         <nav className="nc-nav">
             <div className="container-xl" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "32px" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "24px", position: "relative" }}>
                     <Magnet intensity={0.2} padding={8}>
                         <Link href="/" className="nc-nav-logo">Netcatalog</Link>
                     </Magnet>
-                    <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+
+                    <button className="nc-nav-toggle" onClick={() => setOpen(!open)} aria-label="Toggle menu">
+                        {open ? '✕' : '☰'}
+                    </button>
+
+                    <div className="nc-nav-links" style={{ display: "flex", alignItems: "center", gap: "4px" }}>
                         {navLinks.map(link => {
                             const isActive = pathname === link.href;
                             return (
@@ -71,6 +79,15 @@ export function Navbar({ session: initialSession }: NavbarProps) {
                                 </Link>
                             );
                         })}
+                    </div>
+
+                    {/* Mobile menu (toggle-controlled) */}
+                    <div className={`nc-nav-mobile-menu ${open ? 'open' : ''}`}>
+                        {navLinks.map(link => (
+                            <Link key={link.href} href={link.href} className="nc-nav-link" onClick={() => setOpen(false)} style={{ padding: '10px 12px' }}>
+                                {link.label}
+                            </Link>
+                        ))}
                     </div>
                 </div>
 

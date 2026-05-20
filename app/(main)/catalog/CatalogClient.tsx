@@ -115,11 +115,13 @@ export default function CatalogClient({ initialProducts, categories }: CatalogCl
     setMinPrice(""); setMaxPrice(""); setSearchQuery(""); setCurrentPage(1);
   };
 
+  const [filtersOpen, setFiltersOpen] = useState(false);
+
   return (
-    <div className="container-xl" style={{ padding: "48px 24px", display: "grid", gridTemplateColumns: "288px 1fr", gap: "32px", alignItems: "start" }}>
+    <div className="container-xl catalog-layout" style={{ padding: "48px 24px" }}>
 
       {/* ── Sidebar Filters ──────────────────────── */}
-      <aside>
+      <aside className={`catalog-sidebar ${filtersOpen ? 'open' : ''}`}>
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -132,11 +134,16 @@ export default function CatalogClient({ initialProducts, categories }: CatalogCl
               <AdjustmentsHorizontalIcon style={{ width: 18, height: 18, color: "var(--navy-700)" }} />
               <h3 style={{ fontSize: "15px", fontWeight: 700, color: "var(--text-primary)" }}>Filter</h3>
             </div>
-            {hasActiveFilters && (
-              <button onClick={clearAllFilters} style={{ fontSize: 11, fontWeight: 600, color: "var(--red-600)", background: "var(--red-100)", border: "none", borderRadius: 20, padding: "3px 10px", cursor: "pointer", display: "flex", alignItems: "center", gap: 4 }}>
-                <XMarkIcon style={{ width: 12, height: 12 }} /> Hapus
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+              {hasActiveFilters && (
+                <button onClick={clearAllFilters} style={{ fontSize: 11, fontWeight: 600, color: "var(--red-600)", background: "var(--red-100)", border: "none", borderRadius: 20, padding: "3px 10px", cursor: "pointer", display: "flex", alignItems: "center", gap: 4 }}>
+                  <XMarkIcon style={{ width: 12, height: 12 }} /> Hapus
+                </button>
+              )}
+              <button onClick={() => setFiltersOpen(false)} aria-label="Close filters" className="nc-filter-close" style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}>
+                <XMarkIcon style={{ width: 18, height: 18 }} />
               </button>
-            )}
+            </div>
           </div>
 
           {/* Search */}
@@ -224,7 +231,13 @@ export default function CatalogClient({ initialProducts, categories }: CatalogCl
               ))}
             </div>
           </div>
+        
         </motion.div>
+
+        {/* Mobile backdrop when filters open */}
+        {filtersOpen && (
+          <div className="catalog-backdrop" onClick={() => setFiltersOpen(false)} />
+        )}
       </aside>
 
       <main>
@@ -244,6 +257,9 @@ export default function CatalogClient({ initialProducts, categories }: CatalogCl
             </motion.p>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            {mounted && (
+              <button className="nc-filter-toggle" onClick={() => setFiltersOpen(true)}>Filter</button>
+            )}
             <span style={{ fontSize: "12.5px", color: "var(--text-muted)", fontWeight: 500 }}>Urutkan:</span>
             <select
               value={sortBy}

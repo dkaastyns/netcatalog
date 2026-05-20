@@ -11,7 +11,7 @@ export function Footer() {
   return (
     <footer className="nc-footer" style={{ marginTop: 0 }}>
       <div className="container-xl">
-        <div style={{ display: "grid", gridTemplateColumns: "1fr auto 1fr", alignItems: "center", gap: 32 }}>
+        <div className="nc-footer-grid" style={{ display: "grid", gridTemplateColumns: "1fr auto 1fr", alignItems: "center", gap: 32 }}>
           {/* Brand */}
           <div>
             <div style={{ fontWeight: 800, fontSize: "16px", color: "#fff", marginBottom: "6px", letterSpacing: "-0.3px" }}>Netcatalog</div>

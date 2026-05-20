@@ -88,7 +88,7 @@ export default async function HomePage() {
         <div style={{ position: "absolute", top: -40, right: "20%", width: 300, height: 300, borderRadius: "50%", background: "rgba(255,255,255,0.02)", zIndex: 0 }} />
 
         <div className="container-xl" style={{ position: "relative", zIndex: 1 }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "72px", alignItems: "center" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "72px", alignItems: "center" }}>
             <div className="animate-fadeUp">
 
               <h1 style={{ fontSize: "48px", fontWeight: 800, lineHeight: 1.1, color: "#ffffff", marginBottom: "20px", letterSpacing: "-1.5px" }}>
@@ -150,7 +150,7 @@ export default async function HomePage() {
       {/* ── Stats Bar ──────────────────────────────── */}
       <section style={{ background: "var(--surface)", borderBottom: "1px solid var(--border)", padding: "0" }}>
         <div className="container-xl">
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "0", textAlign: "center" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "0", textAlign: "center" }}>
             {[
               { v: stats.products, l: "Total Produk", icon: "📦" },
               { v: stats.categories, l: "Kategori", icon: "🗂️" },
@@ -203,7 +203,7 @@ export default async function HomePage() {
             </div>
             <Link href="/catalog" style={{ fontSize: "13px", fontWeight: 600, color: "var(--navy-700)", display: "flex", alignItems: "center", gap: 4, padding: "8px 16px", borderRadius: 8, border: "1px solid var(--border)", background: "var(--surface)", transition: "all 0.2s" }}>Lihat Semua →</Link>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "24px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "24px" }}>
             {products.map((p, idx) => (
               <div key={p.id} className={`nc-product-card animate-fadeUp delay-${Math.min(idx * 100, 500)}`}>
                 <div className="nc-product-card-image">
@@ -255,7 +255,7 @@ export default async function HomePage() {
             <h2 className="nc-section-title animate-fadeUp" style={{ fontSize: "28px", letterSpacing: "-0.5px" }}>Mengapa Netcatalog?</h2>
             <p className="nc-section-subtitle animate-fadeUp delay-100" style={{ marginTop: "10px", fontSize: "15px", maxWidth: 520, margin: "10px auto 0" }}>Platform manajemen inventaris jaringan yang dirancang untuk keandalan enterprise</p>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "24px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "24px" }}>
             {[
               { icon: ShieldCheckIcon, title: "Kelas Perusahaan", desc: "Perangkat keras yang dibuat untuk tahan lama di lingkungan pusat data 24/7 dengan dukungan garansi komprehensif." },
               { icon: PhoneIcon, title: "Dukungan Ahli 24/7", desc: "Akses langsung ke insinyur jaringan L3 untuk bantuan penerapan dan penyelesaian masalah cepat." },

@@ -66,6 +66,10 @@
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, .07), 0 2px 4px -2px rgba(0, 0, 0, .05);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, .08), 0 4px 6px -4px rgba(0, 0, 0, .05);
   --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, .08), 0 8px 10px -6px rgba(0, 0, 0, .05);
+  /* Breakpoints */
+  --bp-sm: 640px;
+  --bp-md: 768px;
+  --bp-lg: 1024px;
 
   /* Shadcn compatibility */
   --background-shadcn: #F8F8FF;
@@ -558,6 +562,34 @@
   margin-top: 4px;
 }
 
+/* ── About: Values grid (responsive) ───────────────── */
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+
+.values-grid .nc-cat-card {
+  padding: 28px 24px;
+}
+
+@media (max-width: 767px) {
+  .values-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .values-grid .nc-cat-card {
+    padding: 18px 14px;
+  }
+
+  .values-grid .nc-cat-icon {
+    width: 44px;
+    height: 44px;
+    margin-bottom: 12px;
+  }
+}
+
 /* ── Stats / Feature blocks ─────────────────── */
 .nc-feature-icon {
   width: 52px;
@@ -1012,4 +1044,229 @@
 .nc-search-input:focus {
   border-color: var(--blue-mirage);
   width: 300px;
+}
+
+/* ── Responsive adjustments (mobile-first overrides) ───────────────── */
+@media (max-width: 767px) {
+
+  .container-xl,
+  .container-lg {
+    padding: 0 16px;
+  }
+
+  .nc-nav {
+    height: 56px;
+    padding: 0 12px;
+  }
+
+  .nc-nav-logo {
+    font-size: 20px;
+  }
+
+  /* Hide desktop links and show toggle */
+  .nc-nav-links {
+    display: none !important;
+  }
+
+  .nc-nav-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    color: var(--amber-smoke);
+    font-size: 20px;
+    cursor: pointer;
+    padding: 8px;
+  }
+
+  .nc-nav-mobile-menu {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 56px;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    box-shadow: var(--shadow-md);
+    display: none;
+    flex-direction: column;
+    padding: 12px;
+    gap: 8px;
+    z-index: 90;
+  }
+
+  .nc-nav-mobile-menu.open {
+    display: flex;
+  }
+
+  .nc-product-card-image {
+    height: 140px;
+  }
+
+  .nc-product-card-specs {
+    grid-template-columns: 1fr;
+  }
+
+  .nc-product-card-footer {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 10px;
+  }
+
+  .nc-product-price {
+    font-size: 18px;
+    min-width: 0;
+    white-space: nowrap;
+    overflow-wrap: normal;
+  }
+
+  .nc-btn-primary,
+  .nc-btn-secondary {
+    flex-shrink: 0;
+  }
+
+  .nc-cat-card {
+    padding: 20px;
+  }
+
+  .nc-section-title { font-size: 20px; }
+  .nc-section-subtitle { font-size: 13px; }
+
+  .nc-footer .container-xl { padding: 18px; }
+  .nc-footer-grid { grid-template-columns: 1fr !important; gap: 16px; align-items: flex-start !important; }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .container-xl { padding: 0 20px; }
+  .nc-product-card-image { height: 160px; }
+  .nc-nav-links { display: flex !important; }
+  .nc-nav-toggle { display: none; }
+}
+
+/* Catalog layout helpers */
+.catalog-layout {
+  display: grid;
+  grid-template-columns: 288px 1fr;
+  gap: 32px;
+}
+
+.catalog-sidebar {
+  position: relative;
+}
+
+@media (max-width: 767px) {
+  .catalog-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .catalog-sidebar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 56px;
+    bottom: 0;
+    background: var(--surface);
+    z-index: 100;
+    padding: 16px;
+    transform: translateY(-8px);
+    transition: transform 200ms ease, opacity 200ms ease;
+    display: none;
+    overflow-y: auto;
+  }
+
+  .catalog-sidebar.open {
+    display: block;
+  }
+
+  .nc-filter-toggle {
+    display: inline-flex !important;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 8px 12px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  /* dim background when sidebar open */
+  body .catalog-sidebar.open::before {
+    content: '';
+  }
+
+  /* Product card adjustments on small screens */
+  .nc-product-card {
+    border-radius: 12px;
+  }
+
+  .nc-product-card-body {
+    padding: 12px;
+  }
+
+  .nc-product-card-name { font-size: 14px; }
+  .nc-product-price { font-size: 18px; }
+
+  /* Product detail page */
+  .product-grid { display: grid; grid-template-columns: 1fr 480px; gap: 64px; align-items: start; }
+  .product-hero {
+    min-height: 240px;
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+
+  .product-purchase-card {
+    position: sticky;
+    top: 100px;
+    padding: 24px;
+    margin-top: 8px;
+    max-width: 480px;
+    width: 100%;
+  }
+
+  .product-purchase-card h1 { font-size: 22px; }
+  .product-purchase-card .nc-badge { margin-bottom: 8px; }
+  .product-purchase-card .nc-card { width: 100%; }
+
+  .product-purchase-card .nc-btn-primary { padding: 10px; }
+
+  @media (max-width: 767px) {
+    .product-grid { grid-template-columns: 1fr; gap: 20px; }
+    .product-purchase-card { position: static !important; top: auto !important; max-width: none; width: 100%; padding: 18px !important; }
+    .product-hero { min-height: 200px; padding: 12px; }
+  }
+
+  /* About page mission grid responsive rules */
+  .about-mission-grid { display: grid; grid-template-columns: 1fr 1fr; }
+  @media (max-width: 767px) {
+    .about-mission-grid { grid-template-columns: 1fr; gap: 20px; }
+    .about-mission-card { height: auto !important; min-height: 220px; }
+    .about-mission-card Image { max-height: 360px; }
+  }
+
+  /* Values section responsive */
+  @media (max-width: 767px) {
+    .container-xl > section .nc-card { padding: 20px; }
+  }
+
+/* Backdrop for catalog mobile filters */
+.catalog-backdrop {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 56px;
+  bottom: 0;
+  background: rgba(0,0,0,0.35);
+  z-index: 80;
+}
+
+  }
+
+/* Close button visible on small screens */
+.nc-filter-close { display: inline-flex; }
+
+/* Profile page responsive grid */
+.profile-grid { grid-template-columns: 1fr 1fr; }
+@media (max-width: 767px) {
+  .profile-grid { grid-template-columns: 1fr; }
+  .profile-grid > div { padding: 16px; }
+  .nc-card[style*="padding: 48px"] { padding: 24px !important; }
 }

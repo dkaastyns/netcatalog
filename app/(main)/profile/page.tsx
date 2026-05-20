@@ -35,7 +35,7 @@ export default async function ProfilePage() {
           <h1 style={{ fontSize: "32px", fontWeight: 800, marginBottom: "8px" }}>{session.user.name}</h1>
           <p style={{ color: "var(--text-muted)", fontSize: "16px", marginBottom: "32px" }}>{session.user.email}</p>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginBottom: "40px", textAlign: "left" }}>
+          <div className="profile-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginBottom: "40px", textAlign: "left" }}>
             <div style={{ padding: "20px", background: "var(--surface-2)", borderRadius: "var(--radius-lg)", border: "1px solid var(--border)" }}>
               <div style={{ fontSize: "12px", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "4px" }}>Account Type</div>
               <div style={{ fontSize: "16px", fontWeight: 700, color: session.user.role === 'admin' ? "var(--amber-600)" : "var(--text-primary)" }}>
