@@ -21,9 +21,9 @@ export async function GET(request: NextRequest) {
         const [products, categories, users, orders] = await Promise.all([
             // Search Products
             query(`
-        SELECT id, name, slug, 'product' as type 
+        SELECT id, name, slug, description, 'product' as type 
         FROM products 
-        WHERE name ILIKE $1 OR slug ILIKE $1 
+        WHERE name ILIKE $1 OR slug ILIKE $1 OR description ILIKE $1
         LIMIT 5
       `, [searchQuery]),
 

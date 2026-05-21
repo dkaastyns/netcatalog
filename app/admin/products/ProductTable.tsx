@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import type { ProductWithStock, Category } from "@/types";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { useRealtimeSync } from "@/lib/hooks/use-realtime-sync";
@@ -12,7 +12,9 @@ import {
   XMarkIcon,
   PlusIcon,
   PhotoIcon,
-  CubeIcon
+  CubeIcon,
+  MagnifyingGlassIcon,
+  FunnelIcon
 } from "@heroicons/react/24/outline";
 
 import { ConfirmationModal } from "@/components/ui/ConfirmationModal";
@@ -23,75 +25,119 @@ interface ProductTableProps {
   categories: Category[];
 }
 
+// Compute form data from a product
+function getFormDataForProduct(p: ProductWithStock) {
+  return {
+    name: p.name,
+    slug: p.slug,
+    description: p.description || "",
+    price: Number(p.price),
+    status: p.status,
+    categoryId: p.categoryId?.toString() || "",
+    initialStock: 0,
+    formFactor: p.formFactor || "",
+    connectivity: p.connectivity || "",
+    management: p.management || "",
+    warranty: p.warranty || "",
+    stockAdjustment: 0,
+    image: p.image || "",
+  };
+}
+
+const DEFAULT_FORM_DATA = {
+  name: "",
+  slug: "",
+  description: "",
+  price: 0,
+  status: "draft",
+  categoryId: "",
+  initialStock: 0,
+  formFactor: "",
+  connectivity: "",
+  management: "",
+  warranty: "",
+  stockAdjustment: 0,
+  image: "",
+};
+
 export default function ProductTable({ initialProducts, categories }: ProductTableProps) {
   useRealtimeSync();
 
   const [deletedIds, setDeletedIds] = useState<number[]>([]);
-  const products = initialProducts.filter(p => !deletedIds.includes(p.id));
+  const allProducts = initialProducts.filter(p => !deletedIds.includes(p.id));
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  // Inline table filters
+  const [tableSearch, setTableSearch] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
+
+  // Filter the product list based on search, category, and status
+  const products = useMemo(() => {
+    let list = allProducts;
+    if (tableSearch.trim()) {
+      const q = tableSearch.toLowerCase();
+      list = list.filter(p =>
+        p.name.toLowerCase().includes(q) ||
+        p.slug.toLowerCase().includes(q) ||
+        (p.description?.toLowerCase().includes(q) ?? false) ||
+        (p.categoryName?.toLowerCase().includes(q) ?? false)
+      );
+    }
+    if (categoryFilter) list = list.filter(p => (p.categoryName ?? "") === categoryFilter);
+    if (statusFilter) list = list.filter(p => p.status === statusFilter);
+    return list;
+  }, [allProducts, tableSearch, categoryFilter, statusFilter]);
+
+  const hasActiveFilters = tableSearch || categoryFilter || statusFilter;
+
+  // Auto-open: compute initial state from URL ?open=<id> param (no setState in effect)
+  const autoOpenProduct = useMemo(() => {
+    const openId = searchParams.get("open");
+    if (!openId) return null;
+    return initialProducts.find(p => p.id === Number(openId)) ?? null;
+  }, [searchParams, initialProducts]);
+
+  const [isModalOpen, setIsModalOpen] = useState(() => !!autoOpenProduct);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [editingProduct, setEditingProduct] = useState<ProductWithStock | null>(null);
+  const [editingProduct, setEditingProduct] = useState<ProductWithStock | null>(() => autoOpenProduct);
   const [productToDelete, setProductToDelete] = useState<number | null>(null);
 
   // Form states
-  const [formData, setFormData] = useState({
-    name: "",
-    slug: "",
-    description: "",
-    price: 0,
-    status: "draft",
-    categoryId: "",
-    initialStock: 0,
-    formFactor: "",
-    connectivity: "",
-    management: "",
-    warranty: "",
-    stockAdjustment: 0,
-    image: "",
-  });
+  const [formData, setFormData] = useState(() =>
+    autoOpenProduct ? getFormDataForProduct(autoOpenProduct) : DEFAULT_FORM_DATA
+  );
+
+  // Side-effect only: clean up the URL param (no setState)
+  useEffect(() => {
+    if (!searchParams.get("open")) return;
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete("open");
+    const search = params.toString();
+    const query = search ? `?${search}` : "";
+    router.replace(`${pathname}${query}`, { scroll: false });
+  }, [searchParams, router, pathname]);
 
   const openAddModal = () => {
     setEditingProduct(null);
     setFormData({
-      name: "",
-      slug: "",
-      description: "",
-      price: 0,
-      status: "draft",
-      categoryId: "",
-      initialStock: 0,
+      ...DEFAULT_FORM_DATA,
       formFactor: "Standard Rackmount",
       connectivity: "10/100/1000 Mbps",
       management: "Cloud Managed",
       warranty: "3-Year Advanced Replace",
-      stockAdjustment: 0,
-      image: "",
     });
     setIsModalOpen(true);
   };
 
   const openEditModal = (p: ProductWithStock) => {
     setEditingProduct(p);
-    setFormData({
-      name: p.name,
-      slug: p.slug,
-      description: p.description || "",
-      price: Number(p.price),
-      status: p.status,
-      categoryId: p.categoryId?.toString() || "",
-      initialStock: 0,
-      formFactor: p.formFactor || "",
-      connectivity: p.connectivity || "",
-      management: p.management || "",
-      warranty: p.warranty || "",
-      stockAdjustment: 0,
-      image: p.image || "",
-    });
+    setFormData(getFormDataForProduct(p));
     setIsModalOpen(true);
   };
 
@@ -160,7 +206,7 @@ export default function ProductTable({ initialProducts, categories }: ProductTab
 
       if (res.ok) {
         setIsModalOpen(false);
-        router.refresh(); // BUG-06 FIX: Cukup router.refresh(), tidak perlu full reload
+        router.refresh();
       } else {
         const data = await res.json();
         alert(data.message || "Terjadi kesalahan");
@@ -180,10 +226,12 @@ export default function ProductTable({ initialProducts, categories }: ProductTab
 
   return (
     <>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24 }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
         <div>
           <h1 style={{ fontSize: 22, fontWeight: 800, color: "var(--text-primary)" }}>Produk</h1>
-          <p style={{ fontSize: 13.5, color: "var(--text-muted)", marginTop: 2 }}>{products.length} produk dalam katalog</p>
+          <p style={{ fontSize: 13.5, color: "var(--text-muted)", marginTop: 2 }}>
+            {products.length} dari {allProducts.length} produk dalam katalog
+          </p>
         </div>
         <div style={{ display: "flex", gap: 10 }}>
           <button onClick={openAddModal} className="nc-btn-primary" style={{ fontSize: 13, padding: "8px 16px", display: "flex", alignItems: "center", gap: 6 }}>
@@ -191,6 +239,54 @@ export default function ProductTable({ initialProducts, categories }: ProductTab
             Tambah Produk
           </button>
         </div>
+      </div>
+
+      {/* ── Filter Bar ─────────────────────────────── */}
+      <div style={{ display: "flex", gap: 10, marginBottom: 16, alignItems: "center", flexWrap: "wrap" }}>
+        <div style={{ position: "relative", flex: "1 1 220px" }}>
+          <MagnifyingGlassIcon style={{ width: 15, height: 15, position: "absolute", left: 10, top: "50%", transform: "translateY(-50%)", color: "var(--text-faint)" }} />
+          <input
+            type="text"
+            placeholder="Cari nama, slug, kategori..."
+            value={tableSearch}
+            onChange={e => setTableSearch(e.target.value)}
+            className="nc-input"
+            style={{ paddingLeft: 32, height: 38, fontSize: 13, width: "100%" }}
+          />
+        </div>
+        <div style={{ position: "relative" }}>
+          <FunnelIcon style={{ width: 14, height: 14, position: "absolute", left: 9, top: "50%", transform: "translateY(-50%)", color: "var(--text-faint)", pointerEvents: "none" }} />
+          <select
+            value={categoryFilter}
+            onChange={e => setCategoryFilter(e.target.value)}
+            className="nc-select"
+            style={{ height: 38, fontSize: 13, paddingLeft: 28, minWidth: 150 }}
+          >
+            <option value="">Semua Kategori</option>
+            {categories.map(c => <option key={c.id} value={c.name}>{c.name}</option>)}
+          </select>
+        </div>
+        <select
+          value={statusFilter}
+          onChange={e => setStatusFilter(e.target.value)}
+          className="nc-select"
+          style={{ height: 38, fontSize: 13, minWidth: 130 }}
+        >
+          <option value="">Semua Status</option>
+          <option value="published">Published</option>
+          <option value="draft">Draft</option>
+          <option value="archived">Archived</option>
+        </select>
+        {hasActiveFilters && (
+          <button
+            onClick={() => { setTableSearch(""); setCategoryFilter(""); setStatusFilter(""); }}
+            className="nc-btn-secondary"
+            style={{ height: 38, fontSize: 12, display: "flex", alignItems: "center", gap: 5, padding: "0 12px", color: "var(--red-600)", borderColor: "#fca5a5" }}
+          >
+            <XMarkIcon className="w-3.5 h-3.5" />
+            Hapus Filter
+          </button>
+        )}
       </div>
 
       <div className="nc-card" style={{ padding: 0, overflow: "hidden" }}>
@@ -243,6 +339,15 @@ export default function ProductTable({ initialProducts, categories }: ProductTab
                 </td>
               </tr>
             ))}
+            {products.length === 0 && (
+              <tr>
+                <td colSpan={6} style={{ textAlign: "center", padding: "48px 24px", color: "var(--text-faint)" }}>
+                  <MagnifyingGlassIcon className="w-8 h-8 mx-auto mb-3 opacity-30" />
+                  <div style={{ fontSize: 14, fontWeight: 600, color: "var(--text-muted)" }}>Produk tidak ditemukan</div>
+                  <div style={{ fontSize: 12, marginTop: 4 }}>Coba ubah kata kunci atau filter yang digunakan</div>
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>

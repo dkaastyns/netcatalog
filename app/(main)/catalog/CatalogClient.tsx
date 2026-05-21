@@ -63,7 +63,13 @@ export default function CatalogClient({ initialProducts, categories }: CatalogCl
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
       result = result.filter(p =>
-        p.name.toLowerCase().includes(q) || p.description?.toLowerCase().includes(q)
+        p.name.toLowerCase().includes(q) ||
+        p.slug.toLowerCase().includes(q) ||
+        (p.description?.toLowerCase().includes(q) ?? false) ||
+        (p.categoryName?.toLowerCase().includes(q) ?? false) ||
+        (p.formFactor?.toLowerCase().includes(q) ?? false) ||
+        (p.connectivity?.toLowerCase().includes(q) ?? false) ||
+        (p.management?.toLowerCase().includes(q) ?? false)
       );
     }
     if (selectedCategories.length > 0) {
@@ -231,7 +237,7 @@ export default function CatalogClient({ initialProducts, categories }: CatalogCl
               ))}
             </div>
           </div>
-        
+
         </motion.div>
 
         {/* Mobile backdrop when filters open */}
@@ -251,7 +257,7 @@ export default function CatalogClient({ initialProducts, categories }: CatalogCl
           <div>
             <TextReveal text="Katalog Produk" className="catalog-title" duration={0.6} delay={0.1} />
             <style>{`.catalog-title { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; color: var(--text-primary); margin: 0; }`}</style>
-            
+
             <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} style={{ fontSize: "13.5px", color: "var(--text-muted)", marginTop: "4px" }}>
               Menampilkan <strong style={{ color: "var(--text-primary)" }}>{paginatedProducts.length}</strong> dari <strong style={{ color: "var(--text-primary)" }}>{filteredProducts.length}</strong> produk
             </motion.p>

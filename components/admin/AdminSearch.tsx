@@ -89,7 +89,7 @@ export function AdminSearch() {
     const navigateTo = (type: string, id: string) => {
         setIsOpen(false);
         setQuery("");
-        if (type === 'product') router.push(`/catalog/${id}`);
+        if (type === 'product') router.push(`/admin/products?open=${id}`);
         else if (type === 'category') router.push(`/admin/categories?edit=${id}`);
         else if (type === 'user') router.push(`/admin/users`);
         else if (type === 'order') router.push(`/admin/orders`);
@@ -170,7 +170,7 @@ export function AdminSearch() {
                                     {results.products.length > 0 && (
                                         <Section title="Produk">
                                             {results.products.map(p => (
-                                                <ResultItem key={p.id} icon={CubeIcon} label={p.name!} sublabel={p.slug} onClick={() => navigateTo('product', p.slug || p.id.toString())} />
+                                                <ResultItem key={p.id} icon={CubeIcon} label={p.name!} sublabel={p.slug} onClick={() => navigateTo('product', p.id)} />
                                             ))}
                                         </Section>
                                     )}
