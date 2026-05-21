@@ -44,11 +44,11 @@ export function Navbar({ session: initialSession }: NavbarProps) {
                         <Link href="/" className="nc-nav-logo">Netcatalog</Link>
                     </Magnet>
 
-                    <button className="md:hidden text-[#f2e0d0] text-2xl p-2" onClick={() => setOpen(!open)} aria-label="Toggle menu">
+                    <button className="nc-nav-toggle" onClick={() => setOpen(!open)} aria-label="Toggle menu">
                         {open ? '✕' : '☰'}
                     </button>
 
-                    <div className="hidden md:flex items-center gap-1">
+                    <div className="nc-nav-links" style={{ display: "flex", alignItems: "center", gap: "4px" }}>
                         {navLinks.map(link => {
                             const isActive = pathname === link.href;
                             return (
@@ -56,9 +56,9 @@ export function Navbar({ session: initialSession }: NavbarProps) {
                                     key={link.href}
                                     href={link.href}
                                     className={`nc-nav-link ${isActive ? 'active' : ''}`}
-                                    style={{
-                                        position: "relative",
-                                        padding: "6px 12px",
+                                    style={{ 
+                                        position: "relative", 
+                                        padding: "6px 12px", 
                                         zIndex: 1
                                     }}
                                 >
@@ -82,15 +82,13 @@ export function Navbar({ session: initialSession }: NavbarProps) {
                     </div>
 
                     {/* Mobile menu (toggle-controlled) */}
-                    {open && (
-                        <div className="md:hidden absolute top-[64px] left-0 right-0 bg-[#6e88b0] border-b border-white/10 flex flex-col p-4 z-50 shadow-xl">
-                            {navLinks.map(link => (
-                                <Link key={link.href} href={link.href} className="nc-nav-link text-base border-b border-white/5 last:border-0" onClick={() => setOpen(false)} style={{ padding: '12px 16px' }}>
-                                    {link.label}
-                                </Link>
-                            ))}
-                        </div>
-                    )}
+                    <div className={`nc-nav-mobile-menu ${open ? 'open' : ''}`}>
+                        {navLinks.map(link => (
+                            <Link key={link.href} href={link.href} className="nc-nav-link" onClick={() => setOpen(false)} style={{ padding: '10px 12px' }}>
+                                {link.label}
+                            </Link>
+                        ))}
+                    </div>
                 </div>
 
                 <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>

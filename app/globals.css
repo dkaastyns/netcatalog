@@ -227,6 +227,38 @@
   display: flex;
 }
 
+@media (max-width: 767px) {
+  .nc-nav-links {
+    display: none !important;
+  }
+
+  .nc-nav-toggle {
+    display: block;
+  }
+
+  .nc-nav-mobile-menu.open {
+    position: absolute;
+    top: 64px;
+    left: 0;
+    right: 0;
+    background: var(--blue-mirage);
+    padding: 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+  }
+}
+
+@media (min-width: 768px) {
+  .nc-nav-toggle {
+    display: none !important;
+  }
+
+  .nc-nav-mobile-menu {
+    display: none !important;
+  }
+}
+
 .nc-btn-primary {
   background: var(--amber-smoke);
   color: var(--blue-mirage);
@@ -432,6 +464,11 @@
   font-size: 20px;
   font-weight: 800;
   color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  padding-right: 8px;
 }
 
 /* ── Category Card ──────────────────────────── */
