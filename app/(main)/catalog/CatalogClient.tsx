@@ -146,7 +146,7 @@ export default function CatalogClient({ initialProducts, categories }: CatalogCl
                   <XMarkIcon style={{ width: 12, height: 12 }} /> Hapus
                 </button>
               )}
-              <button onClick={() => setFiltersOpen(false)} aria-label="Close filters" className="nc-filter-close" style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}>
+              <button onClick={() => setFiltersOpen(false)} aria-label="Close filters" className="nc-filter-close md:hidden" style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}>
                 <XMarkIcon style={{ width: 18, height: 18 }} />
               </button>
             </div>
