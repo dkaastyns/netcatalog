@@ -1469,3 +1469,12 @@
     padding: 24px !important;
   }
 }
+
+/* HIDE MOBILE FILTER TOGGLE & CLOSE ON DESKTOP */
+@media (min-width: 768px) {
+
+  .nc-filter-toggle,
+  .nc-filter-close {
+    display: none !important;
+  }
+}

@@ -145,7 +145,7 @@ export function LogOrderModal({ isOpen, onClose, products, onSuccess }: LogOrder
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95, y: 20 }}
                     className="nc-modal-content"
-                    style={{ width: "100%", maxWidth: "600px", padding: 0, overflow: "hidden" }}
+                    style={{ width: "100%", maxWidth: "600px", padding: 0, maxHeight: "90vh", overflowY: "auto" }}
                     onClick={e => e.stopPropagation()}
                 >
                     <div className="nc-modal-header" style={{ padding: "24px", borderBottom: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "space-between", background: "var(--surface)" }}>

@@ -79,7 +79,7 @@ export function OrderDetailModal({ isOpen, onClose, order, onSuccess, onDelete }
                 customerAddress: order.customerAddress || "",
             });
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [order?.id]);
 
     const handleSaveInfo = async (e: React.FormEvent) => {
@@ -197,7 +197,7 @@ export function OrderDetailModal({ isOpen, onClose, order, onSuccess, onDelete }
                         backdropFilter: "blur(6px)",
                         zIndex: 50,
                         display: "flex", alignItems: "center", justifyContent: "center",
-                        padding: "16px", overflowY: "auto",
+                        padding: "16px",
                     }}
                 >
                     <motion.div
@@ -213,8 +213,8 @@ export function OrderDetailModal({ isOpen, onClose, order, onSuccess, onDelete }
                             width: "100%",
                             maxWidth: "900px",
                             boxShadow: "0 32px 80px rgba(0,0,0,0.18), 0 0 0 1px rgba(0,0,0,0.06)",
-                            overflow: "hidden",
-                            margin: "32px 0",
+                            maxHeight: "90vh",
+                            overflowY: "auto",
                         }}
                     >
                         {/* Header */}
