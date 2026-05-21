@@ -15,8 +15,8 @@ export async function POST(req: Request) {
 
     try {
         const body = (await req.json()) as CreateOrderInput;
-        const { customerName, customerEmail, customerPhone, companyName, notes, items, status } = body;
-        
+        const { customerName, customerEmail, customerPhone, companyName, notes, items, status, paymentProof } = body;
+
         const initialStatus = status || "pending";
 
         // 1. Create the main order
@@ -33,8 +33,9 @@ export async function POST(req: Request) {
                 "status", 
                 "productId", 
                 "quantity",
-                "isReadByAdmin"
-            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id`,
+                "isReadByAdmin",
+                "paymentProof"
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING id`,
             [
                 customerName,
                 customerEmail,
@@ -44,7 +45,8 @@ export async function POST(req: Request) {
                 initialStatus,
                 items.length === 1 ? firstItem.id : null,
                 items.length === 1 ? firstItem.quantity : null,
-                true // Since it's created by admin, mark as read
+                true, // Since it's created by admin, mark as read
+                paymentProof || null
             ]
         );
 
@@ -62,8 +64,8 @@ export async function POST(req: Request) {
                     if (currentStock < item.quantity) {
                         // Clean up the order we just created since it failed validation
                         await query(`DELETE FROM orders WHERE id = $1`, [order.id]);
-                        return NextResponse.json({ 
-                            message: `Stok produk ID ${item.id} tidak mencukupi. Sisa stok: ${currentStock}` 
+                        return NextResponse.json({
+                            message: `Stok produk ID ${item.id} tidak mencukupi. Sisa stok: ${currentStock}`
                         }, { status: 400 });
                     }
                 }

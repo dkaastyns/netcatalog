@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { XMarkIcon, ShoppingBagIcon } from "@heroicons/react/24/outline";
+import { XMarkIcon, ShoppingBagIcon, PhotoIcon } from "@heroicons/react/24/outline";
 import { toast } from "sonner";
 import type { ProductWithStock } from "@/types";
+import Image from "next/image";
 
 interface LogOrderModalProps {
     isOpen: boolean;
@@ -17,6 +18,8 @@ interface LogOrderModalProps {
 export function LogOrderModal({ isOpen, onClose, products, onSuccess }: LogOrderModalProps) {
     const [mounted, setMounted] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [isUploading, setIsUploading] = useState(false);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         const timer = setTimeout(() => setMounted(true), 0);
@@ -31,10 +34,11 @@ export function LogOrderModal({ isOpen, onClose, products, onSuccess }: LogOrder
         productId: "",
         quantity: 1,
         status: "completed",
+        paymentProof: "",
     });
 
-    const selectedProductObj = Array.isArray(products) && formData.productId 
-        ? products.find(p => p.id === parseInt(formData.productId)) 
+    const selectedProductObj = Array.isArray(products) && formData.productId
+        ? products.find(p => p.id === parseInt(formData.productId))
         : null;
     const totalPrice = selectedProductObj ? selectedProductObj.price * formData.quantity : 0;
 
@@ -66,7 +70,8 @@ export function LogOrderModal({ isOpen, onClose, products, onSuccess }: LogOrder
                             price: selectedProduct.price
                         }
                     ],
-                    status: formData.status
+                    status: formData.status,
+                    paymentProof: formData.paymentProof || undefined,
                 }),
             });
 
@@ -82,6 +87,7 @@ export function LogOrderModal({ isOpen, onClose, products, onSuccess }: LogOrder
                     productId: "",
                     quantity: 1,
                     status: "completed",
+                    paymentProof: "",
                 });
                 onSuccess();
             } else {
@@ -95,23 +101,43 @@ export function LogOrderModal({ isOpen, onClose, products, onSuccess }: LogOrder
         }
     };
 
+    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        setIsUploading(true);
+        const fd = new FormData();
+        fd.append("file", file);
+        try {
+            const res = await fetch("/api/upload", { method: "POST", body: fd });
+            const data = await res.json();
+            if (data.url) {
+                setFormData(prev => ({ ...prev, paymentProof: data.url }));
+                toast.success("Bukti pembayaran berhasil diunggah");
+            }
+        } catch {
+            toast.error("Gagal mengunggah bukti pembayaran");
+        } finally {
+            setIsUploading(false);
+        }
+    };
+
     if (!mounted || !isOpen) return null;
 
     return createPortal(
         <AnimatePresence>
-            <div 
-                className="nc-modal-overlay" 
-                onClick={onClose} 
-                style={{ 
-                    position: "fixed", 
-                    inset: 0, 
-                    background: "rgba(15, 23, 42, 0.4)", 
-                    backdropFilter: "blur(4px)", 
-                    display: "flex", 
-                    alignItems: "center", 
-                    justifyContent: "center", 
-                    zIndex: 10000, 
-                    padding: 20 
+            <div
+                className="nc-modal-overlay"
+                onClick={onClose}
+                style={{
+                    position: "fixed",
+                    inset: 0,
+                    background: "rgba(15, 23, 42, 0.4)",
+                    backdropFilter: "blur(4px)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    zIndex: 10000,
+                    padding: 20
                 }}
             >
                 <motion.div
@@ -240,6 +266,39 @@ export function LogOrderModal({ isOpen, onClose, products, onSuccess }: LogOrder
                                 onChange={e => setFormData({ ...formData, notes: e.target.value })}
                                 style={{ height: "auto", paddingTop: "12px" }}
                             />
+                        </div>
+
+                        {/* Payment Proof */}
+                        <div className="space-y-3 pt-4 border-t border-slate-100">
+                            <label className="nc-label">Bukti Pembayaran (Opsional)</label>
+                            <input type="file" ref={fileInputRef} onChange={handleFileUpload} style={{ display: "none" }} accept="image/*,.pdf" />
+                            <div style={{ display: "flex", gap: 12, alignItems: "start" }}>
+                                {formData.paymentProof ? (
+                                    <div style={{ width: 80, height: 80, borderRadius: 12, border: "1px solid var(--border)", overflow: "hidden", position: "relative", flexShrink: 0 }}>
+                                        <Image src={formData.paymentProof} alt="Bukti" width={80} height={80} style={{ width: "100%", height: "100%", objectFit: "cover" }} unoptimized />
+                                        <button type="button" onClick={() => setFormData({ ...formData, paymentProof: "" })} style={{ position: "absolute", top: 2, right: 2, width: 20, height: 20, borderRadius: "50%", background: "rgba(0,0,0,0.5)", border: "none", color: "#fff", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                            <XMarkIcon className="w-3 h-3" />
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <div style={{ width: 80, height: 80, borderRadius: 12, border: "2px dashed var(--border)", background: "var(--surface-2, #f8f9fa)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                                        <PhotoIcon className="w-6 h-6 text-gray-300" />
+                                    </div>
+                                )}
+                                <div style={{ flex: 1 }}>
+                                    <button type="button" onClick={() => fileInputRef.current?.click()} disabled={isUploading} className="nc-btn-secondary" style={{ width: "100%", justifyContent: "center", height: 38, fontSize: 13 }}>
+                                        {isUploading ? "Mengunggah..." : formData.paymentProof ? "Ganti Bukti" : "Unggah Bukti Pembayaran"}
+                                    </button>
+                                    <input
+                                        type="text"
+                                        className="nc-input"
+                                        placeholder="Atau tempel URL bukti pembayaran..."
+                                        value={formData.paymentProof}
+                                        onChange={e => setFormData({ ...formData, paymentProof: e.target.value })}
+                                        style={{ marginTop: 8, fontSize: 12 }}
+                                    />
+                                </div>
+                            </div>
                         </div>
 
                         <div className="flex flex-col gap-4 pt-6 border-t border-slate-100">

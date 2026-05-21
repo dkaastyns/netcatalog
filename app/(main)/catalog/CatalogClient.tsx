@@ -19,6 +19,18 @@ import {
 } from "@heroicons/react/24/outline";
 import TextReveal from "@/components/ui/TextReveal";
 
+// Helper: format number to Rupiah-style string with dot separators (e.g. 450000 → "450.000")
+function formatRupiahInput(value: string): string {
+  const digits = value.replace(/\D/g, "");
+  if (!digits) return "";
+  return Number(digits).toLocaleString("id-ID");
+}
+
+// Helper: parse Rupiah-style string back to number (e.g. "450.000" → 450000)
+function parseRupiahInput(value: string): string {
+  return value.replace(/\./g, "");
+}
+
 interface CatalogClientProps {
   initialProducts: ProductWithStock[];
   categories: { name: string; slug: string }[];
@@ -182,16 +194,16 @@ export default function CatalogClient({ initialProducts, categories }: CatalogCl
             <label style={{ fontSize: "11px", fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.6px", display: "block", marginBottom: "12px" }}>Rentang Harga</label>
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
               <input
-                type="number" placeholder="Min" value={minPrice}
-                onChange={e => { setMinPrice(e.target.value); setCurrentPage(1); }}
+                type="text" inputMode="numeric" placeholder="Min" value={minPrice ? formatRupiahInput(minPrice) : ""}
+                onChange={e => { setMinPrice(parseRupiahInput(e.target.value)); setCurrentPage(1); }}
                 style={{ width: "100%", height: "36px", padding: "0 10px", borderRadius: "10px", border: "1.5px solid var(--border)", fontSize: "13px", outline: "none", fontFamily: "inherit", background: "var(--background)", color: "var(--text-primary)" }}
                 onFocus={e => { e.target.style.borderColor = "var(--blue-mirage)"; }}
                 onBlur={e => { e.target.style.borderColor = "var(--border)"; }}
               />
               <span style={{ color: "var(--text-faint)", flexShrink: 0 }}>—</span>
               <input
-                type="number" placeholder="Maks" value={maxPrice}
-                onChange={e => { setMaxPrice(e.target.value); setCurrentPage(1); }}
+                type="text" inputMode="numeric" placeholder="Maks" value={maxPrice ? formatRupiahInput(maxPrice) : ""}
+                onChange={e => { setMaxPrice(parseRupiahInput(e.target.value)); setCurrentPage(1); }}
                 style={{ width: "100%", height: "36px", padding: "0 10px", borderRadius: "10px", border: "1.5px solid var(--border)", fontSize: "13px", outline: "none", fontFamily: "inherit", background: "var(--background)", color: "var(--text-primary)" }}
                 onFocus={e => { e.target.style.borderColor = "var(--blue-mirage)"; }}
                 onBlur={e => { e.target.style.borderColor = "var(--border)"; }}

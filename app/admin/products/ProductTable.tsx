@@ -20,6 +20,18 @@ import {
 import { ConfirmationModal } from "@/components/ui/ConfirmationModal";
 import { formatCurrency } from "@/lib/format";
 
+// Helper: format number to Rupiah-style string with dot separators (e.g. 450000 → "450.000")
+function formatRupiahInput(value: string): string {
+  const digits = value.replace(/\D/g, "");
+  if (!digits) return "";
+  return Number(digits).toLocaleString("id-ID");
+}
+
+// Helper: parse Rupiah-style string back to raw digits string (e.g. "450.000" → "450000")
+function parseRupiahInput(value: string): string {
+  return value.replace(/\./g, "");
+}
+
 interface ProductTableProps {
   initialProducts: ProductWithStock[];
   categories: Category[];
@@ -31,7 +43,7 @@ function getFormDataForProduct(p: ProductWithStock) {
     name: p.name,
     slug: p.slug,
     description: p.description || "",
-    price: Number(p.price),
+    price: String(Number(p.price)),
     status: p.status,
     categoryId: p.categoryId?.toString() || "",
     initialStock: 0,
@@ -48,7 +60,7 @@ const DEFAULT_FORM_DATA = {
   name: "",
   slug: "",
   description: "",
-  price: 0,
+  price: "",
   status: "draft",
   categoryId: "",
   initialStock: 0,
@@ -200,6 +212,7 @@ export default function ProductTable({ initialProducts, categories }: ProductTab
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...formData,
+          price: parseFloat(parseRupiahInput(String(formData.price))) || 0,
           categoryId: formData.categoryId ? parseInt(formData.categoryId) : null
         }),
       });
@@ -427,7 +440,7 @@ export default function ProductTable({ initialProducts, categories }: ProductTab
                     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16 }}>
                       <div>
                         <label className="nc-label">Harga (Rp)</label>
-                        <input type="number" required value={formData.price} onChange={e => setFormData({ ...formData, price: parseFloat(e.target.value) })} className="nc-input" />
+                        <input type="text" inputMode="numeric" required value={formData.price ? formatRupiahInput(String(formData.price)) : ""} onChange={e => setFormData({ ...formData, price: parseRupiahInput(e.target.value) })} className="nc-input" placeholder="misal: 450.000" />
                       </div>
                       <div>
                         <label className="nc-label">Kategori</label>
