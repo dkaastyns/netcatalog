@@ -417,7 +417,6 @@ export default function ProductTable({ initialProducts, categories }: ProductTab
                           {uploading ? "Mengunggah..." : "Pilih Berkas"}
                         </button>
                         <p style={{ fontSize: 11, color: "var(--text-faint)", marginTop: 8 }}>Direkomendasikan: 800x800px. WebP, JPG, atau PNG.</p>
-                        <input style={{ marginTop: 8 }} value={formData.image} onChange={e => setFormData({ ...formData, image: e.target.value })} className="nc-input" placeholder="Atau tempel URL Gambar di sini..." />
                       </div>
                     </div>
                   </div>

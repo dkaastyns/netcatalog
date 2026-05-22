@@ -292,15 +292,6 @@ export function LogOrderModal({ isOpen, onClose, products, onSuccess }: LogOrder
                                     <button type="button" onClick={() => fileInputRef.current?.click()} disabled={isUploading} className="nc-btn-secondary" style={{ width: "100%", justifyContent: "center", height: 38, fontSize: 13 }}>
                                         {isUploading ? "Mengunggah..." : formData.paymentProof ? "Ganti Bukti" : "Unggah Bukti Pembayaran"}
                                     </button>
-                                    <input
-                                        required
-                                        type="text"
-                                        className="nc-input"
-                                        placeholder="Atau tempel URL bukti pembayaran..."
-                                        value={formData.paymentProof}
-                                        onChange={e => setFormData({ ...formData, paymentProof: e.target.value })}
-                                        style={{ marginTop: 8, fontSize: 12 }}
-                                    />
                                 </div>
                             </div>
                         </div>
