@@ -70,7 +70,7 @@ export default async function AboutPage() {
             <div className="animate-fadeUp delay-200">
               <div
                 className="nc-card about-mission-card"
-                style={{ borderRadius: "32px", overflow: "hidden", position: "relative", background: "var(--surface)", display: "flex", alignItems: "center", justifyContent: "center", padding: "0", border: "1px solid var(--border-strong)", boxShadow: "0 40px 80px -15px rgba(0,0,0,0.12), 0 0 1px rgba(0,0,0,0.1)", transition: "all 0.5s cubic-bezier(0.4, 0, 0.2, 1)" }}
+                style={{ borderRadius: "32px", overflow: "hidden", position: "relative", background: "var(--surface)", display: "flex", alignItems: "center", justifyContent: "center", padding: "0", border: "1px solid var(--border-strong)", boxShadow: "0 40px 80px -15px rgba(0,0,0,0.12), 0 0 1px rgba(0,0,0,0.1)", transition: "all 0.5s cubic-bezier(0.4, 0, 0.2, 1)", minHeight: "500px" }}
               >
                 <div style={{ position: "absolute", inset: 0, background: "linear-gradient(225deg, rgba(255,255,255,0.1) 0%, transparent 40%)", zIndex: 2, pointerEvents: "none" }} />
                 <Image
