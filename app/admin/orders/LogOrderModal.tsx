@@ -44,8 +44,8 @@ export function LogOrderModal({ isOpen, onClose, products, onSuccess }: LogOrder
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!formData.productId) {
-            toast.error("Silakan pilih produk");
+        if (!formData.productId || !formData.customerName || !formData.customerEmail || !formData.customerPhone || !formData.companyName || !formData.notes || !formData.paymentProof) {
+            toast.error("Silakan lengkapi semua informasi termasuk bukti pembayaran");
             return;
         }
 
@@ -193,6 +193,7 @@ export function LogOrderModal({ isOpen, onClose, products, onSuccess }: LogOrder
                             <div className="space-y-2">
                                 <label className="nc-label">Nomor Telepon</label>
                                 <input
+                                    required
                                     type="text"
                                     className="nc-input"
                                     placeholder="+62 ..."
@@ -201,8 +202,9 @@ export function LogOrderModal({ isOpen, onClose, products, onSuccess }: LogOrder
                                 />
                             </div>
                             <div className="space-y-2">
-                                <label className="nc-label">Perusahaan (Opsional)</label>
+                                <label className="nc-label">Perusahaan</label>
                                 <input
+                                    required
                                     type="text"
                                     className="nc-input"
                                     placeholder="Nama Perusahaan"
@@ -259,6 +261,7 @@ export function LogOrderModal({ isOpen, onClose, products, onSuccess }: LogOrder
                         <div className="space-y-2">
                             <label className="nc-label">Catatan / Instruksi</label>
                             <textarea
+                                required
                                 className="nc-input"
                                 rows={3}
                                 placeholder="Tambahkan persyaratan khusus atau detail kesepakatan..."
@@ -270,7 +273,7 @@ export function LogOrderModal({ isOpen, onClose, products, onSuccess }: LogOrder
 
                         {/* Payment Proof */}
                         <div className="space-y-3 pt-4 border-t border-slate-100">
-                            <label className="nc-label">Bukti Pembayaran (Opsional)</label>
+                            <label className="nc-label">Bukti Pembayaran</label>
                             <input type="file" ref={fileInputRef} onChange={handleFileUpload} style={{ display: "none" }} accept="image/*,.pdf" />
                             <div style={{ display: "flex", gap: 12, alignItems: "start" }}>
                                 {formData.paymentProof ? (
@@ -290,6 +293,7 @@ export function LogOrderModal({ isOpen, onClose, products, onSuccess }: LogOrder
                                         {isUploading ? "Mengunggah..." : formData.paymentProof ? "Ganti Bukti" : "Unggah Bukti Pembayaran"}
                                     </button>
                                     <input
+                                        required
                                         type="text"
                                         className="nc-input"
                                         placeholder="Atau tempel URL bukti pembayaran..."
