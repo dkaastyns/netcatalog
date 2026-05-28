@@ -40,10 +40,7 @@ export default function CatalogClient({ initialProducts, categories }: CatalogCl
   useRealtimeSync();
 
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [stockFilter, setStockFilter] = useState<{ inStock: boolean; outOfStock: boolean }>({
-    inStock: false,
-    outOfStock: false,
-  });
+  const [stockFilter, setStockFilter] = useState<"inStock" | "outOfStock" | null>(null);
   const [sortBy, setSortBy] = useState("Direkomendasikan");
   const [searchQuery, setSearchQuery] = useState("");
   const [minPrice, setMinPrice] = useState("");
@@ -92,12 +89,10 @@ export default function CatalogClient({ initialProducts, categories }: CatalogCl
     }
     if (minPrice) result = result.filter(p => Number(p.price) >= Number(minPrice));
     if (maxPrice) result = result.filter(p => Number(p.price) <= Number(maxPrice));
-    if (stockFilter.inStock || stockFilter.outOfStock) {
-      result = result.filter(p => {
-        if (stockFilter.inStock && p.stockCount > 0) return true;
-        if (stockFilter.outOfStock && p.stockCount <= 0) return true;
-        return false;
-      });
+    if (stockFilter === "inStock") {
+      result = result.filter(p => p.stockCount > 0);
+    } else if (stockFilter === "outOfStock") {
+      result = result.filter(p => p.stockCount <= 0);
     }
     result.sort((a, b) => {
       if (sortBy === "Harga: Rendah ke Tinggi") return Number(a.price) - Number(b.price);
@@ -125,11 +120,11 @@ export default function CatalogClient({ initialProducts, categories }: CatalogCl
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const hasActiveFilters = selectedCategories.length > 0 || stockFilter.inStock || stockFilter.outOfStock || minPrice || maxPrice || searchQuery;
+  const hasActiveFilters = selectedCategories.length > 0 || stockFilter !== null || minPrice || maxPrice || searchQuery;
 
   const clearAllFilters = () => {
     setSelectedCategories([]);
-    setStockFilter({ inStock: false, outOfStock: false });
+    setStockFilter(null);
     setMinPrice(""); setMaxPrice(""); setSearchQuery(""); setCurrentPage(1);
   };
 
@@ -241,20 +236,25 @@ export default function CatalogClient({ initialProducts, categories }: CatalogCl
           <div>
             <label style={{ fontSize: "11px", fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.6px", display: "block", marginBottom: "12px" }}>Status Stok</label>
             <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-              {[
-                { key: "inStock", label: "Tersedia", checked: stockFilter.inStock },
-                { key: "outOfStock", label: "Stok Habis", checked: stockFilter.outOfStock },
-              ].map(({ key, label, checked }) => (
-                <label key={key} style={{ display: "flex", alignItems: "center", gap: "10px", fontSize: "13.5px", cursor: "pointer", padding: "6px 10px", borderRadius: 10, transition: "background 0.2s", background: checked ? "rgba(110,136,176,0.1)" : "transparent", border: `1px solid ${checked ? "rgba(110,136,176,0.3)" : "transparent"}` }}>
-                  <input
-                    type="checkbox"
-                    checked={checked}
-                    onChange={e => { setStockFilter({ ...stockFilter, [key]: e.target.checked }); setCurrentPage(1); }}
-                    style={{ width: "15px", height: "15px", accentColor: "var(--navy-600)", cursor: "pointer" }}
-                  />
-                  <span style={{ fontWeight: checked ? 600 : 400, color: checked ? "var(--navy-900)" : "var(--text-secondary)" }}>{label}</span>
-                </label>
-              ))}
+              {([
+                { key: "inStock" as const, label: "Tersedia" },
+                { key: "outOfStock" as const, label: "Stok Habis" },
+              ]).map(({ key, label }) => {
+                const checked = stockFilter === key;
+                return (
+                  <label key={key} style={{ display: "flex", alignItems: "center", gap: "10px", fontSize: "13.5px", cursor: "pointer", padding: "6px 10px", borderRadius: 10, transition: "background 0.2s", background: checked ? "rgba(110,136,176,0.1)" : "transparent", border: `1px solid ${checked ? "rgba(110,136,176,0.3)" : "transparent"}` }}>
+                    <input
+                      type="radio"
+                      name="stockStatus"
+                      checked={checked}
+                      onChange={() => { setStockFilter(checked ? null : key); setCurrentPage(1); }}
+                      onClick={() => { if (checked) { setStockFilter(null); setCurrentPage(1); } }}
+                      style={{ width: "15px", height: "15px", accentColor: "var(--navy-600)", cursor: "pointer" }}
+                    />
+                    <span style={{ fontWeight: checked ? 600 : 400, color: checked ? "var(--navy-900)" : "var(--text-secondary)" }}>{label}</span>
+                  </label>
+                );
+              })}
             </div>
           </div>
 
