@@ -49,7 +49,7 @@ export default function CatalogClient({ initialProducts, categories }: CatalogCl
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 6;
+  const itemsPerPage = 4;
   const sidebarRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
