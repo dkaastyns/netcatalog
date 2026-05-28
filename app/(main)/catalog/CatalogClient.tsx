@@ -244,11 +244,9 @@ export default function CatalogClient({ initialProducts, categories }: CatalogCl
                 return (
                   <label key={key} style={{ display: "flex", alignItems: "center", gap: "10px", fontSize: "13.5px", cursor: "pointer", padding: "6px 10px", borderRadius: 10, transition: "background 0.2s", background: checked ? "rgba(110,136,176,0.1)" : "transparent", border: `1px solid ${checked ? "rgba(110,136,176,0.3)" : "transparent"}` }}>
                     <input
-                      type="radio"
-                      name="stockStatus"
+                      type="checkbox"
                       checked={checked}
                       onChange={() => { setStockFilter(checked ? null : key); setCurrentPage(1); }}
-                      onClick={() => { if (checked) { setStockFilter(null); setCurrentPage(1); } }}
                       style={{ width: "15px", height: "15px", accentColor: "var(--navy-600)", cursor: "pointer" }}
                     />
                     <span style={{ fontWeight: checked ? 600 : 400, color: checked ? "var(--navy-900)" : "var(--text-secondary)" }}>{label}</span>
