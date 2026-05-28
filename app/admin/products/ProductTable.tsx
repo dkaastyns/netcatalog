@@ -14,7 +14,9 @@ import {
   PhotoIcon,
   CubeIcon,
   MagnifyingGlassIcon,
-  FunnelIcon
+  FunnelIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
 } from "@heroicons/react/24/outline";
 
 import { ConfirmationModal } from "@/components/ui/ConfirmationModal";
@@ -89,8 +91,15 @@ export default function ProductTable({ initialProducts, categories }: ProductTab
   const [categoryFilter, setCategoryFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
 
+  // Pagination
+  const ITEMS_PER_PAGE = 7;
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // Reset to page 1 whenever filters change
+  useEffect(() => { setCurrentPage(1); }, [tableSearch, categoryFilter, statusFilter]);
+
   // Filter the product list based on search, category, and status
-  const products = useMemo(() => {
+  const filteredProducts = useMemo(() => {
     let list = allProducts;
     if (tableSearch.trim()) {
       const q = tableSearch.toLowerCase();
@@ -105,6 +114,12 @@ export default function ProductTable({ initialProducts, categories }: ProductTab
     if (statusFilter) list = list.filter(p => p.status === statusFilter);
     return list;
   }, [allProducts, tableSearch, categoryFilter, statusFilter]);
+
+  const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
+  const products = filteredProducts.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
 
   const hasActiveFilters = tableSearch || categoryFilter || statusFilter;
 
@@ -243,7 +258,7 @@ export default function ProductTable({ initialProducts, categories }: ProductTab
         <div>
           <h1 style={{ fontSize: 22, fontWeight: 800, color: "var(--text-primary)" }}>Produk</h1>
           <p style={{ fontSize: 13.5, color: "var(--text-muted)", marginTop: 2 }}>
-            {products.length} dari {allProducts.length} produk dalam katalog
+            Menampilkan {products.length} dari {filteredProducts.length} produk
           </p>
         </div>
         <div style={{ display: "flex", gap: 10 }}>
@@ -292,7 +307,7 @@ export default function ProductTable({ initialProducts, categories }: ProductTab
         </select>
         {hasActiveFilters && (
           <button
-            onClick={() => { setTableSearch(""); setCategoryFilter(""); setStatusFilter(""); }}
+            onClick={() => { setTableSearch(""); setCategoryFilter(""); setStatusFilter(""); setCurrentPage(1); }}
             className="nc-btn-secondary"
             style={{ height: 38, fontSize: 12, display: "flex", alignItems: "center", gap: 5, padding: "0 12px", color: "var(--red-600)", borderColor: "#fca5a5" }}
           >
@@ -364,6 +379,43 @@ export default function ProductTable({ initialProducts, categories }: ProductTab
           </tbody>
         </table>
       </div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 16, padding: "0 4px" }}>
+          <span style={{ fontSize: 12.5, color: "var(--text-muted)" }}>
+            Halaman <strong>{currentPage}</strong> dari <strong>{totalPages}</strong>
+          </span>
+          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            <button
+              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+              className="nc-btn-secondary"
+              style={{ width: 34, height: 34, padding: 0, justifyContent: "center", opacity: currentPage === 1 ? 0.4 : 1, cursor: currentPage === 1 ? "not-allowed" : "pointer" }}
+            >
+              <ChevronLeftIcon style={{ width: 15, height: 15 }} />
+            </button>
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+              <button
+                key={page}
+                onClick={() => setCurrentPage(page)}
+                className={currentPage === page ? "nc-btn-primary" : "nc-btn-secondary"}
+                style={{ width: 34, height: 34, padding: 0, justifyContent: "center", fontSize: 13 }}
+              >
+                {page}
+              </button>
+            ))}
+            <button
+              onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+              disabled={currentPage === totalPages}
+              className="nc-btn-secondary"
+              style={{ width: 34, height: 34, padding: 0, justifyContent: "center", opacity: currentPage === totalPages ? 0.4 : 1, cursor: currentPage === totalPages ? "not-allowed" : "pointer" }}
+            >
+              <ChevronRightIcon style={{ width: 15, height: 15 }} />
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Modal Overlay */}
       <AnimatePresence>
