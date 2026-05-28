@@ -147,12 +147,14 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 24px;
+  width: 100%;
 }
 
 .container-lg {
   max-width: 960px;
   margin: 0 auto;
   padding: 0 24px;
+  width: 100%;
 }
 
 /* ── Navigation (Updated to Blue Mirage) */
@@ -189,7 +191,7 @@
   color: rgba(242, 224, 208, .7);
   padding: 6px 12px;
   border-radius: var(--radius-md);
-  transition: color .15s, background .15s;
+  transition: color 0.2s cubic-bezier(0.22, 1, 0.36, 1), background 0.2s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .nc-nav-link:hover,
@@ -218,13 +220,28 @@
 
 /* Mobile menu — hidden by default */
 .nc-nav-mobile-menu {
-  display: none;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
+  position: absolute;
+  top: 56px;
+  left: 0;
+  right: 0;
+  background: var(--blue-mirage);
+  padding: 0 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s cubic-bezier(0.22, 1, 0.36, 1), padding 0.35s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease;
+  opacity: 0;
+  display: flex;
 }
 
 .nc-nav-mobile-menu.open {
-  display: flex;
+  max-height: 320px;
+  padding: 16px;
+  opacity: 1;
 }
 
 @media (max-width: 767px) {
@@ -234,18 +251,6 @@
 
   .nc-nav-toggle {
     display: block;
-  }
-
-  .nc-nav-mobile-menu.open {
-    position: absolute;
-    top: 64px;
-    left: 0;
-    right: 0;
-    background: var(--blue-mirage);
-    padding: 16px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
   }
 }
 
@@ -341,13 +346,13 @@
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
-  transition: box-shadow .2s, transform .2s, border-color .2s;
+  transition: box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1), transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.25s ease;
 }
 
 .nc-card:hover {
   box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
-  border-color: var(--border-strong);
+  transform: translateY(-3px);
+  border-color: rgba(110, 136, 176, 0.3);
 }
 
 .nc-featured-grid {
@@ -655,10 +660,17 @@
   padding: 28px 24px;
 }
 
+@media (max-width: 1023px) {
+  .values-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+}
+
 @media (max-width: 767px) {
   .values-grid {
     grid-template-columns: 1fr;
-    gap: 18px;
+    gap: 16px;
   }
 
   .values-grid .nc-cat-card {
@@ -996,7 +1008,7 @@
 @keyframes fadeUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(24px);
   }
 
   to {
@@ -1018,7 +1030,7 @@
 @keyframes scaleIn {
   from {
     opacity: 0;
-    transform: scale(0.96);
+    transform: scale(0.94);
   }
 
   to {
@@ -1030,7 +1042,7 @@
 @keyframes slideInLeft {
   from {
     opacity: 0;
-    transform: translateX(-16px);
+    transform: translateX(-20px);
   }
 
   to {
@@ -1049,24 +1061,42 @@
   }
 }
 
+@keyframes floatUp {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes pulseSoft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
 .animate-fadeUp {
-  animation: fadeUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: fadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
   will-change: transform, opacity;
 }
 
 .animate-fadeIn {
-  animation: fadeIn 0.5s ease both;
+  animation: fadeIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
   will-change: opacity;
 }
 
 .animate-scaleIn {
-  animation: scaleIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: scaleIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
   will-change: transform, opacity;
 }
 
 .animate-slideInLeft {
-  animation: slideInLeft 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: slideInLeft 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
   will-change: transform, opacity;
+}
+
+.animate-floatUp {
+  animation: floatUp 3s ease-in-out infinite;
+}
+
+.animate-pulseSoft {
+  animation: pulseSoft 2s ease-in-out infinite;
 }
 
 .nc-spinner-sm {
@@ -1162,17 +1192,21 @@
   background: var(--surface);
   color: var(--text-primary);
   outline: none;
-  width: 240px;
+  width: 200px;
+  max-width: 100%;
   font-family: inherit;
-  transition: border-color .15s, width .2s;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, width 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .nc-search-input:focus {
   border-color: var(--blue-mirage);
-  width: 300px;
+  box-shadow: 0 0 0 3px rgba(110, 136, 176, 0.1);
+  width: 280px;
 }
 
-/* ── Responsive adjustments (mobile-first overrides) ───────────────── */
+/* ── Responsive adjustments ─────────────────────────────────────────── */
+
+/* === Mobile (≤767px) === */
 @media (max-width: 767px) {
 
   .container-xl,
@@ -1189,7 +1223,6 @@
     font-size: 20px;
   }
 
-  /* Hide desktop links and show toggle */
   .nc-nav-links {
     display: none !important;
   }
@@ -1201,49 +1234,51 @@
     background: transparent;
     border: none;
     color: var(--amber-smoke);
-    font-size: 20px;
+    font-size: 22px;
     cursor: pointer;
     padding: 8px;
+    transition: opacity 0.2s ease;
   }
 
+  .nc-nav-toggle:hover {
+    opacity: 0.8;
+  }
+
+  /* Mobile nav menu adjustments */
   .nc-nav-mobile-menu {
-    position: absolute;
-    left: 0;
-    right: 0;
     top: 56px;
-    background: var(--surface);
-    border-top: 1px solid var(--border);
-    box-shadow: var(--shadow-md);
-    display: none;
-    flex-direction: column;
-    padding: 12px;
-    gap: 8px;
-    z-index: 90;
   }
 
-  .nc-nav-mobile-menu.open {
-    display: flex;
+  .nc-nav-mobile-menu .nc-nav-link {
+    font-size: 15px;
+    padding: 12px 14px;
+    border-radius: var(--radius-md);
+    color: rgba(242, 224, 208, 0.85);
   }
 
+  .nc-nav-mobile-menu .nc-nav-link:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--amber-smoke);
+  }
+
+  /* Product cards */
   .nc-product-card-image {
-    height: 140px;
+    height: 160px;
   }
 
   .nc-product-card-specs {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
   }
 
   .nc-product-card-footer {
     flex-wrap: wrap;
-    justify-content: flex-start;
-    gap: 10px;
+    justify-content: space-between;
+    gap: 8px;
   }
 
   .nc-product-price {
     font-size: 18px;
     min-width: 0;
-    white-space: nowrap;
-    overflow-wrap: normal;
   }
 
   .nc-btn-primary,
@@ -1252,60 +1287,95 @@
   }
 
   .nc-cat-card {
-    padding: 20px;
+    padding: 18px 16px;
   }
 
   .nc-section-title {
-    font-size: 20px;
+    font-size: 22px;
   }
 
   .nc-section-subtitle {
-    font-size: 13px;
-  }
-
-  .nc-footer .container-xl {
-    padding: 18px;
+    font-size: 13.5px;
   }
 
   .nc-footer-grid {
     grid-template-columns: 1fr !important;
-    gap: 16px;
+    gap: 24px;
     align-items: flex-start !important;
+  }
+
+  .nc-footer-grid > div:nth-child(2) {
+    display: none !important;
+  }
+
+  .nc-footer-grid > div:last-child {
+    align-items: flex-start !important;
+  }
+
+  .nc-auth-card {
+    padding: 28px 20px;
+    border-radius: var(--radius-xl);
   }
 }
 
+/* === Tablet (768px – 1023px) === */
 @media (min-width: 768px) and (max-width: 1023px) {
   .container-xl {
     padding: 0 20px;
+  }
+
+  .nc-nav-links {
+    display: flex !important;
+    gap: 2px;
+  }
+
+  .nc-nav-link {
+    font-size: 12.5px;
+    padding: 6px 10px;
+  }
+
+  .nc-nav-toggle {
+    display: none !important;
+  }
+
+  .nc-nav-mobile-menu {
+    display: none !important;
   }
 
   .nc-product-card-image {
     height: 160px;
   }
 
-  .nc-nav-links {
-    display: flex !important;
-  }
-
-  .nc-nav-toggle {
-    display: none;
+  .nc-footer-grid {
+    grid-template-columns: 1fr auto 1fr !important;
   }
 }
 
-/* Catalog layout helpers */
+/* ── Catalog layout helpers ──────────────────────────── */
 .catalog-layout {
   display: grid;
-  grid-template-columns: 288px 1fr;
+  grid-template-columns: 268px 1fr;
   gap: 32px;
+  align-items: start;
 }
 
 .catalog-sidebar {
   position: relative;
 }
 
+/* Tablet: narrower sidebar */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .catalog-layout {
+    grid-template-columns: 220px 1fr;
+    gap: 20px;
+  }
+}
+
+/* Mobile: slide-in drawer */
 @media (max-width: 767px) {
   .catalog-layout {
     grid-template-columns: 1fr;
+    gap: 0;
   }
 
   .catalog-sidebar {
@@ -1316,30 +1386,42 @@
     bottom: 0;
     background: var(--surface);
     z-index: 100;
-    padding: 16px;
-    transform: translateY(-8px);
-    transition: transform 200ms ease, opacity 200ms ease;
-    display: none;
+    padding: 0;
     overflow-y: auto;
+    transform: translateX(-100%);
+    opacity: 0;
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease;
   }
 
   .catalog-sidebar.open {
-    display: block;
+    transform: translateX(0);
+    opacity: 1;
+    padding: 16px;
   }
 
   .nc-filter-toggle {
     display: inline-flex !important;
     background: var(--surface);
-    border: 1px solid var(--border);
+    border: 1.5px solid var(--border-strong);
     border-radius: 10px;
-    padding: 8px 12px;
+    padding: 8px 14px;
+    font-size: 13px;
     font-weight: 700;
     cursor: pointer;
+    gap: 6px;
+    align-items: center;
+    color: var(--text-primary);
+    transition: background 0.2s ease, border-color 0.2s ease;
+  }
+
+  .nc-filter-toggle:hover {
+    background: var(--surface-2);
+    border-color: var(--blue-mirage);
   }
 
   /* Product card adjustments on small screens */
   .nc-product-card {
-    border-radius: 12px;
+    border-radius: 14px;
   }
 
   .nc-product-card-body {
@@ -1357,7 +1439,7 @@
   /* Product detail page — stack on mobile */
   .product-grid {
     grid-template-columns: 1fr !important;
-    gap: 20px !important;
+    gap: 24px !important;
   }
 
   .product-purchase-card {
@@ -1365,51 +1447,71 @@
     top: auto !important;
     max-width: none !important;
     width: 100% !important;
-    padding: 18px !important;
+    padding: 20px !important;
   }
 
   .product-hero {
-    min-height: 200px;
-    padding: 12px;
+    min-height: 220px !important;
+    padding: 16px !important;
   }
 
   /* About page mission grid — stack on mobile */
   .about-mission-grid {
     grid-template-columns: 1fr !important;
-    gap: 20px;
+    gap: 24px;
   }
 
   .about-mission-card {
     height: auto !important;
-    min-height: 220px;
+    min-height: 240px;
   }
 }
 
 /* Product detail page — desktop layout */
 .product-grid {
   display: grid;
-  grid-template-columns: 1fr 480px;
-  gap: 64px;
+  grid-template-columns: 1fr 440px;
+  gap: 48px;
   align-items: start;
 }
 
+/* Tablet: narrower aside */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .product-grid {
+    grid-template-columns: 1fr 340px;
+    gap: 32px;
+  }
+
+  .product-hero {
+    min-height: 280px !important;
+  }
+
+  .product-purchase-card {
+    padding: 20px !important;
+  }
+
+  .product-purchase-card h1 {
+    font-size: 26px !important;
+  }
+}
+
 .product-hero {
-  min-height: 240px;
+  min-height: 280px;
   padding: 16px;
   margin-bottom: 16px;
 }
 
 .product-purchase-card {
   position: sticky;
-  top: 100px;
-  padding: 24px;
-  margin-top: 8px;
-  max-width: 480px;
+  top: 90px;
+  padding: 28px;
+  margin-top: 0;
+  max-width: 440px;
   width: 100%;
 }
 
 .product-purchase-card h1 {
-  font-size: 22px;
+  font-size: 28px;
 }
 
 .product-purchase-card .nc-badge {
@@ -1421,13 +1523,24 @@
 }
 
 .product-purchase-card .nc-btn-primary {
-  padding: 10px;
+  padding: 12px;
+  width: 100%;
+  justify-content: center;
 }
 
 /* About page mission grid — desktop */
 .about-mission-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
+}
+
+/* Tablet */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .about-mission-grid {
+    gap: 40px;
+  }
 }
 
 /* Backdrop for catalog mobile filters */
@@ -1454,19 +1567,34 @@
 /* Profile page responsive grid */
 .profile-grid {
   grid-template-columns: 1fr 1fr;
+  gap: 16px;
 }
 
 @media (max-width: 767px) {
   .profile-grid {
     grid-template-columns: 1fr;
+    gap: 12px;
   }
 
-  .profile-grid>div {
-    padding: 16px;
+  .profile-grid > div {
+    padding: 14px;
   }
 
   .nc-card[style*="padding: 48px"] {
     padding: 24px !important;
+  }
+
+  /* Profile avatar adjust */
+  .profile-avatar {
+    width: 80px !important;
+    height: 80px !important;
+    font-size: 32px !important;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .nc-card[style*="padding: 48px"] {
+    padding: 32px !important;
   }
 }
 

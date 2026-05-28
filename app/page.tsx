@@ -80,55 +80,65 @@ export default async function HomePage() {
     <div style={{ minHeight: "100vh", background: "var(--background)" }}>
       <Navbar session={session} />
 
-      {/* ── Hero ─────────────────────────────────── */}
-      <section style={{ background: "var(--blue-mirage)", position: "relative", overflow: "hidden", padding: "110px 0 120px" }}>
+      {/* ── Hero ───────────────────────────────────── */}
+      <section className="nc-hero-section" style={{ background: "var(--blue-mirage)", position: "relative", overflow: "hidden" }}>
+        <style>{`
+          .nc-hero-section { padding: 90px 0 100px; }
+          .nc-hero-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 56px; align-items: center; }
+          .nc-hero-img-card { width: 100%; max-width: 480px; margin-left: auto; }
+          .nc-hero-h1 { font-size: 48px; font-weight: 800; line-height: 1.1; color: #ffffff; margin-bottom: 20px; letter-spacing: -1.5px; }
+          .nc-hero-p { font-size: 16px; color: rgba(255,255,255,0.8); line-height: 1.8; margin-bottom: 40px; max-width: 460px; }
+          .nc-hero-btns { display: flex; gap: 14px; flex-wrap: wrap; }
+          .nc-hero-img-inner { position: relative; width: 100%; height: 320px; border-radius: 16px; overflow: hidden; background: var(--surface-2); display: flex; align-items: center; justify-content: center; }
+          @media (max-width: 767px) {
+            .nc-hero-section { padding: 56px 0 64px; }
+            .nc-hero-grid { gap: 32px; grid-template-columns: 1fr; }
+            .nc-hero-h1 { font-size: 32px; letter-spacing: -0.8px; }
+            .nc-hero-p { font-size: 15px; margin-bottom: 28px; }
+            .nc-hero-img-card { max-width: 100%; margin-left: 0; padding: 14px; }
+            .nc-hero-img-inner { height: 220px; }
+          }
+          @media (min-width: 768px) and (max-width: 1023px) {
+            .nc-hero-section { padding: 70px 0 80px; }
+            .nc-hero-grid { gap: 40px; }
+            .nc-hero-h1 { font-size: 38px; }
+            .nc-hero-img-inner { height: 280px; }
+          }
+        `}</style>
         {/* Layered background shapes */}
         <div style={{ position: "absolute", top: 0, right: 0, bottom: 0, width: "60%", background: "rgba(255,255,255,0.04)", borderTopLeftRadius: "80px", borderBottomLeftRadius: "80px", zIndex: 0 }} />
         <div style={{ position: "absolute", bottom: -80, left: -80, width: 400, height: 400, borderRadius: "50%", background: "rgba(255,255,255,0.03)", zIndex: 0 }} />
         <div style={{ position: "absolute", top: -40, right: "20%", width: 300, height: 300, borderRadius: "50%", background: "rgba(255,255,255,0.02)", zIndex: 0 }} />
 
         <div className="container-xl" style={{ position: "relative", zIndex: 1 }}>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "72px", alignItems: "center" }}>
+          <div className="nc-hero-grid">
             <div className="animate-fadeUp">
 
-              <h1 style={{ fontSize: "48px", fontWeight: 800, lineHeight: 1.1, color: "#ffffff", marginBottom: "20px", letterSpacing: "-1.5px" }}>
+              <h1 className="nc-hero-h1">
                 Solusi Jaringan Terbaik<br />
                 <span style={{ color: "var(--amber-smoke)" }}>untuk Kebutuhan</span> Anda
               </h1>
-              <p style={{ fontSize: "16px", color: "rgba(255,255,255,0.8)", lineHeight: 1.8, marginBottom: "44px", maxWidth: "460px" }}>
+              <p className="nc-hero-p">
                 Temukan koleksi solusi jaringan kelas perusahaan yang dipilih secara teliti untuk meningkatkan infrastruktur dan alur kerja harian Anda.
               </p>
-              <div style={{ display: "flex", gap: "14px", flexWrap: "wrap" }}>
-                <Link href="/catalog" className="nc-btn-primary" style={{ fontSize: "15px", padding: "14px 32px", background: "var(--amber-smoke)", color: "var(--blue-mirage)", borderRadius: "12px", border: "none", fontWeight: 700 }}>
+              <div className="nc-hero-btns">
+                <Link href="/catalog" className="nc-btn-primary" style={{ fontSize: "15px", padding: "14px 28px", background: "var(--amber-smoke)", color: "var(--blue-mirage)", borderRadius: "12px", border: "none", fontWeight: 700 }}>
                   Jelajahi Katalog
                 </Link>
-                <Link href="/about" className="nc-btn-outline-white" style={{ fontSize: "15px", padding: "14px 32px", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.25)", color: "rgba(255,255,255,0.9)", borderRadius: "12px" }}>
+                <Link href="/about" className="nc-btn-outline-white" style={{ fontSize: "15px", padding: "14px 28px", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.25)", color: "rgba(255,255,255,0.9)", borderRadius: "12px" }}>
                   Pelajari Lebih Lanjut
                 </Link>
               </div>
             </div>
 
             <div className="animate-fadeUp delay-200" style={{ position: "relative" }}>
-              <div style={{
+              <div className="nc-hero-img-card" style={{
                 background: "#ffffff",
                 borderRadius: "28px",
                 padding: "20px",
                 boxShadow: "0 32px 64px -16px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.1)",
-                width: "100%",
-                maxWidth: "520px",
-                marginLeft: "auto"
               }}>
-                <div style={{
-                  position: "relative",
-                  width: "100%",
-                  height: "340px",
-                  borderRadius: "16px",
-                  overflow: "hidden",
-                  background: "var(--surface-2)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center"
-                }}>
+                <div className="nc-hero-img-inner">
                   <div style={{ position: "absolute", inset: 0, backgroundImage: "radial-gradient(circle at center, rgba(110, 136, 176, 0.25) 0%, transparent 70%)" }} />
                   <Image
                     src="/images/hero-switch.png"
@@ -147,17 +157,32 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── Stats Bar ──────────────────────────────── */}
+      {/* ── Stats Bar ───────────────────────────────────── */}
       <section style={{ background: "var(--surface)", borderBottom: "1px solid var(--border)", padding: "0" }}>
+        <style>{`
+          .nc-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); }
+          .nc-stat-item { padding: 24px 16px; text-align: center; border-right: 1px solid var(--border); }
+          .nc-stat-item:last-child { border-right: none; }
+          @media (max-width: 767px) {
+            .nc-stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .nc-stat-item { padding: 18px 12px; }
+            .nc-stat-item:nth-child(2) { border-right: none; }
+            .nc-stat-item:nth-child(3) { border-top: 1px solid var(--border); border-right: 1px solid var(--border); }
+            .nc-stat-item:nth-child(4) { border-top: 1px solid var(--border); border-right: none; }
+          }
+          @media (min-width: 768px) and (max-width: 1023px) {
+            .nc-stat-item { padding: 20px 12px; }
+          }
+        `}</style>
         <div className="container-xl">
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "0", textAlign: "center" }}>
+          <div className="nc-stats-grid">
             {[
               { v: stats.products, l: "Total Produk", icon: "📦" },
               { v: stats.categories, l: "Kategori", icon: "🗂️" },
               { v: stats.published, l: "Diterbitkan", icon: "✅" },
               { v: stats.totalStock, l: "Total Stok Unit", icon: "📊" },
             ].map((s, i) => (
-              <div key={i} style={{ padding: "24px 16px", borderRight: i < 3 ? "1px solid var(--border)" : "none" }} className={`animate-fadeUp delay-${(i+1)*100}`}>
+              <div key={i} className={`nc-stat-item animate-fadeUp delay-${(i+1)*100}`}>
                 <div style={{ fontSize: "28px", fontWeight: 800, color: "var(--navy-900)", lineHeight: 1, letterSpacing: "-0.5px" }}>
                   <AnimatedCounter value={s.v} />
                 </div>
@@ -168,16 +193,28 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── Categories ─────────────────────────────── */}
-      <section id="categories" style={{ padding: "80px 0", background: "var(--background)" }}>
+      {/* ── Categories ─────────────────────────────────── */}
+      <section id="categories" className="nc-section-categories">
+        <style>{`
+          .nc-section-categories { padding: 80px 0; background: var(--background); }
+          .nc-cat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+          @media (max-width: 767px) {
+            .nc-section-categories { padding: 56px 0; }
+            .nc-cat-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+          }
+          @media (min-width: 768px) and (max-width: 1023px) {
+            .nc-section-categories { padding: 64px 0; }
+            .nc-cat-grid { grid-template-columns: repeat(3, 1fr); }
+          }
+        `}</style>
         <div className="container-xl">
           <div style={{ marginBottom: "40px" }}>
             <h2 className="nc-section-title" style={{ fontSize: "28px", letterSpacing: "-0.5px" }}>Telusuri Kategori</h2>
             <p className="nc-section-subtitle" style={{ marginTop: "8px", fontSize: "15px" }}>Temukan perangkat yang tepat berdasarkan kebutuhan infrastruktur Anda</p>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(210px, 1fr))", gap: "16px" }}>
+          <div className="nc-cat-grid">
             {categories.map((cat, idx) => (
-              <Link href={`/catalog?category=${cat.slug}`} key={cat.id} className={`nc-cat-card animate-fadeUp delay-${Math.min(idx * 50, 500)}`} style={{ padding: "24px 20px", display: "flex", flexDirection: "column", height: "100%" }}>
+              <Link href={`/catalog?category=${cat.slug}`} key={cat.id} className={`nc-cat-card animate-fadeUp delay-${Math.min(idx * 50, 500)}`} style={{ padding: "22px 18px", display: "flex", flexDirection: "column", height: "100%" }}>
                 <div className="nc-cat-icon">
                   <CategoryIcon slug={cat.slug} className="w-5 h-5" />
                 </div>
@@ -193,21 +230,34 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── Featured Devices ───────────────────────── */}
-      <section style={{ padding: "80px 0", background: "var(--surface)", borderTop: "1px solid var(--border)" }}>
+      {/* ── Featured Devices ───────────────────────────────── */}
+      <section className="nc-section-featured" style={{ background: "var(--surface)", borderTop: "1px solid var(--border)" }}>
+        <style>{`
+          .nc-section-featured { padding: 80px 0; }
+          .nc-featured-header { display: flex; align-items: flex-end; justifyContent: space-between; margin-bottom: 40px; gap: 16px; }
+          .nc-featured-products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; }
+          @media (max-width: 767px) {
+            .nc-section-featured { padding: 56px 0; }
+            .nc-featured-header { flex-direction: column; align-items: flex-start; margin-bottom: 24px; }
+            .nc-featured-products-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+          }
+          @media (min-width: 768px) and (max-width: 1023px) {
+            .nc-section-featured { padding: 64px 0; }
+            .nc-featured-products-grid { grid-template-columns: repeat(2, 1fr); }
+          }
+        `}</style>
         <div className="container-xl">
-          <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", marginBottom: "40px" }}>
+          <div className="nc-featured-header">
             <div>
               <h2 className="nc-section-title" style={{ fontSize: "28px", letterSpacing: "-0.5px" }}>Perangkat Unggulan</h2>
               <p className="nc-section-subtitle" style={{ marginTop: "8px", fontSize: "15px" }}>Produk terbaru dan terpopuler dari koleksi kami</p>
             </div>
-            <Link href="/catalog" style={{ fontSize: "13px", fontWeight: 600, color: "var(--navy-700)", display: "flex", alignItems: "center", gap: 4, padding: "8px 16px", borderRadius: 8, border: "1px solid var(--border)", background: "var(--surface)", transition: "all 0.2s" }}>Lihat Semua →</Link>
+            <Link href="/catalog" style={{ fontSize: "13px", fontWeight: 600, color: "var(--navy-700)", display: "flex", alignItems: "center", gap: 4, padding: "8px 16px", borderRadius: 8, border: "1px solid var(--border)", background: "var(--surface)", transition: "all 0.2s", whiteSpace: "nowrap", flexShrink: 0 }}>Lihat Semua →</Link>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "24px" }}>
+          <div className="nc-featured-products-grid">
             {products.map((p, idx) => (
               <div key={p.id} className={`nc-product-card animate-fadeUp delay-${Math.min(idx * 100, 500)}`}>
                 <div className="nc-product-card-image">
-                  {/* BUG-12 FIX: Badge 'Baru' berdasarkan tanggal (30 hari terakhir), bukan posisi index */}
                   {(new Date().getTime() - new Date(p.createdAt).getTime()) < 30 * 24 * 60 * 60 * 1000 && (
                     <span className="nc-product-badge new">Baru</span>
                   )}
@@ -248,20 +298,31 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── Features ───────────────────────────────── */}
-      <section id="features" style={{ padding: "96px 0", background: "var(--background)", borderTop: "1px solid var(--border)" }}>
+      {/* ── Features ───────────────────────────────────── */}
+      <section id="features" className="nc-section-features" style={{ background: "var(--background)", borderTop: "1px solid var(--border)" }}>
+        <style>{`
+          .nc-section-features { padding: 96px 0; }
+          .nc-features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; }
+          @media (max-width: 767px) {
+            .nc-section-features { padding: 56px 0; }
+            .nc-features-grid { grid-template-columns: 1fr; gap: 16px; }
+          }
+          @media (min-width: 768px) and (max-width: 1023px) {
+            .nc-section-features { padding: 72px 0; }
+          }
+        `}</style>
         <div className="container-xl">
           <div style={{ textAlign: "center", marginBottom: "56px" }}>
             <h2 className="nc-section-title animate-fadeUp" style={{ fontSize: "28px", letterSpacing: "-0.5px" }}>Mengapa Netcatalog?</h2>
             <p className="nc-section-subtitle animate-fadeUp delay-100" style={{ marginTop: "10px", fontSize: "15px", maxWidth: 520, margin: "10px auto 0" }}>Platform manajemen inventaris jaringan yang dirancang untuk keandalan enterprise</p>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "24px" }}>
+          <div className="nc-features-grid">
             {[
               { icon: ShieldCheckIcon, title: "Kelas Perusahaan", desc: "Perangkat keras yang dibuat untuk tahan lama di lingkungan pusat data 24/7 dengan dukungan garansi komprehensif." },
               { icon: PhoneIcon, title: "Dukungan Ahli 24/7", desc: "Akses langsung ke insinyur jaringan L3 untuk bantuan penerapan dan penyelesaian masalah cepat." },
               { icon: GlobeAltIcon, title: "Logistik Global", desc: "Gudang yang terletak strategis memastikan pengiriman cepat dan penggantian suku cadang di seluruh dunia." },
             ].map((f, i) => (
-              <div key={i} className={`animate-fadeUp delay-${(i+1)*100}`} style={{ padding: "36px 32px", background: "var(--surface)", borderRadius: "20px", border: "1px solid var(--border)", boxShadow: "0 4px 20px -10px rgba(0,0,0,0.06)", transition: "all 0.3s ease", textAlign: "center" }}>
+              <div key={i} className={`animate-fadeUp delay-${(i+1)*100}`} style={{ padding: "36px 28px", background: "var(--surface)", borderRadius: "20px", border: "1px solid var(--border)", boxShadow: "0 4px 20px -10px rgba(0,0,0,0.06)", transition: "all 0.3s cubic-bezier(0.22, 1, 0.36, 1)", textAlign: "center" }}>
                 <div className="w-14 h-14 rounded-xl bg-slate-50 flex items-center justify-center text-slate-800 mx-auto mb-6 border border-slate-100">
                   <f.icon className="w-7 h-7" />
                 </div>
@@ -273,12 +334,22 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── CTA ────────────────────────────────────── */}
-      <section style={{ padding: "100px 0", background: "var(--blue-mirage)", position: "relative", overflow: "hidden" }}>
+      {/* ── CTA ──────────────────────────────────────── */}
+      <section className="nc-cta-section" style={{ background: "var(--blue-mirage)", position: "relative", overflow: "hidden" }}>
+        <style>{`
+          .nc-cta-section { padding: 100px 0; }
+          .nc-cta-h2 { font-size: 36px; font-weight: 800; color: #ffffff; margin-bottom: 16px; letter-spacing: -0.5px; }
+          .nc-cta-p { font-size: 16px; color: rgba(255,255,255,0.75); margin-bottom: 40px; line-height: 1.7; max-width: 520px; }
+          @media (max-width: 767px) {
+            .nc-cta-section { padding: 64px 0; }
+            .nc-cta-h2 { font-size: 26px; }
+            .nc-cta-p { font-size: 15px; margin-bottom: 28px; }
+          }
+        `}</style>
         <div style={{ position: "absolute", inset: 0, backgroundImage: "radial-gradient(circle at 30% 50%, rgba(255,255,255,0.05) 0%, transparent 60%)" }} />
         <div className="container-xl" style={{ maxWidth: 680, margin: "0 auto", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", position: "relative", zIndex: 1 }}>
-          <h2 style={{ fontSize: "36px", fontWeight: 800, color: "#ffffff", marginBottom: "16px", letterSpacing: "-0.5px" }} className="animate-fadeUp">Analisis Infrastruktur Anda</h2>
-          <p style={{ fontSize: "16px", color: "rgba(255,255,255,0.75)", marginBottom: "40px", lineHeight: 1.7, maxWidth: 520 }} className="animate-fadeUp delay-100">
+          <h2 className="nc-cta-h2 animate-fadeUp">Analisis Infrastruktur Anda</h2>
+          <p className="nc-cta-p animate-fadeUp delay-100">
             Jelajahi koleksi luas perangkat keras jaringan kelas perusahaan kami. Bandingkan statistik dan pantau tingkat inventaris secara real-time.
           </p>
           <Link href="/catalog" className="nc-btn-primary animate-fadeUp delay-200" style={{ fontSize: "15px", padding: "16px 40px", borderRadius: "100px", fontWeight: 700, background: "var(--amber-smoke)", color: "var(--blue-mirage)" }}>

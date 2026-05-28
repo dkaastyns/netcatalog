@@ -57,12 +57,26 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--background)" }}>
-      {/* ── Navigation ─────────────────────────────── */}
+      {/* ── Navigation ──────────────────────────────────────── */}
       <Navbar session={session} />
 
-      <main className="container-xl" style={{ padding: "48px 24px" }}>
+      <main className="container-xl" style={{ padding: "40px 24px 64px" }}>
+        <style>{`
+          .product-specs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+          .product-desc-card { padding: 40px; }
+          .product-hero-price { font-size: 40px; }
+          @media (max-width: 767px) {
+            .product-specs-grid { grid-template-columns: 1fr; gap: 20px; }
+            .product-desc-card { padding: 20px; }
+            .product-hero-price { font-size: 28px; }
+          }
+          @media (min-width: 768px) and (max-width: 1023px) {
+            .product-desc-card { padding: 28px; }
+            .product-hero-price { font-size: 32px; }
+          }
+        `}</style>
         {/* Breadcrumb */}
-        <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "13px", color: "var(--text-muted)", marginBottom: "40px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "13px", color: "var(--text-muted)", marginBottom: "32px", flexWrap: "wrap" }}>
           <Link href="/" style={{ opacity: 0.8 }}>Home</Link>
           <ChevronRightIcon className="w-3 h-3" />
           <Link href="/catalog" style={{ opacity: 0.8 }}>Katalog</Link>
@@ -99,13 +113,13 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
             </div>
 
             {/* Description & Details */}
-            <div className="nc-card" style={{ padding: "40px", border: "none", boxShadow: "var(--shadow-sm)" }}>
+            <div className="nc-card product-desc-card" style={{ border: "none", boxShadow: "var(--shadow-sm)" }}>
               <h2 style={{ fontSize: "20px", fontWeight: 700, marginBottom: "20px", color: "var(--navy-950)" }}>Ringkasan Produk</h2>
               <p style={{ fontSize: "16px", color: "var(--text-secondary)", lineHeight: 1.8, marginBottom: "32px" }}>
                 {product.description || "Solusi infrastruktur jaringan berkinerja tinggi yang dirancang untuk lingkungan perusahaan modern. Memberikan keandalan, skalabilitas, dan fitur keamanan yang luar biasa untuk mendukung operasional bisnis kritis Anda."}
               </p>
 
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "32px" }}>
+              <div className="product-specs-grid">
                 <div>
                   <h4 style={{ fontSize: "14px", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "16px" }}>Fitur Utama</h4>
                   <ul style={{ padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: "12px" }}>
@@ -134,7 +148,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
 
               <div style={{ margin: "32px 0", padding: "32px 0", borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)" }}>
                 <div style={{ display: "flex", alignItems: "baseline", gap: "8px" }}>
-                  <span style={{ fontSize: "40px", fontWeight: 800, color: "var(--text-primary)" }}>
+              <span style={{ fontSize: "40px", fontWeight: 800, color: "var(--text-primary)" }} className="product-hero-price">
                     {formatCurrency(product.price)}
                   </span>
                   <span style={{ fontSize: "14px", color: "var(--text-muted)", fontWeight: 500 }}>IDR / unit</span>

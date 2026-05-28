@@ -18,19 +18,32 @@ export default async function AboutPage() {
     <div style={{ minHeight: "100vh", background: "var(--background)" }}>
       <Navbar session={session} />
 
-      {/* ── Hero Section ───────────────────────────── */}
-      <section style={{
+      {/* ── Hero Section ────────────────────────────────── */}
+      <section className="nc-about-hero" style={{
         background: "var(--blue-mirage)",
         color: "var(--amber-smoke)",
-        padding: "100px 0",
         textAlign: "center",
         position: "relative",
         overflow: "hidden"
       }}>
+        <style>{`
+          .nc-about-hero { padding: 100px 0; }
+          .nc-about-hero h1 { font-size: 48px; font-weight: 800; margin-bottom: 20px; color: var(--amber-smoke); line-height: 1.15; }
+          .nc-about-hero p { font-size: 18px; max-width: 700px; margin: 0 auto; line-height: 1.8; opacity: 0.9; }
+          @media (max-width: 767px) {
+            .nc-about-hero { padding: 60px 0; }
+            .nc-about-hero h1 { font-size: 28px; }
+            .nc-about-hero p { font-size: 15px; }
+          }
+          @media (min-width: 768px) and (max-width: 1023px) {
+            .nc-about-hero { padding: 72px 0; }
+            .nc-about-hero h1 { font-size: 36px; }
+          }
+        `}</style>
         <div style={{ position: "absolute", inset: 0, opacity: 0.1, backgroundImage: "radial-gradient(var(--amber-smoke) 1px, transparent 1px)", backgroundSize: "40px 40px" }} />
         <div className="container-xl animate-fadeUp" style={{ position: "relative", zIndex: 1 }}>
-          <h1 style={{ fontSize: "48px", fontWeight: 800, marginBottom: "20px", color: "var(--amber-smoke)" }}>Membangun Tulang Punggung Kemajuan Digital</h1>
-          <p style={{ fontSize: "18px", maxWidth: "700px", margin: "0 auto", lineHeight: 1.8, opacity: 0.9 }}>
+          <h1>Membangun Tulang Punggung Kemajuan Digital</h1>
+          <p>
             Netcatalog adalah tujuan utama untuk infrastruktur jaringan kelas perusahaan. Kami memberdayakan organisasi untuk berkembang dengan percaya diri melalui perangkat keras pilihan dan panduan ahli.
           </p>
         </div>
@@ -90,20 +103,25 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      {/* ── Values Section ─────────────────────────── */}
-      <section style={{ padding: "80px 0", background: "var(--surface-2)" }}>
+      {/* ── Values Section ────────────────────────────────── */}
+      <section className="nc-values-section">
+        <style>{`
+          .nc-values-section { padding: 80px 0; background: var(--surface-2); }
+          @media (max-width: 767px) { .nc-values-section { padding: 52px 0; } }
+          @media (min-width: 768px) and (max-width: 1023px) { .nc-values-section { padding: 64px 0; } }
+        `}</style>
         <div className="container-xl">
           <div style={{ textAlign: "center", marginBottom: "56px" }}>
             <h2 style={{ fontSize: "32px", fontWeight: 800 }}>Nilai Inti</h2>
           </div>
-          <div className="values-grid" style={{ gap: "32px" }}>
+          <div className="values-grid">
             {[
               { icon: ShieldCheckIcon, title: "Integritas", desc: "Kami memberikan spesifikasi teknis yang jujur dan waktu tunggu yang transparan untuk setiap pesanan." },
               { icon: LightBulbIcon, title: "Inovasi", desc: "Platform kami terus berkembang untuk menyediakan alat pelacakan dan katalogisasi yang lebih baik." },
               { icon: ClockIcon, title: "Keandalan", desc: "Kami memahami bahwa waktu henti jaringan bukanlah pilihan. Kami mengirimkan tepat waktu, setiap saat." }
             ].map((v, i) => (
-              <div key={i} className="nc-card animate-fadeUp" style={{ padding: "40px", textAlign: "center", animationDelay: `${i * 0.1}s`, borderRadius: "24px", border: "1px solid var(--border)", boxShadow: "0 4px 20px -10px rgba(0,0,0,0.05)" }}>
-                <div style={{ width: 64, height: 64, borderRadius: "50%", border: "1px solid var(--border)", background: "var(--surface)", color: "var(--navy-900)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 24px" }}>
+              <div key={i} className="nc-card animate-fadeUp" style={{ padding: "40px", textAlign: "center", animationDelay: `${i * 0.1}s`, borderRadius: "24px", border: "1px solid var(--border)", boxShadow: "0 4px 20px -10px rgba(0,0,0,0.05)", transition: "all 0.3s cubic-bezier(0.22, 1, 0.36, 1)" }}>
+                <div style={{ width: 64, height: 64, borderRadius: "50%", border: "1px solid var(--border)", background: "var(--surface)", color: "var(--navy-900)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 24px", transition: "all 0.3s cubic-bezier(0.22, 1, 0.36, 1)" }}>
                   <v.icon className="w-8 h-8" />
                 </div>
                 <h3 style={{ fontSize: "18px", fontWeight: 800, marginBottom: "16px" }}>{v.title}</h3>
@@ -114,11 +132,19 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      {/* ── CTA ────────────────────────────────────── */}
-      <section style={{ padding: "100px 0", textAlign: "center" }}>
+      {/* ── CTA ──────────────────────────────────────── */}
+      <section className="nc-about-cta" style={{ textAlign: "center" }}>
+        <style>{`
+          .nc-about-cta { padding: 100px 0; }
+          .nc-about-cta h2 { font-size: 36px; font-weight: 800; margin-bottom: 24px; }
+          @media (max-width: 767px) {
+            .nc-about-cta { padding: 64px 0; }
+            .nc-about-cta h2 { font-size: 26px; margin-bottom: 20px; }
+          }
+        `}</style>
         <div className="container-xl">
-          <h2 style={{ fontSize: "36px", fontWeight: 800, marginBottom: "24px" }}>Siap untuk mengembangkan jaringan Anda?</h2>
-          <div style={{ display: "flex", justifyContent: "center", gap: "16px" }}>
+          <h2>Siap untuk mengembangkan jaringan Anda?</h2>
+          <div style={{ display: "flex", justifyContent: "center", gap: "16px", flexWrap: "wrap" }}>
             <Link href="/catalog" className="nc-btn-primary" style={{ padding: "14px 36px", fontSize: "15px", borderRadius: "100px" }}>
               Jelajahi Katalog
             </Link>

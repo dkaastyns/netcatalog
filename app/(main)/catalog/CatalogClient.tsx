@@ -136,9 +136,17 @@ export default function CatalogClient({ initialProducts, categories }: CatalogCl
   const [filtersOpen, setFiltersOpen] = useState(false);
 
   return (
-    <div className="container-xl catalog-layout" style={{ padding: "48px 24px" }}>
-
-      {/* ── Sidebar Filters ──────────────────────── */}
+    <div className="container-xl" style={{ padding: "32px 24px 48px" }}>
+      <style>{`
+        @media (max-width: 767px) {
+          .catalog-header-row { flex-direction: column; align-items: flex-start; gap: 12px; }
+          .catalog-sort-row { width: 100%; justify-content: space-between; }
+        }
+        @media (min-width: 768px) and (max-width: 1023px) {
+          .catalog-header-row { gap: 12px; }
+        }
+      `}</style>
+      <div className="catalog-layout">
       <aside className={`catalog-sidebar ${filtersOpen ? 'open' : ''}`}>
         <motion.div
           initial={{ opacity: 0, x: -20 }}
@@ -264,6 +272,7 @@ export default function CatalogClient({ initialProducts, categories }: CatalogCl
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+          className="catalog-header-row"
           style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "28px" }}
         >
           <div>
@@ -274,7 +283,7 @@ export default function CatalogClient({ initialProducts, categories }: CatalogCl
               Menampilkan <strong style={{ color: "var(--text-primary)" }}>{paginatedProducts.length}</strong> dari <strong style={{ color: "var(--text-primary)" }}>{filteredProducts.length}</strong> produk
             </motion.p>
           </div>
-          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }} className="catalog-sort-row">
             {mounted && (
               <button className="nc-filter-toggle" onClick={() => setFiltersOpen(true)}>Filter</button>
             )}
@@ -427,6 +436,7 @@ export default function CatalogClient({ initialProducts, categories }: CatalogCl
           </motion.div>
         )}
       </main>
+      </div>
     </div>
   );
 }
