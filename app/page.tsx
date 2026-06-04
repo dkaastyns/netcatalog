@@ -202,7 +202,7 @@ export default async function HomePage() {
                     <span className="nc-product-badge new">Baru</span>
                   )}
                   {p.image ? (
-                    <Image src={p.image} alt={p.name} width={400} height={300} style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute", inset: 0 }} />
+                    <Image src={p.image} alt={p.name} width={400} height={300} sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute", inset: 0 }} />
                   ) : (
                     <div style={{ color: "var(--navy-600)", opacity: .35 }}>
                       <CategoryIcon slug={p.slug} className="w-12 h-12" />
