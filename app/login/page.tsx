@@ -11,6 +11,8 @@ import {
   ChevronLeftIcon,
   LockClosedIcon,
   EnvelopeIcon,
+  EyeIcon,
+  EyeSlashIcon,
 } from "@heroicons/react/24/outline";
 import TextReveal from "@/components/ui/TextReveal";
 
@@ -18,6 +20,7 @@ export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   
@@ -125,13 +128,30 @@ export default function LoginPage() {
             <label style={{ fontSize: "13px", fontWeight: 600, color: "var(--text-secondary)", marginBottom: "8px", display: "flex", alignItems: "center", gap: 6 }}>
               <LockClosedIcon style={{ width: 14, height: 14 }} /> Kata Sandi
             </label>
-            <input
-              id="login-pw" type="password" value={password} onChange={e => setPassword(e.target.value)} required
-              placeholder="••••••••"
-              style={{ width: "100%", height: "48px", padding: "0 16px", borderRadius: "12px", border: "1.5px solid var(--border)", fontSize: "14px", background: "var(--background)", outline: "none", transition: "border-color 0.2s, box-shadow 0.2s", fontFamily: "inherit", color: "var(--text-primary)" }}
-              onFocus={e => { e.target.style.borderColor = "var(--blue-mirage)"; e.target.style.boxShadow = "0 0 0 3px rgba(110,136,176,0.12)"; }}
-              onBlur={e => { e.target.style.borderColor = "var(--border)"; e.target.style.boxShadow = "none"; }}
-            />
+            <div style={{ position: "relative" }}>
+              <input
+                id="login-pw"
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                required
+                placeholder="••••••••"
+                style={{ width: "100%", height: "48px", padding: "0 44px 0 16px", borderRadius: "12px", border: "1.5px solid var(--border)", fontSize: "14px", background: "var(--background)", outline: "none", transition: "border-color 0.2s, box-shadow 0.2s", fontFamily: "inherit", color: "var(--text-primary)" }}
+                onFocus={e => { e.target.style.borderColor = "var(--blue-mirage)"; e.target.style.boxShadow = "0 0 0 3px rgba(110,136,176,0.12)"; }}
+                onBlur={e => { e.target.style.borderColor = "var(--border)"; e.target.style.boxShadow = "none"; }}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                style={{ position: "absolute", right: "12px", top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", color: "var(--text-muted)", display: "flex", alignItems: "center", padding: "4px" }}
+              >
+                {showPassword ? (
+                  <EyeSlashIcon style={{ width: 20, height: 20 }} />
+                ) : (
+                  <EyeIcon style={{ width: 20, height: 20 }} />
+                )}
+              </button>
+            </div>
           </div>
 
           <motion.button
