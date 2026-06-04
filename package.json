@@ -54,8 +54,13 @@
     "typescript": "^5"
   },
   "browserslist": [
-    ">0.3%",
+    "last 2 Chrome versions",
+    "last 2 Safari versions",
+    "last 2 Firefox versions",
+    "last 2 Edge versions",
+    "last 2 Samsung versions",
+    "last 2 iOS versions",
     "not dead",
-    "not op_mini all"
+    "not IE 11"
   ]
 }

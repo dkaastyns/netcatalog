@@ -1,49 +1,65 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { animate, motion, useMotionValue, useTransform, useInView } from "framer-motion";
 
 interface AnimatedCounterProps {
   value: number;
 }
 
+/**
+ * Animates a number from 0 → value when it enters the viewport.
+ *
+ * Rewritten to use native browser APIs (IntersectionObserver + requestAnimationFrame)
+ * instead of framer-motion — eliminates ~58 KiB from the initial JS bundle.
+ *
+ * Initial render shows the real value (no hydration flash), animation
+ * triggers only once when the element scrolls into view.
+ */
 export function AnimatedCounter({ value }: AnimatedCounterProps) {
-  const count = useMotionValue(0);
-  const rounded = useTransform(count, (latest) =>
-    Math.round(latest).toLocaleString("id-ID")
-  );
   const ref = useRef<HTMLSpanElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-50px" });
+  const hasAnimated = useRef(false);
 
   useEffect(() => {
-    // Respect prefers-reduced-motion — skip animation, jump to final value
+    const el = ref.current;
+    if (!el) return;
+
     const prefersReduced = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
 
-    if (isInView) {
-      if (prefersReduced) {
-        count.set(value);
-        return;
-      }
-      const controls = animate(count, value, {
-        duration: 1.8,
-        ease: [0.22, 1, 0.36, 1], // custom spring-like ease-out
-      });
-      return () => controls.stop();
-    }
-  }, [value, count, isInView]);
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting || hasAnimated.current) return;
+        hasAnimated.current = true;
+        observer.disconnect();
 
-  return (
-    <motion.span
-      ref={ref}
-      style={{
-        display: "inline-block",
-        // Promote to GPU layer for smooth text rendering during animation
-        willChange: "contents",
-      }}
-    >
-      {rounded}
-    </motion.span>
-  );
+        // Skip animation for users who prefer reduced motion
+        if (prefersReduced) return;
+
+        const DURATION = 1800; // ms
+        const start = performance.now();
+
+        const tick = (now: number) => {
+          const progress = Math.min((now - start) / DURATION, 1);
+          // Cubic ease-out: fast start, slow finish — feels premium
+          const eased = 1 - Math.pow(1 - progress, 3);
+          if (el) {
+            el.textContent = Math.round(eased * value).toLocaleString("id-ID");
+          }
+          if (progress < 1) requestAnimationFrame(tick);
+        };
+
+        // Start from 0
+        el.textContent = "0";
+        requestAnimationFrame(tick);
+      },
+      { threshold: 0.1, rootMargin: "-50px" }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [value]);
+
+  // Server-rendered value — shown immediately, no hydration flash
+  return <span ref={ref}>{value.toLocaleString("id-ID")}</span>;
 }

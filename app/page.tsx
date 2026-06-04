@@ -132,8 +132,10 @@ export default async function HomePage() {
                     alt="Enterprise Network Infrastructure"
                     width={520}
                     height={340}
-                    style={{ width: "100%", height: "100%", objectFit: "cover", position: "relative", zIndex: 1 }}
+                    sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 480px"
+                    fetchPriority="high"
                     priority
+                    style={{ width: "100%", height: "100%", objectFit: "cover", position: "relative", zIndex: 1 }}
                   />
                 </div>
 

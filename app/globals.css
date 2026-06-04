@@ -193,6 +193,14 @@
   color: #ffffff;
   letter-spacing: -0.6px;
   text-transform: none;
+  /* Subtle hover lift — replaces Magnet component */
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease;
+  display: inline-block;
+}
+
+.nc-nav-logo:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
 }
 
 .nc-nav-link {
@@ -216,6 +224,29 @@
   border-radius: 0;
 }
 
+/* Avatar — replaces Magnet wrapper, pure CSS hover */
+.nc-nav-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--navy-700);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  overflow: hidden;
+  flex-shrink: 0;
+  transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.2s ease;
+}
+
+.nc-nav-avatar:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+}
+
 /* Mobile toggle — hidden on desktop by default */
 .nc-nav-toggle {
   display: none;
@@ -226,6 +257,13 @@
   cursor: pointer;
   padding: 8px;
   line-height: 1;
+}
+
+/* Hamburger icon — CSS rotate transition replaces framer-motion */
+.nc-nav-hamburger-icon {
+  display: block;
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
 }
 
 /* Mobile menu — hidden by default */
