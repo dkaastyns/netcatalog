@@ -82,29 +82,7 @@ export default async function HomePage() {
 
       {/* ── Hero ───────────────────────────────────── */}
       <section className="nc-hero-section" style={{ background: "var(--blue-mirage)", position: "relative", overflow: "hidden" }}>
-        <style>{`
-          .nc-hero-section { padding: 90px 0 100px; }
-          .nc-hero-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 56px; align-items: center; }
-          .nc-hero-img-card { width: 100%; max-width: 480px; margin-left: auto; }
-          .nc-hero-h1 { font-size: 48px; font-weight: 800; line-height: 1.1; color: #ffffff; margin-bottom: 20px; letter-spacing: -1.5px; }
-          .nc-hero-p { font-size: 16px; color: rgba(255,255,255,0.8); line-height: 1.8; margin-bottom: 40px; max-width: 460px; }
-          .nc-hero-btns { display: flex; gap: 14px; flex-wrap: wrap; }
-          .nc-hero-img-inner { position: relative; width: 100%; height: 320px; border-radius: 16px; overflow: hidden; background: var(--surface-2); display: flex; align-items: center; justify-content: center; }
-          @media (max-width: 767px) {
-            .nc-hero-section { padding: 56px 0 64px; }
-            .nc-hero-grid { gap: 32px; grid-template-columns: 1fr; }
-            .nc-hero-h1 { font-size: 32px; letter-spacing: -0.8px; }
-            .nc-hero-p { font-size: 15px; margin-bottom: 28px; }
-            .nc-hero-img-card { max-width: 100%; margin-left: 0; padding: 14px; }
-            .nc-hero-img-inner { height: 220px; }
-          }
-          @media (min-width: 768px) and (max-width: 1023px) {
-            .nc-hero-section { padding: 70px 0 80px; }
-            .nc-hero-grid { gap: 40px; }
-            .nc-hero-h1 { font-size: 38px; }
-            .nc-hero-img-inner { height: 280px; }
-          }
-        `}</style>
+
         {/* Layered background shapes */}
         <div style={{ position: "absolute", top: 0, right: 0, bottom: 0, width: "60%", background: "rgba(255,255,255,0.04)", borderTopLeftRadius: "80px", borderBottomLeftRadius: "80px", zIndex: 0 }} />
         <div style={{ position: "absolute", bottom: -80, left: -80, width: 400, height: 400, borderRadius: "50%", background: "rgba(255,255,255,0.03)", zIndex: 0 }} />
@@ -159,21 +137,7 @@ export default async function HomePage() {
 
       {/* ── Stats Bar ───────────────────────────────────── */}
       <section style={{ background: "var(--surface)", borderBottom: "1px solid var(--border)", padding: "0" }}>
-        <style>{`
-          .nc-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); }
-          .nc-stat-item { padding: 24px 16px; text-align: center; border-right: 1px solid var(--border); }
-          .nc-stat-item:last-child { border-right: none; }
-          @media (max-width: 767px) {
-            .nc-stats-grid { grid-template-columns: repeat(2, 1fr); }
-            .nc-stat-item { padding: 18px 12px; }
-            .nc-stat-item:nth-child(2) { border-right: none; }
-            .nc-stat-item:nth-child(3) { border-top: 1px solid var(--border); border-right: 1px solid var(--border); }
-            .nc-stat-item:nth-child(4) { border-top: 1px solid var(--border); border-right: none; }
-          }
-          @media (min-width: 768px) and (max-width: 1023px) {
-            .nc-stat-item { padding: 20px 12px; }
-          }
-        `}</style>
+
         <div className="container-xl">
           <div className="nc-stats-grid">
             {[
@@ -195,18 +159,7 @@ export default async function HomePage() {
 
       {/* ── Categories ─────────────────────────────────── */}
       <section id="categories" className="nc-section-categories">
-        <style>{`
-          .nc-section-categories { padding: 80px 0; background: var(--background); }
-          .nc-cat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
-          @media (max-width: 767px) {
-            .nc-section-categories { padding: 56px 0; }
-            .nc-cat-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-          }
-          @media (min-width: 768px) and (max-width: 1023px) {
-            .nc-section-categories { padding: 64px 0; }
-            .nc-cat-grid { grid-template-columns: repeat(3, 1fr); }
-          }
-        `}</style>
+
         <div className="container-xl">
           <div style={{ marginBottom: "40px" }}>
             <h2 className="nc-section-title" style={{ fontSize: "28px", letterSpacing: "-0.5px" }}>Telusuri Kategori</h2>
@@ -232,20 +185,7 @@ export default async function HomePage() {
 
       {/* ── Featured Devices ───────────────────────────────── */}
       <section className="nc-section-featured" style={{ background: "var(--surface)", borderTop: "1px solid var(--border)" }}>
-        <style>{`
-          .nc-section-featured { padding: 80px 0; }
-          .nc-featured-header { display: flex; align-items: flex-end; justifyContent: space-between; margin-bottom: 40px; gap: 16px; }
-          .nc-featured-products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; }
-          @media (max-width: 767px) {
-            .nc-section-featured { padding: 56px 0; }
-            .nc-featured-header { flex-direction: column; align-items: flex-start; margin-bottom: 24px; }
-            .nc-featured-products-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-          }
-          @media (min-width: 768px) and (max-width: 1023px) {
-            .nc-section-featured { padding: 64px 0; }
-            .nc-featured-products-grid { grid-template-columns: repeat(2, 1fr); }
-          }
-        `}</style>
+
         <div className="container-xl">
           <div className="nc-featured-header">
             <div>
@@ -262,7 +202,7 @@ export default async function HomePage() {
                     <span className="nc-product-badge new">Baru</span>
                   )}
                   {p.image ? (
-                    <Image src={p.image} alt={p.name} width={400} height={300} style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute", inset: 0 }} unoptimized />
+                    <Image src={p.image} alt={p.name} width={400} height={300} style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute", inset: 0 }} />
                   ) : (
                     <div style={{ color: "var(--navy-600)", opacity: .35 }}>
                       <CategoryIcon slug={p.slug} className="w-12 h-12" />
@@ -300,17 +240,7 @@ export default async function HomePage() {
 
       {/* ── Features ───────────────────────────────────── */}
       <section id="features" className="nc-section-features" style={{ background: "var(--background)", borderTop: "1px solid var(--border)" }}>
-        <style>{`
-          .nc-section-features { padding: 96px 0; }
-          .nc-features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; }
-          @media (max-width: 767px) {
-            .nc-section-features { padding: 56px 0; }
-            .nc-features-grid { grid-template-columns: 1fr; gap: 16px; }
-          }
-          @media (min-width: 768px) and (max-width: 1023px) {
-            .nc-section-features { padding: 72px 0; }
-          }
-        `}</style>
+
         <div className="container-xl">
           <div style={{ textAlign: "center", marginBottom: "56px" }}>
             <h2 className="nc-section-title animate-fadeUp" style={{ fontSize: "28px", letterSpacing: "-0.5px" }}>Mengapa Netcatalog?</h2>
@@ -336,16 +266,7 @@ export default async function HomePage() {
 
       {/* ── CTA ──────────────────────────────────────── */}
       <section className="nc-cta-section" style={{ background: "var(--blue-mirage)", position: "relative", overflow: "hidden" }}>
-        <style>{`
-          .nc-cta-section { padding: 100px 0; }
-          .nc-cta-h2 { font-size: 36px; font-weight: 800; color: #ffffff; margin-bottom: 16px; letter-spacing: -0.5px; }
-          .nc-cta-p { font-size: 16px; color: rgba(255,255,255,0.75); margin-bottom: 40px; line-height: 1.7; max-width: 520px; }
-          @media (max-width: 767px) {
-            .nc-cta-section { padding: 64px 0; }
-            .nc-cta-h2 { font-size: 26px; }
-            .nc-cta-p { font-size: 15px; margin-bottom: 28px; }
-          }
-        `}</style>
+
         <div style={{ position: "absolute", inset: 0, backgroundImage: "radial-gradient(circle at 30% 50%, rgba(255,255,255,0.05) 0%, transparent 60%)" }} />
         <div className="container-xl" style={{ maxWidth: 680, margin: "0 auto", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", position: "relative", zIndex: 1 }}>
           <h2 className="nc-cta-h2 animate-fadeUp">Analisis Infrastruktur Anda</h2>

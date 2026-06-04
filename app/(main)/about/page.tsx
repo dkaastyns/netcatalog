@@ -95,7 +95,7 @@ export default async function AboutPage() {
                     transition: "transform 0.8s ease"
                   }}
                   className="hover:scale-110"
-                  unoptimized
+                  sizes="(max-width: 768px) 100vw, 50vw"
                 />
               </div>
             </div>

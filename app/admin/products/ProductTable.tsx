@@ -334,7 +334,7 @@ export default function ProductTable({ initialProducts, categories }: ProductTab
                   <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                     <div style={{ width: 44, height: 44, borderRadius: 10, background: "var(--surface-2)", overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
                       {p.image ? (
-                        <Image src={p.image} alt={p.name} width={44} height={44} style={{ width: "100%", height: "100%", objectFit: "cover" }} unoptimized />
+                        <Image src={p.image} alt={p.name} width={44} height={44} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                       ) : (
                         <CubeIcon className="w-5 h-5 text-gray-400" />
                       )}
@@ -448,7 +448,7 @@ export default function ProductTable({ initialProducts, categories }: ProductTab
                       <div style={{ width: 120, height: 120, borderRadius: "var(--radius-xl)", border: "2px dashed var(--border)", background: "var(--surface-2)", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", position: "relative" }}>
                         {formData.image ? (
                           <>
-                            <Image src={formData.image} alt="Preview" width={120} height={120} style={{ width: "100%", height: "100%", objectFit: "cover" }} unoptimized />
+                            <Image src={formData.image} alt="Preview" width={120} height={120} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                             <button type="button" onClick={() => setFormData({ ...formData, image: "" })} style={{ position: "absolute", top: 4, right: 4, width: 24, height: 24, borderRadius: "50%", background: "rgba(0,0,0,0.5)", border: "none", color: "#fff", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
                               <XMarkIcon className="w-3.5 h-3.5" />
                             </button>

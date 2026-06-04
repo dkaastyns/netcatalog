@@ -342,7 +342,7 @@ export default function CatalogClient({ initialProducts, categories }: CatalogCl
                       )}
                       {p.image ? (
                         <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.4 }} style={{ width: "100%", height: "100%", position: "absolute", inset: 0 }}>
-                          <Image src={p.image} alt={p.name} width={400} height={300} style={{ width: "100%", height: "100%", objectFit: "cover" }} unoptimized />
+                          <Image src={p.image} alt={p.name} width={400} height={300} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                         </motion.div>
                       ) : (
                         <CubeIcon style={{ width: 48, height: 48 }} className="text-slate-800 opacity-30 stroke-[1.2]" />

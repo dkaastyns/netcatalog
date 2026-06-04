@@ -278,7 +278,7 @@ export function LogOrderModal({ isOpen, onClose, products, onSuccess }: LogOrder
                             <div style={{ display: "flex", gap: 12, alignItems: "start" }}>
                                 {formData.paymentProof ? (
                                     <div style={{ width: 80, height: 80, borderRadius: 12, border: "1px solid var(--border)", overflow: "hidden", position: "relative", flexShrink: 0 }}>
-                                        <Image src={formData.paymentProof} alt="Bukti" width={80} height={80} style={{ width: "100%", height: "100%", objectFit: "cover" }} unoptimized />
+                                        <Image src={formData.paymentProof} alt="Bukti" width={80} height={80} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                                         <button type="button" onClick={() => setFormData({ ...formData, paymentProof: "" })} style={{ position: "absolute", top: 2, right: 2, width: 20, height: 20, borderRadius: "50%", background: "rgba(0,0,0,0.5)", border: "none", color: "#fff", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
                                             <XMarkIcon className="w-3 h-3" />
                                         </button>

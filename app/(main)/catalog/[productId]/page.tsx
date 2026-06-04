@@ -104,7 +104,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
             }}>
               <div style={{ position: "absolute", inset: 0, opacity: 0.4, backgroundImage: "radial-gradient(circle at 50% 50%, var(--blue-100) 0%, transparent 70%)" }} />
               {product.image ? (
-                <Image src={product.image} alt={product.name} width={800} height={400} style={{ width: "100%", height: "100%", objectFit: "contain", position: "relative", zIndex: 1 }} unoptimized />
+                <Image src={product.image} alt={product.name} width={800} height={400} style={{ width: "100%", height: "100%", objectFit: "contain", position: "relative", zIndex: 1 }} />
               ) : (
                 <div style={{ color: "var(--blue-mirage)", position: "relative", zIndex: 1, filter: "drop-shadow(0 10px 20px rgba(110, 136, 176, 0.2))" }}>
                   <CategoryIcon slug={product.categorySlug || 'default'} className="w-20 h-20" />

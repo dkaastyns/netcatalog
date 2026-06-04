@@ -482,7 +482,7 @@ export function OrderDetailModal({ isOpen, onClose, order, onSuccess, onDelete }
                                                     </a>
                                                 ) : (
                                                     <a href={order.paymentProof} target="_blank" rel="noopener noreferrer">
-                                                        <Image src={order.paymentProof} alt="Bukti Pembayaran" width={400} height={300} style={{ maxHeight: "240px", objectFit: "contain", borderRadius: "8px" }} unoptimized />
+                                                        <Image src={order.paymentProof} alt="Bukti Pembayaran" width={400} height={300} style={{ maxHeight: "240px", objectFit: "contain", borderRadius: "8px" }} />
                                                     </a>
                                                 )}
                                             </motion.div>
