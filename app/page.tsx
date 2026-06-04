@@ -90,16 +90,16 @@ export default async function HomePage() {
 
         <div className="container-xl" style={{ position: "relative", zIndex: 1 }}>
           <div className="nc-hero-grid">
-            <div className="animate-fadeUp">
+            <div>
 
               <h1 className="nc-hero-h1">
                 Solusi Jaringan Terbaik<br />
                 <span style={{ color: "var(--amber-smoke)" }}>untuk Kebutuhan</span> Anda
               </h1>
-              <p className="nc-hero-p">
+              <p className="nc-hero-p animate-fadeUp delay-50">
                 Temukan koleksi solusi jaringan kelas perusahaan yang dipilih secara teliti untuk meningkatkan infrastruktur dan alur kerja harian Anda.
               </p>
-              <div className="nc-hero-btns">
+              <div className="nc-hero-btns animate-fadeUp delay-100">
                 <Link href="/catalog" className="nc-btn-primary" style={{ fontSize: "15px", padding: "14px 28px", background: "var(--amber-smoke)", color: "var(--navy-950)", borderRadius: "12px", border: "none", fontWeight: 700 }}>
                   Jelajahi Katalog
                 </Link>
@@ -202,7 +202,7 @@ export default async function HomePage() {
                     <span className="nc-product-badge new">Baru</span>
                   )}
                   {p.image ? (
-                    <Image src={p.image} alt={p.name} width={400} height={300} sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute", inset: 0 }} />
+                    <Image src={p.image} alt={p.name} width={400} height={300} sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 300px" style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute", inset: 0 }} />
                   ) : (
                     <div style={{ color: "var(--navy-600)", opacity: .35 }}>
                       <CategoryIcon slug={p.slug} className="w-12 h-12" />

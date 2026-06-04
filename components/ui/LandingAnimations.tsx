@@ -7,11 +7,18 @@ export function LandingAnimations() {
     const nav = document.querySelector(".nc-nav") as HTMLElement | null;
     if (!nav) return;
 
+    let ticking = false;
     const onScroll = () => {
-      if (window.scrollY > 10) {
-        nav.classList.add("scrolled");
-      } else {
-        nav.classList.remove("scrolled");
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          if (window.scrollY > 10) {
+            nav.classList.add("scrolled");
+          } else {
+            nav.classList.remove("scrolled");
+          }
+          ticking = false;
+        });
+        ticking = true;
       }
     };
 
