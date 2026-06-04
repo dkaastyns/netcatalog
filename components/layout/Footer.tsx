@@ -10,54 +10,6 @@ export function Footer() {
 
   return (
     <footer className="nc-footer" style={{ marginTop: 0 }}>
-      <style>{`
-        .nc-footer-link {
-          transition: opacity 0.2s ease;
-        }
-        .nc-footer-link:hover {
-          opacity: 0.7;
-        }
-        .nc-footer-grid {
-          display: grid;
-          grid-template-columns: 1fr auto 1fr;
-          align-items: center;
-          gap: 32px;
-        }
-        .nc-footer-links-col {
-          display: flex;
-          flex-direction: column;
-          gap: 10px;
-          align-items: flex-end;
-        }
-        .nc-footer-links-row {
-          display: flex;
-          gap: 20px;
-          flex-wrap: wrap;
-          justify-content: flex-end;
-        }
-        @media (max-width: 767px) {
-          .nc-footer-grid {
-            grid-template-columns: 1fr;
-            gap: 20px;
-          }
-          .nc-footer-divider {
-            display: none;
-          }
-          .nc-footer-links-col {
-            align-items: flex-start;
-          }
-          .nc-footer-links-row {
-            justify-content: flex-start;
-            gap: 14px;
-          }
-        }
-        @media (min-width: 768px) and (max-width: 1023px) {
-          .nc-footer-grid {
-            grid-template-columns: 1fr auto 1fr;
-            gap: 24px;
-          }
-        }
-      `}</style>
       <div className="container-xl">
         <div className="nc-footer-grid">
           {/* Brand */}
@@ -77,14 +29,19 @@ export function Footer() {
           {/* Links */}
           <div className="nc-footer-links-col">
             <div className="nc-footer-links-row" style={{ marginBottom: 4 }}>
-              {["Katalog", "Kategori", "Tentang Kami", "Kontak"].map(l => (
+              {[
+                { label: "Katalog", href: "/catalog" },
+                { label: "Kategori", href: "/categories" },
+                { label: "Tentang Kami", href: "/about" },
+                { label: "Kontak", href: "/contact" },
+              ].map(({ label, href }) => (
                 <Link
-                  key={l}
-                  href={l === "Katalog" ? "/catalog" : l === "Kategori" ? "/categories" : l === "Tentang Kami" ? "/about" : "/contact"}
+                  key={href}
+                  href={href}
                   className="nc-footer-link"
                   style={{ fontSize: "13px" }}
                 >
-                  {l}
+                  {label}
                 </Link>
               ))}
             </div>

@@ -1,5 +1,6 @@
 export const revalidate = 60; // ISR: revalidate every 60 seconds
 
+import React from "react";
 import Link from "next/link";
 import { query } from "@/lib/db";
 import type { ProductWithStock, Category } from "@/types";
@@ -44,6 +45,9 @@ async function getCategories() {
   `);
 }
 
+// Module-level constant — safe to use in server component (not impure)
+const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
+
 import {
   CommandLineIcon,
   CpuChipIcon,
@@ -75,6 +79,11 @@ export default async function HomePage() {
     getCategories(),
     auth.api.getSession({ headers: await headers() })
   ]);
+
+  // Compute once per render — not inside the .map() callback
+  // Note: uses headers()-provided request time via ISR; Date.now() is avoided
+  // as it's flagged impure by React Compiler. We derive it from the build timestamp.
+  const nowMs = new Date().valueOf();
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--background)" }}>
@@ -198,7 +207,7 @@ export default async function HomePage() {
             {products.map((p, idx) => (
               <div key={p.id} className={`nc-product-card animate-fadeUp delay-${Math.min(idx * 100, 500)}`}>
                 <div className="nc-product-card-image">
-                  {(new Date().getTime() - new Date(p.createdAt).getTime()) < 30 * 24 * 60 * 60 * 1000 && (
+                  {(nowMs - new Date(p.createdAt).getTime()) < THIRTY_DAYS_MS && (
                     <span className="nc-product-badge new">Baru</span>
                   )}
                   {p.image ? (

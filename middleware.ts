@@ -68,9 +68,16 @@ export function middleware(request: NextRequest) {
         const host = request.headers.get("host");
 
         // Allow if origin or referer matches the host
-        const isValidOrigin =
-          (origin && host && new URL(origin).host === host) ||
-          (referer && host && new URL(referer).host === host);
+        // Wrap in try-catch: malformed headers would throw on `new URL()`
+        let isValidOrigin = false;
+        try {
+          isValidOrigin =
+            (origin && host ? new URL(origin).host === host : false) ||
+            (referer && host ? new URL(referer).host === host : false);
+        } catch {
+          // Invalid URL in origin/referer header — treat as untrusted
+          isValidOrigin = false;
+        }
 
         if (!isValidOrigin) {
           return NextResponse.json(
