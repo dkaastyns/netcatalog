@@ -156,9 +156,9 @@
   width: 100%;
 }
 
-/* ── Navigation (Updated to Blue Mirage) */
+/* ── Navigation (Updated to Navy 900 for Contrast) */
 .nc-nav {
-  background-color: var(--blue-mirage);
+  background-color: var(--navy-900);
   color: var(--amber-smoke);
   height: 64px;
   display: flex;
@@ -225,7 +225,7 @@
   top: 56px;
   left: 0;
   right: 0;
-  background: var(--blue-mirage);
+  background: var(--navy-900);
   padding: 0 16px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
@@ -265,7 +265,7 @@
 
 .nc-btn-primary {
   background: var(--amber-smoke);
-  color: var(--blue-mirage);
+  color: var(--navy-950);
   font-size: 13px;
   font-weight: 600;
   padding: 8px 18px;
@@ -989,7 +989,7 @@
 /* ── Footer ─────────────────────────────── */
 .nc-footer {
   padding: 48px 0;
-  background: var(--blue-mirage);
+  background: var(--navy-900);
   color: var(--amber-smoke);
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }

@@ -31,7 +31,7 @@ export default async function ContactPage() {
                             <div className="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center text-slate-800 mb-6 border border-slate-100">
                                 <EnvelopeIcon className="w-6 h-6" />
                             </div>
-                            <h3 className="font-bold text-slate-900 mb-2">Email Kami</h3>
+                            <h2 className="font-bold text-slate-900 mb-2 text-base">Email Kami</h2>
                             <p className="text-sm text-slate-500">support@netcatalog.info</p>
                             <p className="text-xs text-slate-500 mt-2 font-medium uppercase tracking-wider">Dukungan Cepat</p>
                         </div>
@@ -40,7 +40,7 @@ export default async function ContactPage() {
                             <div className="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center text-slate-800 mb-6 border border-slate-100">
                                 <PhoneIcon className="w-6 h-6" />
                             </div>
-                            <h3 className="font-bold text-slate-900 mb-2">Telepon Langsung</h3>
+                            <h2 className="font-bold text-slate-900 mb-2 text-base">Telepon Langsung</h2>
                             <p className="text-sm text-slate-500">+62 821-4456-9908</p>
                             <p className="text-xs text-slate-500 mt-2 font-medium uppercase tracking-wider">Sen - Jum, 09:00 - 18:00</p>
                         </div>
@@ -49,7 +49,7 @@ export default async function ContactPage() {
                             <div className="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center text-slate-800 mb-6 border border-slate-100">
                                 <ChatBubbleLeftRightIcon className="w-6 h-6" />
                             </div>
-                            <h3 className="font-bold text-slate-900 mb-2">WhatsApp</h3>
+                            <h2 className="font-bold text-slate-900 mb-2 text-base">WhatsApp</h2>
                             <p className="text-sm text-slate-500">+62 821-4456-9908</p>
                             <p className="text-xs text-slate-500 mt-2 font-medium uppercase tracking-wider">Tersedia Sekarang</p>
                         </div>
@@ -58,7 +58,7 @@ export default async function ContactPage() {
                             <div className="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center text-slate-800 mb-6 border border-slate-100">
                                 <MapPinIcon className="w-6 h-6" />
                             </div>
-                            <h3 className="font-bold text-slate-900 mb-2">Kantor</h3>
+                            <h2 className="font-bold text-slate-900 mb-2 text-base">Kantor</h2>
                             <p className="text-sm text-slate-500">Netcatalog</p>
                             <p className="text-xs text-slate-500 mt-2 font-medium uppercase tracking-wider">Semarang, Indonesia</p>
                         </div>
@@ -68,7 +68,7 @@ export default async function ContactPage() {
                         <h2 className="text-2xl font-bold text-slate-900 mb-4">Mencari Spesifikasi Teknis?</h2>
                         <p className="text-slate-600 mb-10 max-w-lg mx-auto leading-relaxed">Jelajahi katalog ekstensif perangkat keras jaringan kelas perusahaan dan solusi infrastruktur kami.</p>
                         <div className="flex flex-col sm:flex-row justify-center gap-4">
-                            <Link href="/catalog" className="nc-btn-primary h-12 px-8 flex items-center justify-center rounded-xl bg-slate-900 text-white hover:bg-slate-800 transition-all font-medium">Lihat Katalog</Link>
+                            <Link href="/catalog" className="h-12 px-8 flex items-center justify-center rounded-xl bg-slate-900 text-white hover:bg-slate-800 transition-all font-medium">Lihat Katalog</Link>
                             <Link href="/about" className="nc-btn-secondary h-12 px-8 flex items-center justify-center rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition-all font-medium text-slate-700">Cerita Kami</Link>
                         </div>
                     </div>

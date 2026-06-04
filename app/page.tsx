@@ -100,7 +100,7 @@ export default async function HomePage() {
                 Temukan koleksi solusi jaringan kelas perusahaan yang dipilih secara teliti untuk meningkatkan infrastruktur dan alur kerja harian Anda.
               </p>
               <div className="nc-hero-btns">
-                <Link href="/catalog" className="nc-btn-primary" style={{ fontSize: "15px", padding: "14px 28px", background: "var(--amber-smoke)", color: "var(--blue-mirage)", borderRadius: "12px", border: "none", fontWeight: 700 }}>
+                <Link href="/catalog" className="nc-btn-primary" style={{ fontSize: "15px", padding: "14px 28px", background: "var(--amber-smoke)", color: "var(--navy-950)", borderRadius: "12px", border: "none", fontWeight: 700 }}>
                   Jelajahi Katalog
                 </Link>
                 <Link href="/about" className="nc-btn-outline-white" style={{ fontSize: "15px", padding: "14px 28px", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.25)", color: "rgba(255,255,255,0.9)", borderRadius: "12px" }}>
@@ -273,8 +273,8 @@ export default async function HomePage() {
           <p className="nc-cta-p animate-fadeUp delay-100">
             Jelajahi koleksi luas perangkat keras jaringan kelas perusahaan kami. Bandingkan statistik dan pantau tingkat inventaris secara real-time.
           </p>
-          <Link href="/catalog" className="nc-btn-primary animate-fadeUp delay-200" style={{ fontSize: "15px", padding: "16px 40px", borderRadius: "100px", fontWeight: 700, background: "var(--amber-smoke)", color: "var(--blue-mirage)" }}>
-            Buka Katalog Sekarang
+          <Link href="/catalog" className="nc-btn-primary animate-fadeUp delay-200" style={{ fontSize: "15px", padding: "16px 40px", borderRadius: "100px", fontWeight: 700, background: "var(--amber-smoke)", color: "var(--navy-950)" }}>
+            Mulai Sekarang
           </Link>
         </div>
       </section>
