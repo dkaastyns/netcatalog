@@ -171,7 +171,7 @@ export function LogOrderModal({ isOpen, onClose, products, onSuccess }: LogOrder
                                     required
                                     type="text"
                                     className="nc-input"
-                                    placeholder="misal: John Doe"
+                                    placeholder="misal: Karltzy"
                                     value={formData.customerName}
                                     onChange={e => setFormData({ ...formData, customerName: e.target.value })}
                                 />
