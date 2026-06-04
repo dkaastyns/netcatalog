@@ -182,7 +182,7 @@ export function LogOrderModal({ isOpen, onClose, products, onSuccess }: LogOrder
                                     required
                                     type="email"
                                     className="nc-input"
-                                    placeholder="john@example.com"
+                                    placeholder="Karltzy@email.com"
                                     value={formData.customerEmail}
                                     onChange={e => setFormData({ ...formData, customerEmail: e.target.value })}
                                 />
