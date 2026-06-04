@@ -1385,7 +1385,7 @@
     top: 56px;
     bottom: 0;
     background: var(--surface);
-    z-index: 100;
+    z-index: 200;
     padding: 0;
     overflow-y: auto;
     transform: translateX(-100%);
@@ -1551,7 +1551,8 @@
   top: 56px;
   bottom: 0;
   background: rgba(0, 0, 0, 0.35);
-  z-index: 80;
+  z-index: 150;
+  animation: fadeIn 0.25s ease both;
 }
 
 /* Filter toggle — hidden by default on desktop, shown on mobile via media query above */
@@ -1604,5 +1605,198 @@
   .nc-filter-toggle,
   .nc-filter-close {
     display: none !important;
+  }
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   ADMIN RESPONSIVE — Mobile & Tablet
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* Admin sidebar overlay backdrop */
+.nc-admin-sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 45;
+  animation: fadeIn 0.2s ease both;
+}
+
+/* === Admin Mobile (≤767px) === */
+@media (max-width: 767px) {
+
+  /* Sidebar: hidden off-screen by default, slide in as overlay */
+  .nc-sidebar {
+    position: fixed !important;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 256px !important;
+    z-index: 50;
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .nc-sidebar.mobile-open {
+    transform: translateX(0);
+  }
+
+  /* Header adjustments */
+  .nc-admin-header {
+    height: 56px !important;
+    padding: 0 12px !important;
+  }
+
+  .nc-admin-header h2 {
+    font-size: 11px !important;
+    letter-spacing: 0.5px !important;
+  }
+
+  /* Smaller search on mobile */
+  .nc-search-input {
+    width: 120px;
+    font-size: 12px !important;
+    height: 32px !important;
+    padding-left: 28px !important;
+  }
+
+  .nc-search-input:focus {
+    width: 160px;
+  }
+
+  /* Main content: reduce padding */
+  .nc-admin-main {
+    padding: 0 12px 16px !important;
+  }
+
+  /* Tables: scrollable on mobile */
+  .nc-card:has(.nc-table) {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .nc-table {
+    min-width: 600px;
+  }
+
+  .nc-table th,
+  .nc-table td {
+    padding: 10px 12px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  /* Stat cards: 2 columns */
+  .nc-admin-stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+  }
+
+  .nc-stat-card {
+    padding: 16px !important;
+  }
+
+  .nc-stat-value {
+    font-size: 22px;
+  }
+
+  .nc-stat-label {
+    font-size: 10px;
+  }
+
+  /* Dashboard lower section: stack */
+  .nc-admin-lower-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  /* Quick actions: wrap */
+  .nc-admin-quick-actions {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+
+  .nc-admin-quick-actions .nc-btn-secondary {
+    font-size: 12px !important;
+    padding: 6px 12px !important;
+  }
+
+  /* Page headers: stack title + button */
+  .nc-admin-page-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+  }
+
+  .nc-admin-page-header h1 {
+    font-size: 20px !important;
+  }
+
+  /* Filter bar wrap on mobile */
+  .nc-admin-filter-bar {
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+
+  .nc-admin-filter-bar > div,
+  .nc-admin-filter-bar > select {
+    width: 100% !important;
+    flex: 1 1 100% !important;
+    min-width: 0 !important;
+  }
+
+  /* Modal adjustments */
+  .nc-modal-overlay {
+    padding: 12px;
+  }
+
+  .nc-modal-content {
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  /* Inventory pagination */
+  .nc-admin-pagination {
+    flex-direction: column !important;
+    gap: 8px !important;
+    text-align: center;
+  }
+}
+
+/* === Admin Tablet (768px – 1023px) === */
+@media (min-width: 768px) and (max-width: 1023px) {
+
+  /* Sidebar: collapsed icon-only */
+  .nc-sidebar {
+    width: 72px !important;
+  }
+
+  .nc-sidebar .nc-sidebar-logo-text,
+  .nc-sidebar .nc-sidebar-section,
+  .nc-sidebar-link span {
+    display: none !important;
+  }
+
+  .nc-sidebar-link {
+    justify-content: center !important;
+    padding: 10px 0 !important;
+  }
+
+  .nc-sidebar .nc-sidebar-logo {
+    justify-content: center !important;
+  }
+
+  /* Header */
+  .nc-admin-header {
+    padding: 0 16px !important;
+  }
+
+  /* Stat cards: 2 columns */
+  .nc-admin-stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  /* Dashboard lower section: stack */
+  .nc-admin-lower-grid {
+    grid-template-columns: 1fr !important;
   }
 }

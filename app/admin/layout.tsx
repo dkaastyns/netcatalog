@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
@@ -34,8 +34,26 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const router = useRouter();
   const { data: session, isPending } = authClient.useSession();
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  const prevPathname = React.useRef(pathname);
+  useEffect(() => {
+    if (prevPathname.current !== pathname) {
+      setIsMobileMenuOpen(false);
+      prevPathname.current = pathname;
+    }
+  }, [pathname]);
+
+  const handleToggleSidebar = () => {
+    // On mobile (<768px), toggle overlay menu; on desktop, toggle collapse
+    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+      setIsMobileMenuOpen(prev => !prev);
+    } else {
+      setIsCollapsed(prev => !prev);
+    }
+  };
 
 
   useEffect(() => {
@@ -82,12 +100,20 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   return (
     <div style={{ display: "flex", minHeight: "100vh", background: "var(--background)" }}>
+      {/* ── Mobile Sidebar Backdrop ────────────── */}
+      {isMobileMenuOpen && (
+        <div
+          className="nc-admin-sidebar-backdrop"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+      )}
+
       {/* ── Sidebar ─────────────────────────────── */}
       <motion.aside
         initial={false}
         animate={{ width: isCollapsed ? 72 : 256 }}
         transition={{ type: "spring", damping: 28, stiffness: 220 }}
-        className={`nc-sidebar ${isCollapsed ? 'collapsed' : ''}`}
+        className={`nc-sidebar ${isCollapsed ? 'collapsed' : ''} ${isMobileMenuOpen ? 'mobile-open' : ''}`}
         style={{ boxShadow: "rgba(0,0,0,0.03) 4px 0px 20px", zIndex: 50 }}
       >
         <div className="nc-sidebar-logo" style={{ height: "70px", justifyContent: isCollapsed ? "center" : "flex-start" }}>
@@ -117,7 +143,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           {navLinks.map(link => {
             const isActive = pathname === link.href;
             return (
-              <Link key={link.href} href={link.href} className={`nc-sidebar-link ${isActive ? 'active' : ''}`} style={{ justifyContent: isCollapsed ? "center" : "flex-start", padding: isCollapsed ? "10px 0" : "10px 20px" }} title={isCollapsed ? link.label : ""}>
+              <Link key={link.href} href={link.href} className={`nc-sidebar-link ${isActive ? 'active' : ''}`} style={{ justifyContent: isCollapsed ? "center" : "flex-start", padding: isCollapsed ? "10px 0" : "10px 20px" }} title={isCollapsed ? link.label : ""} onClick={() => setIsMobileMenuOpen(false)}>
                 <link.Icon className="w-[18px] h-[18px] transition-all duration-200" />
                 {!isCollapsed && (
                   <motion.span initial={{ opacity: 0, x: -5 }} animate={{ opacity: 1, x: 0 }}>
@@ -133,7 +159,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               Sistem
             </motion.div>
           )}
-          <Link href="/" className="nc-sidebar-link" style={{ justifyContent: isCollapsed ? "center" : "flex-start", padding: isCollapsed ? "10px 0" : "10px 20px" }} title={isCollapsed ? "Live Storefront" : ""}>
+          <Link href="/" className="nc-sidebar-link" style={{ justifyContent: isCollapsed ? "center" : "flex-start", padding: isCollapsed ? "10px 0" : "10px 20px" }} title={isCollapsed ? "Live Storefront" : ""} onClick={() => setIsMobileMenuOpen(false)}>
             <HomeIcon className="w-[18px] h-[18px]" />
             {!isCollapsed && (
               <motion.span initial={{ opacity: 0, x: -5 }} animate={{ opacity: 1, x: 0 }}>
@@ -178,10 +204,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
       {/* ── Main area ───────────────────────────── */}
       <div style={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0 }}>
-        <header className="nc-admin-header" style={{ height: "70px", padding: "0 32px" }}>
+        <header className="nc-admin-header md:px-[32px] px-4" style={{ height: "70px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
             <button
-              onClick={() => setIsCollapsed(!isCollapsed)}
+              onClick={handleToggleSidebar}
               style={{ background: "transparent", border: "none", cursor: "pointer", color: "var(--text-muted)", display: "flex", alignItems: "center", justifyContent: "center", padding: 8, borderRadius: 8, transition: "background 0.2s, color 0.2s" }}
               className="hover:bg-slate-100"
             >
@@ -207,7 +233,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-          style={{ flex: 1, overflow: "auto", padding: "0 32px 32px" }}
+          className="nc-admin-main md:px-[32px] md:pb-[32px] px-4 pb-4"
+          style={{ flex: 1, overflow: "auto" }}
         >
           {children}
         </motion.main>

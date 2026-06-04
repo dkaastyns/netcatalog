@@ -95,8 +95,6 @@ export default function ProductTable({ initialProducts, categories }: ProductTab
   const ITEMS_PER_PAGE = 7;
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Reset to page 1 whenever filters change
-  useEffect(() => { setCurrentPage(1); }, [tableSearch, categoryFilter, statusFilter]);
 
   // Filter the product list based on search, category, and status
   const filteredProducts = useMemo(() => {
@@ -277,7 +275,7 @@ export default function ProductTable({ initialProducts, categories }: ProductTab
             type="text"
             placeholder="Cari nama, slug, kategori..."
             value={tableSearch}
-            onChange={e => setTableSearch(e.target.value)}
+            onChange={e => { setTableSearch(e.target.value); setCurrentPage(1); }}
             className="nc-input"
             style={{ paddingLeft: 32, height: 38, fontSize: 13, width: "100%" }}
           />
@@ -286,7 +284,7 @@ export default function ProductTable({ initialProducts, categories }: ProductTab
           <FunnelIcon style={{ width: 14, height: 14, position: "absolute", left: 9, top: "50%", transform: "translateY(-50%)", color: "var(--text-faint)", pointerEvents: "none" }} />
           <select
             value={categoryFilter}
-            onChange={e => setCategoryFilter(e.target.value)}
+            onChange={e => { setCategoryFilter(e.target.value); setCurrentPage(1); }}
             className="nc-select"
             style={{ height: 38, fontSize: 13, paddingLeft: 28, minWidth: 150 }}
           >
@@ -296,7 +294,7 @@ export default function ProductTable({ initialProducts, categories }: ProductTab
         </div>
         <select
           value={statusFilter}
-          onChange={e => setStatusFilter(e.target.value)}
+          onChange={e => { setStatusFilter(e.target.value); setCurrentPage(1); }}
           className="nc-select"
           style={{ height: 38, fontSize: 13, minWidth: 130 }}
         >
@@ -317,7 +315,7 @@ export default function ProductTable({ initialProducts, categories }: ProductTab
         )}
       </div>
 
-      <div className="nc-card" style={{ padding: 0, overflow: "hidden" }}>
+      <div className="nc-card" style={{ padding: 0, overflowX: "auto" }}>
         <table className="nc-table">
           <thead>
             <tr>

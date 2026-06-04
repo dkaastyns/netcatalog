@@ -64,9 +64,9 @@ export default async function AdminDashboard() {
   ];
 
   return (
-    <div style={{ padding: "32px 28px" }}>
+    <div className="p-4 md:p-[32px_28px]">
       {/* Page header */}
-      <div style={{ marginBottom: 32, display: "flex", alignItems: "flex-start", justifyContent: "space-between" }}>
+      <div className="mb-8 flex flex-col sm:flex-row sm:items-start justify-between gap-4">
         <div>
           <h1 style={{ fontSize: 24, fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.5px" }}>Dashboard</h1>
           <p style={{ fontSize: 13.5, color: "var(--text-muted)", marginTop: 4 }}>Selamat datang kembali — berikut adalah ringkasan katalog Anda.</p>
@@ -79,7 +79,7 @@ export default async function AdminDashboard() {
       </div>
 
       {/* Stats */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 16, marginBottom: 32 }}>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         {stats.map((s, i) => (
           <div key={i} className="nc-stat-card animate-fadeUp" style={{ animationDelay: `${i * 0.07}s` }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
@@ -98,7 +98,7 @@ export default async function AdminDashboard() {
       </div>
 
       {/* Two-column lower */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 360px", gap: 20 }}>
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-5">
         {/* Recent Movements */}
         <div className="nc-card animate-fadeUp delay-300" style={{ padding: 0, overflow: "hidden" }}>
           <div style={{ padding: "18px 22px", borderBottom: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
@@ -108,7 +108,8 @@ export default async function AdminDashboard() {
             </div>
             <Link href="/admin/inventory" style={{ fontSize: 12.5, color: "var(--navy-700)", fontWeight: 600, padding: "6px 12px", borderRadius: 8, border: "1px solid var(--border)", background: "var(--surface-2)", transition: "all 0.2s" }}>Lihat semua →</Link>
           </div>
-          <table className="nc-table">
+          <div className="overflow-x-auto w-full">
+            <table className="nc-table min-w-full">
             <thead>
               <tr><th>Produk</th><th>Tipe</th><th>Jumlah</th><th>Oleh</th><th>Tanggal</th></tr>
             </thead>
@@ -133,6 +134,7 @@ export default async function AdminDashboard() {
               )}
             </tbody>
           </table>
+          </div>
         </div>
 
         {/* Sidebar Column */}
@@ -202,7 +204,7 @@ export default async function AdminDashboard() {
       </div>
 
       {/* Quick actions */}
-      <div style={{ marginTop: 28, paddingTop: 24, borderTop: "1px solid var(--border)", display: "flex", gap: 12 }}>
+      <div className="mt-7 pt-6 border-t border-[var(--border)] flex flex-wrap gap-3">
         <Link href="/admin/products" className="nc-btn-secondary" style={{ fontSize: 13, gap: 6 }}>
           <PlusIcon style={{ width: 15, height: 15 }} /> Tambah Produk
         </Link>

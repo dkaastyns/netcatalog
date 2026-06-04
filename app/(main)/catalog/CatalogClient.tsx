@@ -257,11 +257,6 @@ export default function CatalogClient({ initialProducts, categories }: CatalogCl
           </div>
 
         </motion.div>
-
-        {/* Mobile backdrop when filters open */}
-        {filtersOpen && (
-          <div className="catalog-backdrop" onClick={() => setFiltersOpen(false)} />
-        )}
       </aside>
 
       <main>
