@@ -272,7 +272,8 @@
   border-radius: var(--radius-md);
   border: none;
   cursor: pointer;
-  transition: background 0.2s ease, transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.2s ease;
+  transition: background 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, box-shadow;
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -282,7 +283,7 @@
 
 .nc-btn-primary:hover {
   background: var(--accent-500);
-  transform: translateY(-2px);
+  transform: translate3d(0, -2px, 0);
   box-shadow: 0 6px 16px rgba(110, 136, 176, 0.2);
 }
 
@@ -300,7 +301,8 @@
   border-radius: var(--radius-md);
   border: 1.5px solid var(--border-strong);
   cursor: pointer;
-  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.2s ease;
+  transition: background 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, box-shadow;
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -311,12 +313,12 @@
 .nc-btn-secondary:hover {
   background: var(--surface-2);
   border-color: var(--blue-mirage);
-  transform: translateY(-2px);
+  transform: translate3d(0, -2px, 0);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
 }
 
 .nc-btn-secondary:active {
-  transform: translateY(0);
+  transform: translate3d(0, 0, 0);
   box-shadow: none;
 }
 
@@ -994,7 +996,7 @@
 
 .nc-footer-link {
   font-size: 13px;
-  color: rgba(242, 224, 208, 0.7);
+  color: rgba(242, 224, 208, 0.85);
   transition: color 0.15s, opacity 0.15s;
 }
 

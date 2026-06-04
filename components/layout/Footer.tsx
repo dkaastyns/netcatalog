@@ -63,16 +63,16 @@ export function Footer() {
           {/* Brand */}
           <div>
             <div style={{ fontWeight: 800, fontSize: "16px", color: "#fff", marginBottom: "6px", letterSpacing: "-0.3px" }}>Netcatalog</div>
-            <div style={{ fontSize: "12px", color: "rgba(242,224,208,0.6)", lineHeight: 1.6 }}>
+            <div style={{ fontSize: "12px", color: "rgba(242, 224, 208, 0.85)", lineHeight: 1.6 }}>
               Platform manajemen inventaris jaringan<br />untuk profesional modern.
             </div>
-            <div style={{ fontSize: "11px", color: "rgba(242,224,208,0.4)", marginTop: 16 }}>
+            <div style={{ fontSize: "11px", color: "rgba(242, 224, 208, 0.65)", marginTop: 16 }}>
               © {year} Netcatalog Infrastructure Systems. Hak cipta dilindungi.
             </div>
           </div>
 
           {/* Divider */}
-          <div className="nc-footer-divider" style={{ width: 1, height: 60, background: "rgba(255,255,255,0.1)" }} />
+          <div className="nc-footer-divider" style={{ width: 1, height: 60, background: "rgba(255, 255, 255, 0.15)" }} />
 
           {/* Links */}
           <div className="nc-footer-links-col">
@@ -89,7 +89,7 @@ export function Footer() {
               ))}
             </div>
             {!isLoggedIn && (
-              <Link href="/login" className="nc-footer-link" style={{ fontSize: "11.5px", opacity: 0.5 }}>
+              <Link href="/login" className="nc-footer-link" style={{ fontSize: "11.5px", opacity: 0.75 }}>
                 Akses Admin →
               </Link>
             )}
