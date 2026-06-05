@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 
+// ── Rate Limiting ────────────────────────────────────────────
 // Simple in-memory rate limiting (per-instance, resets on cold start)
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
 const RATE_LIMIT_WINDOW = 60_000; // 1 minute
 const RATE_LIMIT_MAX = 100; // max requests per window
+const MAX_MAP_SIZE = 10_000; // prevent unbounded growth under DDoS
 
 function getRateLimitKey(request: NextRequest): string {
   return (
@@ -18,6 +20,11 @@ function isRateLimited(key: string): boolean {
   const entry = rateLimitMap.get(key);
 
   if (!entry || now > entry.resetTime) {
+    // Safety valve: if map grows beyond limit, clear it entirely
+    // to prevent memory exhaustion under DDoS
+    if (rateLimitMap.size >= MAX_MAP_SIZE) {
+      rateLimitMap.clear();
+    }
     rateLimitMap.set(key, { count: 1, resetTime: now + RATE_LIMIT_WINDOW });
     return false;
   }
@@ -37,10 +44,11 @@ function cleanupRateLimitMap() {
   }
 }
 
+// ── Proxy Handler ────────────────────────────────────────────
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Only apply rate limiting to API routes
+  // Only apply rate limiting and CSRF protection to API routes
   if (pathname.startsWith("/api/")) {
     cleanupRateLimitMap();
     const key = getRateLimitKey(request);
@@ -53,6 +61,7 @@ export function proxy(request: NextRequest) {
           headers: {
             "Retry-After": "60",
             "X-RateLimit-Limit": String(RATE_LIMIT_MAX),
+            "Cache-Control": "no-store",
           },
         }
       );

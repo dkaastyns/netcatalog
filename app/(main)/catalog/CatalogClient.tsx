@@ -1,13 +1,12 @@
 "use client";
 
-import { useState, useMemo, useEffect, useRef } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import type { ProductWithStock } from "@/types";
 import Image from "next/image";
 import { formatCurrency } from "@/lib/format";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRealtimeSync } from "@/lib/hooks/use-realtime-sync";
-import gsap from "gsap";
 import {
   MagnifyingGlassIcon,
   ChevronLeftIcon,
@@ -47,18 +46,6 @@ export default function CatalogClient({ initialProducts, categories }: CatalogCl
   const [maxPrice, setMaxPrice] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 4;
-  const sidebarRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    // Premium sidebar entry animation with GSAP
-    if (sidebarRef.current) {
-      gsap.fromTo(
-        sidebarRef.current.children,
-        { opacity: 0, x: -15 },
-        { opacity: 1, x: 0, duration: 0.6, stagger: 0.08, ease: "power2.out", delay: 0.2 }
-      );
-    }
-  }, []);
 
   const toggleCategory = (slug: string) => {
     setSelectedCategories(prev =>
@@ -132,15 +119,6 @@ export default function CatalogClient({ initialProducts, categories }: CatalogCl
 
   return (
     <div className="container-xl" style={{ padding: "32px 24px 48px" }}>
-      <style>{`
-        @media (max-width: 767px) {
-          .catalog-header-row { flex-direction: column; align-items: flex-start; gap: 12px; }
-          .catalog-sort-row { width: 100%; justify-content: space-between; }
-        }
-        @media (min-width: 768px) and (max-width: 1023px) {
-          .catalog-header-row { gap: 12px; }
-        }
-      `}</style>
       <div className="catalog-layout">
       <aside className={`catalog-sidebar ${filtersOpen ? 'open' : ''}`}>
         <motion.div
@@ -148,7 +126,6 @@ export default function CatalogClient({ initialProducts, categories }: CatalogCl
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
           style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 20, padding: "28px 24px", position: "sticky", top: "84px", boxShadow: "0 4px 20px rgba(0,0,0,0.04)" }}
-          ref={sidebarRef}
         >
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "24px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>

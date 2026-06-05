@@ -2,6 +2,7 @@ export const revalidate = 60; // ISR: revalidate every 60 seconds
 
 import React from "react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { query } from "@/lib/db";
 import type { ProductWithStock, Category } from "@/types";
 
@@ -11,8 +12,14 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import Image from "next/image";
 import { formatCurrency } from "@/lib/format";
-import { AnimatedCounter } from "@/components/ui/AnimatedCounter";
-import { LandingAnimations } from "@/components/ui/LandingAnimations";
+
+// Lazy-load client components — reduces initial JS bundle
+const AnimatedCounter = dynamic(
+  () => import("@/components/ui/AnimatedCounter").then(m => ({ default: m.AnimatedCounter })),
+);
+const LandingAnimations = dynamic(
+  () => import("@/components/ui/LandingAnimations").then(m => ({ default: m.LandingAnimations })),
+);
 
 async function getStats() {
   const [[products], [categories], [stock], [published]] = await Promise.all([

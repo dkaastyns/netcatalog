@@ -37,6 +37,16 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Track viewport via matchMedia — more stable than checking innerWidth in click handler
+  useEffect(() => {
+    const mql = window.matchMedia("(max-width: 767px)");
+    const onChange = (e: MediaQueryListEvent | MediaQueryList) => setIsMobile(e.matches);
+    onChange(mql); // set initial value
+    mql.addEventListener("change", onChange);
+    return () => mql.removeEventListener("change", onChange);
+  }, []);
 
   const prevPathname = React.useRef(pathname);
   useEffect(() => {
@@ -48,7 +58,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   const handleToggleSidebar = () => {
     // On mobile (<768px), toggle overlay menu; on desktop, toggle collapse
-    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+    if (isMobile) {
       setIsMobileMenuOpen(prev => !prev);
     } else {
       setIsCollapsed(prev => !prev);

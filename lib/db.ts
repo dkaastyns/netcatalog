@@ -7,11 +7,14 @@ export const pool =
   globalForDb.pool ??
   new Pool({
     connectionString: process.env.DATABASE_URL,
-    max: process.env.NODE_ENV === "production" ? 5 : 10,
+    // Serverless: keep pool small to avoid exhausting DB connection limits
+    max: process.env.NODE_ENV === "production" ? 3 : 10,
     idleTimeoutMillis: 30000,
     connectionTimeoutMillis: 5000,
     statement_timeout: 30000, // 30s query timeout to prevent hanging
     ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false,
+    // Allow pool to fully close when idle — prevents serverless function hangs
+    allowExitOnIdle: true,
   });
 
 if (process.env.NODE_ENV !== "production") {

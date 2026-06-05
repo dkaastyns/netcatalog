@@ -47,9 +47,21 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   // pg (postgres driver) should not be bundled — run server-side only
   serverExternalPackages: ["pg"],
+  // React Compiler: auto-memoize components (stable in Next.js 16)
+  reactCompiler: true,
   experimental: {
-    // Tree-shake large icon/animation packages — fixes PageSpeed "JavaScript Versi Lama" warning
-    optimizePackageImports: ["@heroicons/react", "framer-motion", "@tanstack/react-query"],
+    // Tree-shake large packages — eliminates barrel-import bloat
+    optimizePackageImports: [
+      "@heroicons/react",
+      "framer-motion",
+      "@tanstack/react-query",
+      "sonner",
+      "date-fns",
+      "gsap",
+      "radix-ui",
+    ],
+    // CSS chunking: merge CSS files to reduce number of requests
+    cssChunking: true,
   },
   images: {
     // Allow Cloudinary and Supabase images to be optimized by Next.js
